@@ -103,3 +103,42 @@ textarea:focus {
 ul {
   list-style: none;
 }
+
+.todo-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.todo-form input {
+  flex: 1;
+}
+
+.todo-list {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0;
+}
+
+.todo-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  margin-bottom: 0.25rem;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.todo-list li:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+
+.todo-list button.remove {
+  background: transparent;
+  color: var(--color-accent);
+  border: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
