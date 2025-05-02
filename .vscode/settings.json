@@ -13,5 +13,15 @@
   "eslint.validate": ["javascript", "javascriptreact"],
   "eslint.options": {
     "extensions": [".js", ".jsx"]
+  },
+  // Your existing settings…
+  "emmet.syntaxProfiles": {
+    "html": {
+      "attr_quotes": "double"
+    }
+  },
+  "emmet.preferences": {
+    // Ensures tag expansions also use double quotes
+    "output.attributeQuotes": "double"
   }
 }
