@@ -4,14 +4,14 @@ export function renderTodos(todos, container) {
   todos.forEach((todo) => {
     const li = document.createElement('li');
     li.textContent = todo.text;
-    li.dataset.id = todo.id;
+    li.setAttribute('data-id', todo.id);
 
-    const btn = document.createElement('button');
-    btn.textContent = '✕';
-    btn.classList.add('remove');
-    btn.dataset = todo.id;
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = '✕';
+    removeBtn.classList.add('remove');
+    removeBtn.setAttribute('data-id', todo.id);
 
-    li.appendChild(btn);
+    li.appendChild(removeBtn);
 
     container.appendChild(li);
   });
