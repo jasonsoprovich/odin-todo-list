@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     'no-console': 'warn',
+    'no-param-reassign': ['error', { props: false }],
   },
   ignorePatterns: ['config/', 'dist/', 'node_modules/'],
 };
