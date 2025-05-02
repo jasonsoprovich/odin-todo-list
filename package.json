@@ -1,0 +1,38 @@
+{
+  "name": "webpack-starter",
+  "version": "1.0.0",
+  "description": "A minimal Webpack starter template with Airbnb ESLint, Prettier, and Babel",
+  "scripts": {
+    "start": "webpack serve --config config/webpack.dev.js --open",
+    "build": "webpack --config config/webpack.prod.js",
+    "lint": "eslint src/**/*.js",
+    "format": "prettier --write \"src/**/*.{js,html,css}\"",
+    "deploy": "git subtree push --prefix dist origin gh-pages"
+  },
+  "keywords": [
+    "webpack",
+    "babel",
+    "eslint",
+    "prettier",
+    "starter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "babel-loader": "^9.1.0",
+    "css-loader": "^6.7.0",
+    "eslint": "^8.31.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.31.0",
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.8.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.0",
+    "webpack-merge": "^5.8.0"
+  }
+}

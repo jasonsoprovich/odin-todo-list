@@ -1,0 +1,105 @@
+/* ===== Reset & Box Sizing ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== CSS Variables ===== */
+:root {
+  --font-sans: 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Source Code Pro', monospace;
+  --color-bg: #f9f9f9;
+  --color-text: #333;
+  --color-accent: #007acc;
+  --max-width: 800px;
+}
+
+/* ===== Base Typography ===== */
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* ===== Utility Classes ===== */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ===== Headings ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+  margin-bottom: 0.5em;
+  color: var(--color-accent);
+}
+
+/* ===== Links & Buttons ===== */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  background-color: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== Forms ===== */
+input,
+textarea {
+  font: inherit;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+/* ===== Misc ===== */
+ul {
+  list-style: none;
+}
