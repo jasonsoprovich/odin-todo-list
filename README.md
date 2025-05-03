@@ -1,49 +1,52 @@
-Webpack Starter Template
-A minimal yet powerful Webpack boilerplate configured with:
+# Todo List App
 
-Babel (ES6+ support)
-ESLint (Airbnb style guide)
-Prettier (automatic code formatting)
-CSS loading
-HTML template generation
-Development & production builds (via webpack.dev.js & webpack.prod.js)
-GitHub Template-ready structure
-——————————————————————————
-Features
-Webpack 5
-Babel (@babel/preset-env) for modern JavaScript
-ESLint with eslint-config-airbnb-base + eslint-plugin-import
-Prettier for consistent formatting
-Dev Server with HMR (webpack-dev-server)
-CSS Loader & Style Loader
-HTML Webpack Plugin for HTML templating
-Config split
+A simple, front‑end Todo List application built with modern JavaScript, Webpack, ESLint & Prettier.  
+Start by adding, removing or toggling tasks—everything you need to manage your daily to‑dos.
 
-config/webpack.common.js
-config/webpack.dev.js
-config/webpack.prod.js
+---
 
+## 🚀 Features
 
-——————————————————————————
+### ✅ Core Functionality
 
-Quick Start
+- Add new tasks
+- Remove existing tasks
+- Toggle completion status
+- Persist tasks in `localStorage`
 
+### 🎯 Roadmap / Upcoming Enhancements
 
-Clone this repo as a template:
-git clone https://github.com/<your-user>/webpack-starter.git
-cd webpack-starter
+1. In‑line task editing
+2. Due dates & reminders
+3. Sub‑tasks / checklist support
+4. Task notes & rich text entry
+5. Priority levels (e.g. Low / Medium / High)
+6. Project / category grouping
+7. Sidebar navigation for projects & filters
+8. Drag‑and‑drop ordering
+9. Filtering & sorting (by date, priority, status)
+10. Responsive layout & theming (light/dark mode)
 
-Install dependencies:
+---
+
+## 🛠️ Tech Stack
+
+- JavaScript (ES6+ modules)
+- Webpack 5 (dev & prod configs)
+- Babel (`@babel/preset-env`)
+- ESLint (Airbnb rules)
+- Prettier (code formatting)
+- CSS Modules & PostCSS
+
+---
+
+## 📦 Installation
+
+```bash
+# Clone this repo
+git clone https://github.com/your‑user/todo-list-app.git
+cd todo-list-app
+
+# Install dependencies
 npm install
-
-Start the development server (with hot reload):
-npm run start
-
-Build for production:
-npm run build
-
-Lint your code (ESLint + Airbnb rules):
-npm run lint
-
-Format code (Prettier):
-npm run format
+```
