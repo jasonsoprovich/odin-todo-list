@@ -1,6 +1,6 @@
 import './styles.css';
 import { qs, renderTodos } from './dom';
-import createTodo from './todo';
+import { createTodo } from './todo';
 
 const form = qs('#todo-form');
 const input = qs('#todo-input');
