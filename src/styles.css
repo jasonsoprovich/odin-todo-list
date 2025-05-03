@@ -134,11 +134,25 @@ ul {
   background-color: #f0f0f0;
 }
 
+.todo-list li.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
 .todo-list button.remove {
   background: transparent;
   color: var(--color-accent);
   border: none;
   font-size: 1.2rem;
   line-height: 1;
+  cursor: pointer;
+}
+
+.todo-list button.toggle {
+  background: transparent;
+  color: green;
+  border: none;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
   cursor: pointer;
 }

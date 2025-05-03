@@ -1,6 +1,12 @@
 import './styles.css';
 import { qs, renderTodos } from './dom';
-import { loadTodos, getTodos, createTodo, deleteTodo } from './todo';
+import {
+  loadTodos,
+  getTodos,
+  createTodo,
+  deleteTodo,
+  toggleTodo,
+} from './todo';
 
 const form = qs('#todo-form');
 const input = qs('#todo-input');
@@ -14,7 +20,6 @@ form.addEventListener('submit', (e) => {
   const text = input.value.trim();
   if (!text) return;
   createTodo(text);
-  // todos.push(createTodo(text));
   renderTodos(getTodos(), listElement);
   input.value = '';
   input.focus();
@@ -22,7 +27,9 @@ form.addEventListener('submit', (e) => {
 
 listElement.addEventListener('click', (e) => {
   const id = Number(e.target.getAttribute('data-id'));
-  if (e.target.matches('button.remove')) {
+  if (e.target.matches('button.toggle')) {
+    toggleTodo(id);
+  } else if (e.target.matches('button.remove')) {
     deleteTodo(id);
   }
   renderTodos(getTodos(), listElement);

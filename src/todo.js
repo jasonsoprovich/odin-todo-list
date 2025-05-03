@@ -30,9 +30,17 @@ export function createTodo(text) {
 }
 
 export function deleteTodo(id) {
-  const index = todos.findIndex((todo) => todo.id === id);
+  const index = todos.findIndex((todoItem) => todoItem.id === id);
   if (index === -1) return false;
   todos.splice(index, 1);
   saveTodos();
   return true;
+}
+
+export function toggleTodo(id) {
+  const todo = todos.find((todoItem) => todoItem.id === id);
+  if (!todo) return null;
+  todo.done = !todo.done;
+  saveTodos();
+  return todo;
 }
