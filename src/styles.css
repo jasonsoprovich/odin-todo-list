@@ -104,6 +104,47 @@ ul {
   list-style: none;
 }
 
+.layout {
+  display: flex;
+  align-items: flex-start;
+}
+
+.sidebar {
+  width: 200px;
+  padding: 1rem;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.sidebar li.active {
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
+.cat-form {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.cat-form input {
+  flex: 1;
+  font-weight: 0.9rem;
+}
+
+.cat-form button {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
 .todo-form {
   display: flex;
   gap: 0.5rem;

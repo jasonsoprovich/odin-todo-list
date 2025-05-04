@@ -7,23 +7,37 @@
   </head>
 
   <body>
-    <div id="app" class="container">
-      <h1 class="text-center">Todo List</h1>
-      <form id="todo-form" class="todo-form">
-        <input
-          type="text"
-          id="todo-input"
-          placeholder="Add new task."
-          required
-          autocomplete="off"
-        />
-        <label for="todo-due" class="todo-due-label">
-          Due:
-          <input type="date" id="todo-due" />
-        </label>
-        <button type="submit">Add</button>
-      </form>
-      <ul id="todo-list" class="todo-list"></ul>
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Categories</h2>
+        <ul id="category-list"></ul>
+        <form id="cat-form" class="cat-form">
+          <input
+            type="text"
+            id="cat-input"
+            placeholder="New category"
+            required
+          />
+        </form>
+      </aside>
+      <main id="app" class="main-content container">
+        <h1 class="text-center">Todo List</h1>
+        <form id="todo-form" class="todo-form">
+          <input
+            type="text"
+            id="todo-input"
+            placeholder="Add new task."
+            required
+            autocomplete="off"
+          />
+          <label for="todo-due" class="todo-due-label">
+            Due:
+            <input type="date" id="todo-due" />
+          </label>
+          <button type="submit">Add</button>
+        </form>
+        <ul id="todo-list" class="todo-list"></ul>
+      </main>
     </div>
   </body>
 </html>
