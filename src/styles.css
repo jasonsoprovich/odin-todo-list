@@ -106,13 +106,15 @@ ul {
 
 .layout {
   display: flex;
-  align-items: flex-start;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
-  width: 200px;
+  width: 220px;
   padding: 1rem;
   border-right: 1px solid #ddd;
+  overflow-y: auto;
 }
 
 .sidebar ul {
@@ -130,12 +132,47 @@ ul {
   color: var(--color-accent);
 }
 
+.main-content {
+  flex: 1;
+  padding: 1rem 2rem;
+  overflow-y: auto;
+}
+
+.todo-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.todo-form input {
+  flex: 1;
+}
+
+.todo-form > input[type='text'],
+.todo-form > select,
+.todo-form > .todo-due-label input[type='date'] {
+  flex: 1 1 150px;
+  min-width: 0;
+}
+
+.todo-form button {
+  flex: 0 0 auto;
+}
+
+.todo-form,
+.cat-form {
+  align-items: center;
+}
+
 .cat-form {
   margin-top: 1rem;
   display: flex;
+  gap: 0.5rem;
 }
 
 .cat-form input {
+  width: 100px;
   flex: 1;
   font-weight: 0.9rem;
 }
@@ -143,16 +180,6 @@ ul {
 .cat-form button {
   margin-left: 0.5rem;
   font-size: 0.9rem;
-}
-
-.todo-form {
-  display: flex;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-
-.todo-form input {
-  flex: 1;
 }
 
 .todo-list {
