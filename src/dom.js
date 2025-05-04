@@ -2,7 +2,6 @@ export const qs = (selector) => document.querySelector(selector);
 
 export function renderTodos(todos, container) {
   container.innerHTML = '';
-
   todos.forEach((todo) => {
     const li = document.createElement('li');
     li.setAttribute('data-id', todo.id);
@@ -12,6 +11,17 @@ export function renderTodos(todos, container) {
     textSpan.classList.add('todo-text');
     textSpan.textContent = todo.text;
     li.appendChild(textSpan);
+
+    if (todo.due) {
+      const dueSpan = document.createElement('span');
+      dueSpan.classList.add('todo-due');
+      const date = new Date(todo.due);
+      dueSpan.textContent = `📅 ${date.toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+      })}`;
+      li.appendChild(dueSpan);
+    }
 
     const toggleBtn = document.createElement('button');
     toggleBtn.type = 'button';

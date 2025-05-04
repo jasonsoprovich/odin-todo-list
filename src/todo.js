@@ -21,8 +21,8 @@ export function getTodos() {
   return todos;
 }
 
-export function createTodo(text) {
-  const todo = { id: nextID, text, done: false };
+export function createTodo(text, due = null) {
+  const todo = { id: nextID, text, done: false, due };
   todos.push(todo);
   nextID += 1;
   saveTodos();

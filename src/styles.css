@@ -143,6 +143,34 @@ ul {
   opacity: 0.6;
 }
 
+.todo-list .todo-due {
+  display: inline-block;
+  background: #e0f3ff;
+  color: #007acc;
+  font-size: 0.85rem;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+.todo-form .todo-due-label {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333;
+  margin-left: 0.5rem;
+}
+
+.todo-form .todo-due-label input[type='date'] {
+  margin-left: 0.25rem;
+  padding: 0.25em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
 .todo-list button.toggle,
 .todo-list button.remove {
   all: unset;

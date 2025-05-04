@@ -10,6 +10,7 @@ import {
 
 const form = qs('#todo-form');
 const input = qs('#todo-input');
+const dueInput = qs('#todo-due');
 const listElement = qs('#todo-list');
 
 loadTodos();
@@ -18,10 +19,12 @@ renderTodos(getTodos(), listElement);
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const text = input.value.trim();
+  const due = dueInput.value || null;
   if (!text) return;
-  createTodo(text);
+  createTodo(text, due);
   renderTodos(getTodos(), listElement);
   input.value = '';
+  dueInput.value = '';
   input.focus();
 });
 
