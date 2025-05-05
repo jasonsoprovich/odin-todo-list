@@ -256,10 +256,6 @@ ul {
   color: var(--color-accent);
 }
 
-.hidden {
-  display: none !important;
-}
-
 .todo-list button.note-btn {
   all: unset;
   cursor: pointer;
@@ -272,6 +268,10 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.hidden {
+  display: none;
 }
 
 .note-area .note-text {
