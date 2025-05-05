@@ -2,10 +2,9 @@ export const qs = (selector) => document.querySelector(selector);
 
 export function renderTodos(todos, container) {
   container.innerHTML = '';
+
   todos.forEach((todo) => {
     const li = document.createElement('li');
-    li.setAttribute('data-id', todo.id);
-    if (todo.done) li.classList.add('done');
 
     const textSpan = document.createElement('span');
     textSpan.classList.add('todo-text');
@@ -37,6 +36,33 @@ export function renderTodos(todos, container) {
     removeBtn.textContent = '✕';
     li.appendChild(removeBtn);
 
+    const noteBtn = document.createElement('button');
+    noteBtn.type = 'button';
+    noteBtn.classList.add('note-btn');
+    noteBtn.setAttribute('data-id', todo.id);
+    noteBtn.textContent = '📝';
+    li.appendChild(noteBtn);
+
+    const noteArea = document.createElement('div');
+    noteArea.classList.add('note-area');
+    if (!todo.note) noteArea.classList.add('hidden');
+
+    const textArea = document.createElement('textarea');
+    textArea.classList.add('note-text');
+    textArea.value = todo.note || '';
+    textArea.rows = 3;
+    textArea.placeholder = 'Notes';
+    textArea.addEventListener('click', (e) => e.stopPropagation());
+    noteArea.appendChild(textArea);
+
+    const saveNoteBtn = document.createElement('button');
+    saveNoteBtn.type = 'button';
+    saveNoteBtn.classList.add('save-note-btn');
+    saveNoteBtn.setAttribute('data-id', todo.id);
+    saveNoteBtn.textContent = 'Save';
+    noteArea.appendChild(saveNoteBtn);
+
+    li.appendChild(noteArea);
     container.appendChild(li);
   });
 }

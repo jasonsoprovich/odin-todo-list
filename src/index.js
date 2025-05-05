@@ -6,6 +6,7 @@ import {
   createTodo,
   deleteTodo,
   toggleTodo,
+  updateNote,
 } from './todo';
 import { qs, renderTodos } from './dom';
 
@@ -81,13 +82,29 @@ form.addEventListener('submit', (e) => {
 });
 
 listElement.addEventListener('click', (e) => {
-  const id = Number(e.target.getAttribute('data-id'));
-  if (e.target.matches('button.toggle')) {
-    toggleTodo(id);
-  } else if (e.target.matches('button.remove')) {
-    deleteTodo(id);
+  const { target } = e;
+  const li = target.closest('li');
+  const id = li && Number(target.getAttribute('data-id'));
+  if (!li || !id) return;
+
+  if (target.matches('button.note-btn')) {
+    li.querySelector('.note-area').classList.toggle('hidden');
+    return;
   }
-  renderTodos(getTodos(), listElement);
+
+  if (target.matches('button.toggle')) {
+    toggleTodo(id);
+  } else if (target.matches('button.remove')) {
+    deleteTodo(id);
+  } else if (target.matches('button.save-note-btn')) {
+    const text = li.querySelector('textarea.note-text').value.trim();
+    updateNote(id, text);
+    if (!text) {
+      li.querySelector('.note-area').classList.add('hidden');
+    }
+  }
+
+  renderTodosFilter();
 });
 
 renderCategoryOptions();

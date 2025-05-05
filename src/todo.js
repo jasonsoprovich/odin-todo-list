@@ -6,7 +6,10 @@ export function loadTodos() {
   const jsonItem = localStorage.getItem(STORAGE_KEY);
   if (!jsonItem) return;
   try {
-    todos = JSON.parse(jsonItem);
+    todos = JSON.parse(jsonItem).map((todo) => ({
+      ...todo,
+      note: typeof todo.note === 'string' ? todo.note : '',
+    }));
     const maxID = todos.reduce((max, todo) => Math.max(max, todo.id), 0);
     nextID = maxID + 1;
   } catch {
@@ -22,11 +25,19 @@ export function getTodos() {
 }
 
 export function createTodo(text, due = null, category = 'Inbox') {
-  const todo = { id: nextID, text, done: false, due, category };
+  const todo = { id: nextID, text, done: false, due, category, note: '' };
   todos.push(todo);
   nextID += 1;
   saveTodos();
   return todo;
+}
+
+export function updateNote(id, noteText) {
+  const todoItem = todos.find((item) => item.id === id);
+  if (!todoItem) return null;
+  todoItem.note = noteText;
+  saveTodos();
+  return todoItem;
 }
 
 export function deleteTodo(id) {

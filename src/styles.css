@@ -255,3 +255,35 @@ ul {
 .todo-list button.remove {
   color: var(--color-accent);
 }
+
+.hidden {
+  display: none !important;
+}
+
+.todo-list button.note-btn {
+  all: unset;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.note-area {
+  margin: 0.5rem 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.note-area .note-text {
+  width: 100%;
+  font: inherit;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.save-note-btn {
+  align-self: flex-end;
+  font-size: 0.9rem;
+  padding: 0.25em 0.5em;
+}
