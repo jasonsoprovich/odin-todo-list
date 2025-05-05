@@ -206,7 +206,7 @@ ul {
   flex: 1;
 }
 
-.todo-list li.done .todo-text {
+.todo-list li.done {
   text-decoration: line-through;
   opacity: 0.6;
 }
@@ -220,6 +220,7 @@ ul {
   border-radius: 4px;
   margin-left: auto;
   margin-right: 0.5rem;
+  text-decoration: none;
 }
 
 .todo-form .todo-due-label {

@@ -5,6 +5,7 @@ export function renderTodos(todos, container) {
 
   todos.forEach((todo) => {
     const li = document.createElement('li');
+    li.classList.toggle('done', todo.done);
 
     const textSpan = document.createElement('span');
     textSpan.classList.add('todo-text');
