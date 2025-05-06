@@ -20,6 +20,7 @@ export function loadTodos() {
     todos = [];
   }
 }
+
 export function saveTodos() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
 }

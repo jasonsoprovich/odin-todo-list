@@ -23,10 +23,8 @@ export function getCategories() {
 }
 
 export function addCategory(name) {
-  if (!categories.includes(name)) {
-    categories.push(name);
-    saveCategories();
-    return true;
-  }
-  return false;
+  if (name === 'All' || categories.includes(name)) return false;
+  categories.push(name);
+  saveCategories();
+  return true;
 }
