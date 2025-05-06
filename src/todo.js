@@ -6,9 +6,13 @@ export function loadTodos() {
   const jsonItem = localStorage.getItem(STORAGE_KEY);
   if (!jsonItem) return;
   try {
-    todos = JSON.parse(jsonItem).map((todo) => ({
-      ...todo,
-      note: typeof todo.note === 'string' ? todo.note : '',
+    todos = JSON.parse(jsonItem).map((t) => ({
+      id: t.id,
+      text: t.text || '',
+      done: !!t.done,
+      due: t.due || null,
+      category: t.category || 'Inbox',
+      note: typeof t.note === 'string' ? t.note : '',
     }));
     const maxID = todos.reduce((max, todo) => Math.max(max, todo.id), 0);
     nextID = maxID + 1;
