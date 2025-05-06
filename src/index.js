@@ -7,6 +7,9 @@ import {
   deleteTodo,
   toggleTodo,
   updateNote,
+  addSubtask,
+  toggleSubtask,
+  deleteSubtask,
 } from './todo';
 import { qs, renderTodos } from './dom';
 
@@ -84,7 +87,8 @@ form.addEventListener('submit', (e) => {
 listElement.addEventListener('click', (e) => {
   const { target } = e;
   const li = target.closest('li');
-  const id = li && Number(target.getAttribute('data-id'));
+  const id = li && Number(target.dataset.id);
+
   if (!li || !id) return;
 
   if (target.matches('button.note-btn')) {
@@ -104,7 +108,41 @@ listElement.addEventListener('click', (e) => {
     }
   }
 
+  if (target.matches('button.list-btn')) {
+    li.querySelector('.list-area').classList.toggle('hidden');
+    return;
+  }
+
+  if (target.matches('.sub-toggle')) {
+    const todoId = Number(target.dataset.id);
+    const subId = Number(target.dataset.subId);
+    toggleSubtask(todoId, subId);
+    renderTodosFilter();
+    return;
+  }
+
+  if (target.matches('.sub-remove')) {
+    const todoId = Number(target.dataset.id);
+    const subId = Number(target.dataset.subId);
+    deleteSubtask(todoId, subId);
+    renderTodosFilter();
+    return;
+  }
+
   renderTodosFilter();
+});
+
+listElement.addEventListener('submit', (e) => {
+  if (!e.target.matches('.sub-form')) return;
+  e.preventDefault();
+  const todoId = Number(e.target.dataset.id);
+  const subInput = e.target.querySelector('.sub-input');
+  const text = subInput.value.trim();
+  if (text) {
+    addSubtask(todoId, text);
+    renderTodosFilter();
+  }
+  subInput.value = '';
 });
 
 renderCategoryOptions();

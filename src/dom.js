@@ -6,6 +6,7 @@ export function renderTodos(todos, container) {
   todos.forEach((todo) => {
     const li = document.createElement('li');
     li.classList.toggle('done', todo.done);
+    li.dataset.id = todo.id;
 
     const textSpan = document.createElement('span');
     textSpan.classList.add('todo-text');
@@ -26,22 +27,23 @@ export function renderTodos(todos, container) {
     const toggleBtn = document.createElement('button');
     toggleBtn.type = 'button';
     toggleBtn.classList.add('toggle');
-    toggleBtn.setAttribute('data-id', todo.id);
+    toggleBtn.dataset.id = todo.id;
     toggleBtn.textContent = todo.done ? '↺' : '✓';
     li.appendChild(toggleBtn);
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.classList.add('remove');
-    removeBtn.setAttribute('data-id', todo.id);
+    removeBtn.dataset.id = todo.id;
     removeBtn.textContent = '✕';
     li.appendChild(removeBtn);
 
     const noteBtn = document.createElement('button');
     noteBtn.type = 'button';
     noteBtn.classList.add('note-btn');
-    noteBtn.setAttribute('data-id', todo.id);
+    noteBtn.dataset.id = todo.id;
     noteBtn.textContent = '📝';
+    noteBtn.setAttribute('aria-label', 'Edit notes');
     li.appendChild(noteBtn);
 
     const noteArea = document.createElement('div');
@@ -59,11 +61,79 @@ export function renderTodos(todos, container) {
     const saveNoteBtn = document.createElement('button');
     saveNoteBtn.type = 'button';
     saveNoteBtn.classList.add('save-note-btn');
-    saveNoteBtn.setAttribute('data-id', todo.id);
+    saveNoteBtn.dataset.id = todo.id;
     saveNoteBtn.textContent = 'Save';
+    saveNoteBtn.setAttribute('aria-label', 'Save note');
     noteArea.appendChild(saveNoteBtn);
 
     li.appendChild(noteArea);
+
+    const listBtn = document.createElement('button');
+    listBtn.type = 'button';
+    listBtn.classList.add('list-btn');
+    listBtn.dataset.id = todo.id;
+    listBtn.textContent = '🗒️';
+    listBtn.setAttribute('aria-label', 'Toggle checklist');
+    li.appendChild(listBtn);
+
+    const listArea = document.createElement('div');
+    listArea.classList.add('list-area', 'hidden');
+
+    const subForm = document.createElement('form');
+    subForm.classList.add('sub-form');
+    subForm.dataset.id = todo.id;
+
+    const subInput = document.createElement('input');
+    subInput.type = 'text';
+    subInput.placeholder = 'New subtask';
+    subInput.required = true;
+    subInput.classList.add('sub-input');
+    subForm.appendChild(subInput);
+
+    const subAddBtn = document.createElement('button');
+    subAddBtn.type = 'submit';
+    subAddBtn.textContent = 'Add';
+    subForm.appendChild(subAddBtn);
+
+    listArea.appendChild(subForm);
+
+    const subUl = document.createElement('ul');
+    subUl.classList.add('sub-list');
+
+    if (Array.isArray(todo.subtasks)) {
+      todo.subtasks.forEach((subItem) => {
+        const subLi = document.createElement('li');
+        subLi.classList.toggle('done', subItem.done);
+        subLi.dataset.subId = subItem.id;
+
+        const subChk = document.createElement('button');
+        subChk.type = 'button';
+        subChk.classList.add('sub-toggle');
+        subChk.dataset.id = todo.id;
+        subChk.dataset.subId = subItem.id;
+        subChk.textContent = subItem.done ? '☑️' : '⬜';
+        subLi.appendChild(subChk);
+
+        const subSpan = document.createElement('span');
+        subSpan.classList.add('sub-text');
+        subSpan.textContent = subItem.text;
+        subLi.appendChild(subSpan);
+
+        const subDel = document.createElement('button');
+        subDel.type = 'button';
+        subDel.classList.add('sub-remove');
+        subDel.dataset.id = todo.id;
+        subDel.dataset.subId = subItem.id;
+        subDel.textContent = '✕';
+        subLi.appendChild(subDel);
+
+        subUl.appendChild(subLi);
+      });
+    }
+
+    listArea.appendChild(subUl);
+    li.appendChild(listArea);
+
     container.appendChild(li);
   });
 }
