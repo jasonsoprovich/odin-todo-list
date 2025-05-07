@@ -10,6 +10,7 @@ import {
   addSubtask,
   toggleSubtask,
   deleteSubtask,
+  updateTodo,
 } from './todo';
 import { qs, renderTodos } from './dom';
 
@@ -23,6 +24,7 @@ const catForm = qs('#cat-form');
 const catInput = qs('#cat-input');
 
 let activeCategory = 'All';
+let editingId = null;
 
 loadCategories();
 loadTodos();
@@ -32,7 +34,7 @@ function renderTodosFilter() {
   if (activeCategory !== 'All') {
     list = list.filter((todo) => todo.category === activeCategory);
   }
-  renderTodos(list, listElement);
+  renderTodos(list, listElement, editingId);
 }
 
 function renderCategoryOptions() {
@@ -87,25 +89,27 @@ form.addEventListener('submit', (e) => {
 listElement.addEventListener('click', (e) => {
   const { target } = e;
   const li = target.closest('li');
-  const id = li && Number(target.dataset.id);
-
+  const id = li ? Number(li.dataset.id) : null;
   if (!li || !id) return;
+
+  if (target.matches('button.edit-btn')) {
+    editingId = editingId === id ? null : id;
+    renderTodosFilter();
+    return;
+  }
+
+  if (target.matches('button.save-edit-btn')) {
+    const editInput = li.querySelector('input.edit-input');
+    const newText = editInput.value.trim();
+    if (newText) updateTodo(id, newText);
+    editingId = null;
+    renderTodosFilter();
+    return;
+  }
 
   if (target.matches('button.note-btn')) {
     li.querySelector('.note-area').classList.toggle('hidden');
     return;
-  }
-
-  if (target.matches('button.toggle')) {
-    toggleTodo(id);
-  } else if (target.matches('button.remove')) {
-    deleteTodo(id);
-  } else if (target.matches('button.save-note-btn')) {
-    const text = li.querySelector('textarea.note-text').value.trim();
-    updateNote(id, text);
-    if (!text) {
-      li.querySelector('.note-area').classList.add('hidden');
-    }
   }
 
   if (target.matches('button.list-btn')) {
@@ -113,7 +117,7 @@ listElement.addEventListener('click', (e) => {
     return;
   }
 
-  if (target.matches('.sub-toggle')) {
+  if (target.matches('button.sub-toggle')) {
     const todoId = Number(target.dataset.id);
     const subId = Number(target.dataset.subId);
     toggleSubtask(todoId, subId);
@@ -121,7 +125,7 @@ listElement.addEventListener('click', (e) => {
     return;
   }
 
-  if (target.matches('.sub-remove')) {
+  if (target.matches('button.sub-remove')) {
     const todoId = Number(target.dataset.id);
     const subId = Number(target.dataset.subId);
     deleteSubtask(todoId, subId);
@@ -129,7 +133,24 @@ listElement.addEventListener('click', (e) => {
     return;
   }
 
-  renderTodosFilter();
+  if (target.matches('button.toggle')) {
+    toggleTodo(id);
+    renderTodosFilter();
+    return;
+  }
+
+  if (target.matches('button.remove')) {
+    deleteTodo(id);
+    renderTodosFilter();
+    return;
+  }
+
+  if (target.matches('button.save-note-btn')) {
+    const text = li.querySelector('textarea.note-text').value.trim();
+    updateNote(id, text);
+    if (!text) li.querySelector('.note-area').classList.add('hidden');
+    renderTodosFilter();
+  }
 });
 
 listElement.addEventListener('submit', (e) => {

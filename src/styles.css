@@ -253,6 +253,13 @@ ul {
   color: green;
 }
 
+.todo-list button.edit-btn {
+  all: unset;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 1.1rem;
+}
+
 .todo-list button.remove {
   color: var(--color-accent);
 }
@@ -262,6 +269,24 @@ ul {
   cursor: pointer;
   margin-left: 0.5rem;
   font-size: 1.2rem;
+}
+
+.edit-input {
+  flex: 1;
+  font: inherit;
+  padding: 0.4em;
+  margin: 0 0.5rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
+}
+
+.save-edit-btn {
+  margin-left: 0.5rem;
+  padding: 0.3em 0.6em;
+  font-size: 0.9rem;
+  background-color: var(--color-accent);
+  color: #fff;
+  border-radius: 4px;
 }
 
 .note-area {

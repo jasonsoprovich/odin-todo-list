@@ -1,17 +1,45 @@
 export const qs = (selector) => document.querySelector(selector);
 
-export function renderTodos(todos, container) {
+export function renderTodos(todos, container, editingId = null) {
   container.innerHTML = '';
 
   todos.forEach((todo) => {
     const li = document.createElement('li');
-    li.classList.toggle('done', todo.done);
     li.dataset.id = todo.id;
+    if (todo.done) li.classList.add('done');
 
-    const textSpan = document.createElement('span');
-    textSpan.classList.add('todo-text');
-    textSpan.textContent = todo.text;
-    li.appendChild(textSpan);
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.classList.add('edit-btn');
+    editBtn.dataset.id = todo.id;
+    editBtn.setAttribute('aria-label', 'Edit todo');
+    editBtn.textContent = todo.id === editingId ? '✖️' : '✏️';
+    li.appendChild(editBtn);
+
+    if (todo.id === editingId) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.classList.add('edit-input');
+      input.value = todo.text;
+      li.appendChild(input);
+
+      const saveBtn = document.createElement('button');
+      saveBtn.type = 'button';
+      saveBtn.classList.add('save-edit-btn');
+      saveBtn.dataset.id = todo.id;
+      saveBtn.textContent = 'Save';
+      li.appendChild(saveBtn);
+    } else {
+      const textSpan = document.createElement('span');
+      textSpan.classList.add('todo-text');
+      textSpan.textContent = todo.text;
+      li.appendChild(textSpan);
+    }
+
+    // const textSpan = document.createElement('span');
+    // textSpan.classList.add('todo-text');
+    // textSpan.textContent = todo.text;
+    // li.appendChild(textSpan);
 
     if (todo.due) {
       const dueSpan = document.createElement('span');

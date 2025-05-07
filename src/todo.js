@@ -90,6 +90,14 @@ export function updateNote(id, noteText) {
   return todoItem;
 }
 
+export function updateTodo(id, newText) {
+  const todoItem = todos.find((item) => item.id === id);
+  if (!todoItem) return null;
+  todoItem.text = newText;
+  saveTodos();
+  return todoItem;
+}
+
 export function deleteTodo(id) {
   const index = todos.findIndex((todoItem) => todoItem.id === id);
   if (index === -1) return false;
