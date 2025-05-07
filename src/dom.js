@@ -36,11 +36,6 @@ export function renderTodos(todos, container, editingId = null) {
       li.appendChild(textSpan);
     }
 
-    // const textSpan = document.createElement('span');
-    // textSpan.classList.add('todo-text');
-    // textSpan.textContent = todo.text;
-    // li.appendChild(textSpan);
-
     if (todo.due) {
       const dueSpan = document.createElement('span');
       dueSpan.classList.add('todo-due');
