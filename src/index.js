@@ -88,6 +88,23 @@ form.addEventListener('submit', (e) => {
 
 listElement.addEventListener('click', (e) => {
   const { target } = e;
+
+  if (target.matches('button.sub-toggle')) {
+    const todoId = Number(target.dataset.id);
+    const subId = Number(target.dataset.subId);
+    toggleSubtask(todoId, subId);
+    renderTodosFilter();
+    return;
+  }
+
+  if (target.matches('button.sub-remove')) {
+    const todoId = Number(target.dataset.id);
+    const subId = Number(target.dataset.subId);
+    deleteSubtask(todoId, subId);
+    renderTodosFilter();
+    return;
+  }
+
   const li = target.closest('li');
   const id = li ? Number(li.dataset.id) : null;
   if (!li || !id) return;
@@ -112,24 +129,16 @@ listElement.addEventListener('click', (e) => {
     return;
   }
 
+  if (target.matches('button.save-note-btn')) {
+    const text = li.querySelector('textarea.note-text').value.trim();
+    updateNote(id, text);
+    if (!text) li.querySelector('.note-area').classList.add('hidden');
+    renderTodosFilter();
+    return;
+  }
+
   if (target.matches('button.list-btn')) {
     li.querySelector('.list-area').classList.toggle('hidden');
-    return;
-  }
-
-  if (target.matches('button.sub-toggle')) {
-    const todoId = Number(target.dataset.id);
-    const subId = Number(target.dataset.subId);
-    toggleSubtask(todoId, subId);
-    renderTodosFilter();
-    return;
-  }
-
-  if (target.matches('button.sub-remove')) {
-    const todoId = Number(target.dataset.id);
-    const subId = Number(target.dataset.subId);
-    deleteSubtask(todoId, subId);
-    renderTodosFilter();
     return;
   }
 
@@ -141,14 +150,6 @@ listElement.addEventListener('click', (e) => {
 
   if (target.matches('button.remove')) {
     deleteTodo(id);
-    renderTodosFilter();
-    return;
-  }
-
-  if (target.matches('button.save-note-btn')) {
-    const text = li.querySelector('textarea.note-text').value.trim();
-    updateNote(id, text);
-    if (!text) li.querySelector('.note-area').classList.add('hidden');
     renderTodosFilter();
   }
 });

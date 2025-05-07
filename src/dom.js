@@ -70,7 +70,7 @@ export function renderTodos(todos, container, editingId = null) {
     li.appendChild(noteBtn);
 
     const noteArea = document.createElement('div');
-    noteArea.classList.add('note-area');
+    noteArea.classList.add('note-area', 'hidden');
     if (!todo.note) noteArea.classList.add('hidden');
 
     const textArea = document.createElement('textarea');

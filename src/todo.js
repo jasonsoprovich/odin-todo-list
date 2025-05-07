@@ -63,13 +63,19 @@ export function addSubtask(id, text) {
 }
 
 export function toggleSubtask(todoId, subId) {
-  const todo = todos.find((todoItem) => todoItem.id === todoId);
-  if (!todo) return null;
-  const sub = todo.subtasks.find((subItem) => subItem.id === subId);
-  if (!sub) return null;
-  sub.done = !sub.done;
+  const todo = todos.find((item) => item.id === todoId);
+  if (!todo || !Array.isArray(todo.subtasks)) {
+    return false;
+  }
+
+  const subItem = todo.subtasks.find((s) => s.id === subId);
+  if (!subItem) {
+    return false;
+  }
+
+  subItem.done = !subItem.done;
   saveTodos();
-  return sub;
+  return true;
 }
 
 export function deleteSubtask(todoId, subId) {
