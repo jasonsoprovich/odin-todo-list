@@ -1,3 +1,5 @@
+// categories.js will be replaced by refactored projectManager.js
+
 const CAT_KEY = 'todos-categories';
 let categories = [];
 

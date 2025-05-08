@@ -33,9 +33,8 @@ class TaskManager {
         this.#nextId =
           this.#tasks.reduce((max, task) => Math.max(max, task.id), 0) + 1;
       } catch (error) {
-        // localStorage debugging - safe to remove
+        // eslint-disable-next-line no-console
         console.error('Error loading tasks from localStorage:', error);
-        //
         this.#tasks = [];
         this.#nextId = 1;
       }
