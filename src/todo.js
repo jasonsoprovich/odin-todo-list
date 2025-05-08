@@ -1,3 +1,5 @@
+// todo.js will be replaced by refactored task.js
+
 const STORAGE_KEY = 'todos-app';
 let todos = [];
 let nextID = 1;
