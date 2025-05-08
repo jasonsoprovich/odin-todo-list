@@ -5,9 +5,14 @@ module.exports = {
     node: true,
   },
   extends: ['airbnb-base', 'prettier'],
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 'latest',
     sourceType: 'module',
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-env'],
+    },
   },
   rules: {
     'no-console': 'warn',
