@@ -1,3 +1,5 @@
+// dom.js will be replaced by refactored renderer.js
+
 export const qs = (selector) => document.querySelector(selector);
 
 export function renderTodos(todos, container, editingId = null) {
