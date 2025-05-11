@@ -71,10 +71,18 @@ class TaskManager {
   updateTask(id, updatedProperties) {
     const taskIndex = this.#tasks.findIndex((task) => task.id === id);
     if (taskIndex > -1) {
-      this.#tasks[taskIndex] = {
-        ...this.#tasks[taskIndex],
-        ...updatedProperties,
-      };
+      const oldTaskData = this.#tasks[taskIndex];
+      const updatedData = { ...oldTaskData, ...updatedProperties };
+      this.#tasks[taskIndex] = new Task(
+        updatedData.id,
+        updatedData.text,
+        updatedData.done,
+        updatedData.due,
+        updatedData.category,
+        updatedData.note,
+        updatedData.subtasks,
+        updatedData.priority
+      );
       this.#saveTasks();
       return this.#tasks[taskIndex];
     }
@@ -95,6 +103,16 @@ class TaskManager {
     const task = this.#tasks.find((t) => t.id === id);
     if (task) {
       task.toggleComplete();
+      this.#saveTasks();
+      return task;
+    }
+    return null;
+  }
+
+  updateTaskNote(id, noteText) {
+    const task = this.#tasks.find((t) => t.id === id);
+    if (task) {
+      task.note = noteText;
       this.#saveTasks();
       return task;
     }
