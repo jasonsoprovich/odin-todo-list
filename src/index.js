@@ -147,5 +147,3 @@ if (todoListElement) {
     }
   });
 }
-// Debugging - safe to remove
-console.log('Application initialized with new architecture.');
