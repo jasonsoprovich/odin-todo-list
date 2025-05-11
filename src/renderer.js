@@ -1,3 +1,4 @@
+import { format, parseISO, isValid as isValidDate } from 'date-fns';
 import Events from './pubsub';
 import tasksManager from './taskManager';
 import projectsManager from './projectManager';
@@ -167,17 +168,23 @@ class Renderer {
         const dueSpan = document.createElement('span');
         dueSpan.classList.add('todo-due');
         try {
-          // switch to date-fns later
-          const date = new Date(`${task.due}T00:00:00`);
-          if (!Number.isNaN(date.getTime())) {
-            dueSpan.textContent = `📅 ${date.toLocaleDateString(undefined, {
-              month: 'short',
-              day: 'numeric',
-            })}`;
+          const dateObject = parseISO(task.due);
+          if (isValidDate(dateObject)) {
+            dueSpan.textContent = `📅 ${format(dateObject, 'MMM d')}`;
           } else {
             dueSpan.textContent = `📅 ${task.due}`;
           }
+          // if (!Number.isNaN(date.getTime())) {
+          //   dueSpan.textContent = `📅 ${date.toLocaleDateString(undefined, {
+          //     month: 'short',
+          //     day: 'numeric',
+          //   })}`;
+          // } else {
+          //   dueSpan.textContent = `📅 ${task.due}`;
+          // }
         } catch (e) {
+          // eslint-disable-next-line no-console
+          console.warn('Error parsing due date:', task.due, e);
           dueSpan.textContent = `📅 ${task.due}`;
         }
         li.appendChild(dueSpan);
