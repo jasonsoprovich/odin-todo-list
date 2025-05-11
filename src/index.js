@@ -67,7 +67,7 @@ if (todoListElement) {
       return;
     }
 
-    if (target.matches('button-remove')) {
+    if (target.matches('button.remove')) {
       tasksManager.deleteTask(taskId);
       return;
     }
