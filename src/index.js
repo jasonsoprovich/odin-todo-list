@@ -1,172 +1,151 @@
 import './styles.css';
-import { loadCategories, getCategories, addCategory } from './categories';
-import {
-  loadTodos,
-  getTodos,
-  createTodo,
-  deleteTodo,
-  toggleTodo,
-  updateNote,
-  addSubtask,
-  toggleSubtask,
-  deleteSubtask,
-  updateTodo,
-} from './todo';
-import { qs, renderTodos } from './dom';
+// eslint-disable-next-line no-unused-vars
+import Events from './pubsub';
+import tasksManager from './taskManager';
+import projectsManager from './projectManager';
+import appRenderer from './renderer';
 
-const form = qs('#todo-form');
-const input = qs('#todo-input');
-const dueInput = qs('#todo-due');
-const catSelect = qs('#todo-cat');
-const listElement = qs('#todo-list');
-const catListElement = qs('#category-list');
-const catForm = qs('#cat-form');
-const catInput = qs('#cat-input');
-
-let activeCategory = 'All';
-let editingId = null;
-
-loadCategories();
-loadTodos();
-
-function renderTodosFilter() {
-  let list = getTodos();
-  if (activeCategory !== 'All') {
-    list = list.filter((todo) => todo.category === activeCategory);
-  }
-  renderTodos(list, listElement, editingId);
+function qs(selector) {
+  return document.querySelector(selector);
 }
 
-function renderCategoryOptions() {
-  catSelect.innerHTML = '';
-  getCategories().forEach((cat) => {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    catSelect.appendChild(option);
+const mainTaskForm = qs('#todo-form');
+const taskInput = qs('#todo-input');
+const taskDueInput = qs('#todo-due');
+const taskCategorySelect = qs('#todo-cat');
+const taskPrioritySelect = qs('#todo-priority');
+
+const categoryForm = qs('#cat-form');
+const categoryInput = qs('#cat-input');
+
+const todoListElement = qs('#todo-list');
+
+if (categoryForm) {
+  categoryForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const categoryName = categoryInput.value.trim();
+    if (categoryName) {
+      const added = projectsManager.addProject(categoryName);
+      if (added) {
+        categoryInput.value = '';
+      } else {
+        // eslint-disable-next-line no-alert
+        alert(`Category "${categoryName}" already exists or is invalid.`);
+      }
+    }
   });
 }
 
-function renderCategories() {
-  catListElement.innerHTML = '';
-  const cats = ['All', ...getCategories()];
-  cats.forEach((cat) => {
-    const li = document.createElement('li');
-    li.textContent = cat;
-    if (cat === activeCategory) li.classList.add('active');
-    li.addEventListener('click', () => {
-      activeCategory = cat;
-      renderCategories();
-      renderTodosFilter();
-    });
-    catListElement.appendChild(li);
+if (mainTaskForm) {
+  mainTaskForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = taskInput.value.trim();
+    const due = taskDueInput.value || null;
+    const category = taskCategorySelect.value;
+    const priority = taskPrioritySelect ? taskPrioritySelect.value : 'Medium';
+
+    if (text) {
+      tasksManager.createTask(text, due, category, priority);
+      taskInput.value = '';
+      taskDueInput.value = '';
+      if (taskPrioritySelect) taskPrioritySelect.value = 'Medium';
+      taskInput.focus();
+    }
   });
 }
 
-catForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const name = catInput.value.trim();
-  if (name && addCategory(name)) {
-    renderCategories();
-    renderCategoryOptions();
-  }
-  catInput.value = '';
-});
+if (todoListElement) {
+  todoListElement.addEventListener('click', (e) => {
+    const { target } = e;
+    const taskLi = target.closest('li[data-id]');
+    if (!taskLi) return;
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const text = input.value.trim();
-  const due = dueInput.value || null;
-  const category = catSelect.value;
-  if (!text) return;
-  createTodo(text, due, category);
-  renderTodosFilter();
-  input.value = '';
-  dueInput.value = '';
-  input.focus();
-});
+    const taskId = Number(taskLi.dataset.id);
 
-listElement.addEventListener('click', (e) => {
-  const { target } = e;
+    if (target.matches('button.toggle')) {
+      tasksManager.toggleTaskComplete(taskId);
+      return;
+    }
 
-  if (target.matches('button.sub-toggle')) {
-    const todoId = Number(target.dataset.id);
-    const subId = Number(target.dataset.subId);
-    toggleSubtask(todoId, subId);
-    renderTodosFilter();
-    return;
-  }
+    if (target.matches('button-remove')) {
+      tasksManager.deleteTask(taskId);
+      return;
+    }
 
-  if (target.matches('button.sub-remove')) {
-    const todoId = Number(target.dataset.id);
-    const subId = Number(target.dataset.subId);
-    deleteSubtask(todoId, subId);
-    renderTodosFilter();
-    return;
-  }
+    if (target.matches('button.edit-btn')) {
+      appRenderer.setEditingId(taskId);
+    }
 
-  const li = target.closest('li');
-  const id = li ? Number(li.dataset.id) : null;
-  if (!li || !id) return;
+    if (target.matches('button.save-edit-btn')) {
+      const editInput = taskLi.querySelector('input.edit-input');
+      if (editInput) {
+        const newText = editInput.value.trim();
+        if (newText) {
+          tasksManager.updateTask(taskId, { text: newText });
+        }
+        appRenderer.setEditingId(null);
+      }
+      return;
+    }
 
-  if (target.matches('button.edit-btn')) {
-    editingId = editingId === id ? null : id;
-    renderTodosFilter();
-    return;
-  }
+    if (target.matches('button.note-btn')) {
+      const noteArea = taskLi.querySelector('.note-area');
+      if (noteArea) noteArea.classList.toggle('hidden');
+      return;
+    }
 
-  if (target.matches('button.save-edit-btn')) {
-    const editInput = li.querySelector('input.edit-input');
-    const newText = editInput.value.trim();
-    if (newText) updateTodo(id, newText);
-    editingId = null;
-    renderTodosFilter();
-    return;
-  }
+    if (target.matches('button.save-note-btn')) {
+      const textArea = taskLi.querySelector('.note-area textarea.note-text');
+      if (textArea) {
+        const noteText = textArea.value.trim();
+        tasksManager.updateTaskNote(taskId, noteText);
+        const noteArea = taskLi.querySelector('.note-area');
+        if (noteArea && !noteText) noteArea.classList.add('hidden');
+      }
+      return;
+    }
 
-  if (target.matches('button.note-btn')) {
-    li.querySelector('.note-area').classList.toggle('hidden');
-    return;
-  }
+    if (target.matches('button.list-btn')) {
+      const listArea = taskLi.querySelector('.list-area');
+      if (listArea) listArea.classList.toggle('hidden');
+      return;
+    }
 
-  if (target.matches('button.save-note-btn')) {
-    const text = li.querySelector('textarea.note-text').value.trim();
-    updateNote(id, text);
-    if (!text) li.querySelector('.note-area').classList.add('hidden');
-    renderTodosFilter();
-    return;
-  }
+    if (target.matches('button.sub-toggle')) {
+      const subTaskId = Number(target.dataset.subId);
+      if (subTaskId) {
+        tasksManager.toggleSubtask(taskId, subTaskId);
+      }
+      return;
+    }
 
-  if (target.matches('button.list-btn')) {
-    li.querySelector('.list-area').classList.toggle('hidden');
-    return;
-  }
+    if (target.matches('button.sub-remove')) {
+      const subTaskId = Number(target.dataset.subId);
+      if (subTaskId) {
+        tasksManager.deleteSubtask(taskId, subTaskId);
+      }
+    }
+  });
 
-  if (target.matches('button.toggle')) {
-    toggleTodo(id);
-    renderTodosFilter();
-    return;
-  }
+  todoListElement.addEventListener('submit', (e) => {
+    const { target } = e;
 
-  if (target.matches('button.remove')) {
-    deleteTodo(id);
-    renderTodosFilter();
-  }
-});
+    if (target.matches('form.sub-form')) {
+      e.preventDefault();
+      const taskLi = target.closest('li[data-id]');
+      if (!taskLi) return;
+      const taskId = Number(taskLi.dataset.id);
 
-listElement.addEventListener('submit', (e) => {
-  if (!e.target.matches('.sub-form')) return;
-  e.preventDefault();
-  const todoId = Number(e.target.dataset.id);
-  const subInput = e.target.querySelector('.sub-input');
-  const text = subInput.value.trim();
-  if (text) {
-    addSubtask(todoId, text);
-    renderTodosFilter();
-  }
-  subInput.value = '';
-});
-
-renderCategoryOptions();
-renderCategories();
-renderTodosFilter();
+      const subInput = target.querySelector('input.sub-input');
+      if (subInput) {
+        const text = subInput.value.trim();
+        if (text) {
+          tasksManager.addSubtask(taskId, text);
+        }
+        subInput.value = '';
+      }
+    }
+  });
+}
+// Debugging - safe to remove
+console.log('Application initialized with new architecture.');
