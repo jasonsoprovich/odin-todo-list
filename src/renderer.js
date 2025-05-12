@@ -145,18 +145,30 @@ class Renderer {
       li.appendChild(editBtn);
 
       if (task.id === this.#editingId) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.classList.add('edit-input');
-        input.value = task.text;
-        li.appendChild(input);
+        const editForm = document.createElement('form');
+        editForm.classList.add('edit-task-form');
+        editForm.addEventListener('submit', (e) => e.preventDefault());
+
+        const textInput = document.createElement('input');
+        textInput.type = 'text';
+        textInput.classList.add('edit-input', 'edit-task-text');
+        textInput.value = task.text;
+        editForm.appendChild(textInput);
+
+        const dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.classList.add('edit-input', 'edit-task-due');
+        dateInput.value = task.due || '';
+        editForm.appendChild(dateInput);
 
         const saveBtn = document.createElement('button');
-        saveBtn.type = 'button';
+        saveBtn.type = 'submit';
         saveBtn.classList.add('save-edit-btn');
         saveBtn.dataset.id = task.id;
         saveBtn.textContent = 'Save';
-        li.appendChild(saveBtn);
+        editForm.appendChild(saveBtn);
+
+        li.appendChild(editForm);
       } else {
         const textSpan = document.createElement('span');
         textSpan.classList.add('todo-text');
@@ -174,14 +186,6 @@ class Renderer {
           } else {
             dueSpan.textContent = `📅 ${task.due}`;
           }
-          // if (!Number.isNaN(date.getTime())) {
-          //   dueSpan.textContent = `📅 ${date.toLocaleDateString(undefined, {
-          //     month: 'short',
-          //     day: 'numeric',
-          //   })}`;
-          // } else {
-          //   dueSpan.textContent = `📅 ${task.due}`;
-          // }
         } catch (e) {
           // eslint-disable-next-line no-console
           console.warn('Error parsing due date:', task.due, e);

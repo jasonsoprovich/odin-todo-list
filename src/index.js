@@ -77,14 +77,25 @@ if (todoListElement) {
     }
 
     if (target.matches('button.save-edit-btn')) {
-      const editInput = taskLi.querySelector('input.edit-input');
-      if (editInput) {
-        const newText = editInput.value.trim();
-        if (newText) {
-          tasksManager.updateTask(taskId, { text: newText });
+      const editForm = taskLi.querySelector('form.edit-task-form');
+      if (editForm) {
+        const textInput = editForm.querySelector('input.edit-task-text');
+        const dateInput = editForm.querySelector('input.edit-task-due');
+
+        const newText = textInput ? textInput.value.trim() : null;
+        const newDueDate = dateInput ? dateInput.value || null : null;
+
+        const updatedProperties = {};
+        if (newText !== null && newText !== '') {
+          updatedProperties.text = newText;
         }
-        appRenderer.setEditingId(null);
+        updatedProperties.due = newDueDate;
+
+        if (Object.keys(updatedProperties).length > 0) {
+          tasksManager.updateTask(taskId, updatedProperties);
+        }
       }
+      appRenderer.setEditingId(null);
       return;
     }
 
