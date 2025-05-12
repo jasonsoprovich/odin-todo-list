@@ -46,6 +46,7 @@ class Renderer {
     if (this.#projectTitleElement) {
       this.#projectTitleElement.textContent = data.current || 'Todo List';
     }
+    this.renderTasks(tasksManager.list);
   }
 
   renderCategories(categories, activeCategoryName) {
@@ -65,12 +66,6 @@ class Renderer {
     this.#categoryListElement.appendChild(allLi);
 
     categories.forEach((project) => {
-      // const li = document.createElement('li');
-      // li.textContent = project.name;
-      // if (project.name === activeCategoryName) li.classList.add('active');
-      // li.addEventListener('click', () => {
-      //   projectsManager.setCurrentProject(project.name);
-      // });
       if (project.name === 'All') return;
 
       const projectLi = document.createElement('li');
@@ -150,9 +145,11 @@ class Renderer {
 
     if (currentProjectName && currentProjectName !== 'All') {
       if (currentProjectName === 'Today') {
-        // placeholder for 'today' logic
+        // placeholder for 'today' logic - currently shows 'all'
+        // tasksToRender = allTasks.filter(task => isToday(parseISO(task.due)));
       } else if (currentProjectName === 'Upcoming') {
-        // placeholder for 'upcoming' logic
+        // placeholder for 'today' logic - currently shows 'all'
+        // tasksToRender = allTasks.filter(task => task.due && !isPast(parseISO(task.due)));
       } else {
         tasksToRender = allTasks.filter(
           (task) => task.category === currentProjectName
@@ -301,6 +298,7 @@ class Renderer {
       listBtn.type = 'button';
       listBtn.classList.add('list-btn');
       listBtn.dataset.id = task.id;
+      listBtn.textContent = '🗒️';
       listBtn.setAttribute('aria-label', 'Toggle checklist');
       li.appendChild(listBtn);
 
@@ -319,7 +317,7 @@ class Renderer {
       subForm.appendChild(subInput);
 
       const subAddBtn = document.createElement('button');
-      subAddBtn.type = 'button';
+      subAddBtn.type = 'submit';
       subAddBtn.textContent = 'Add';
       subForm.appendChild(subAddBtn);
       listArea.appendChild(subForm);
