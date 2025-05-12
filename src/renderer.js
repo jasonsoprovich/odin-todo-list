@@ -129,12 +129,17 @@ class Renderer {
       li.dataset.id = task.id;
       if (task.done) li.classList.add('done');
 
-      const prioritySpan = document.createElement('span');
-      prioritySpan.classList.add('todo-priority', task.priority.toLowerCase());
-      prioritySpan.textContent =
-        { High: '🔥', Medium: '⚡', Low: '🛌' }[task.priority] ||
-        ` ${task.priority}`;
-      li.appendChild(prioritySpan);
+      if (task.priority && task.priority !== null) {
+        const prioritySpan = document.createElement('span');
+        prioritySpan.classList.add(
+          'todo-priority',
+          task.priority.toLowerCase()
+        );
+        prioritySpan.textContent =
+          { High: '🔥', Medium: '⚡', Low: '🛌' }[task.priority] ||
+          ` ${task.priority}`;
+        li.appendChild(prioritySpan);
+      }
 
       const editBtn = document.createElement('button');
       editBtn.type = 'button';
@@ -160,6 +165,27 @@ class Renderer {
         dateInput.classList.add('edit-input', 'edit-task-due');
         dateInput.value = task.due || '';
         editForm.appendChild(dateInput);
+
+        const priorityEditSelect = document.createElement('select');
+        priorityEditSelect.classList.add('edit-input', 'edit-task-priority');
+
+        const priorityOptions = [
+          { value: '', text: '⚪ None' }, // value="" represents null
+          { value: 'Low', text: '🛌 Low' },
+          { value: 'Medium', text: '⚡ Medium' },
+          { value: 'High', text: '🔥 High' },
+        ];
+
+        priorityOptions.forEach((opt) => {
+          const option = document.createElement('option');
+          option.value = opt.value;
+          option.textContent = opt.text;
+          if (opt.value === (task.priority || '')) {
+            option.selected = true;
+          }
+          priorityEditSelect.appendChild(option);
+        });
+        editForm.appendChild(priorityEditSelect);
 
         const saveBtn = document.createElement('button');
         saveBtn.type = 'submit';

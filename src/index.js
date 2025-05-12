@@ -42,13 +42,15 @@ if (mainTaskForm) {
     const text = taskInput.value.trim();
     const due = taskDueInput.value || null;
     const category = taskCategorySelect.value;
-    const priority = taskPrioritySelect ? taskPrioritySelect.value : 'Medium';
+
+    const priorityValue = taskPrioritySelect ? taskPrioritySelect.value : '';
+    const priorityForNewTask = priorityValue === '' ? null : priorityValue;
 
     if (text) {
-      tasksManager.createTask(text, due, category, priority);
+      tasksManager.createTask(text, due, category, priorityForNewTask);
       taskInput.value = '';
       taskDueInput.value = '';
-      if (taskPrioritySelect) taskPrioritySelect.value = 'Medium';
+      if (taskPrioritySelect) taskPrioritySelect.value = '';
       taskInput.focus();
     }
   });
@@ -81,15 +83,27 @@ if (todoListElement) {
       if (editForm) {
         const textInput = editForm.querySelector('input.edit-task-text');
         const dateInput = editForm.querySelector('input.edit-task-due');
+        const priorityInput = editForm.querySelector(
+          'select.edit-task-priority'
+        );
 
         const newText = textInput ? textInput.value.trim() : null;
         const newDueDate = dateInput ? dateInput.value || null : null;
 
+        const priorityValueFromEdit = priorityInput ? priorityInput.value : '';
+        const newPriority =
+          priorityValueFromEdit === '' ? null : priorityValueFromEdit;
+
         const updatedProperties = {};
-        if (newText !== null && newText !== '') {
+        if (textInput && newText !== '') {
           updatedProperties.text = newText;
         }
-        updatedProperties.due = newDueDate;
+        if (dateInput) {
+          updatedProperties.due = newDueDate;
+        }
+        if (priorityInput) {
+          updatedProperties.priority = newPriority;
+        }
 
         if (Object.keys(updatedProperties).length > 0) {
           tasksManager.updateTask(taskId, updatedProperties);

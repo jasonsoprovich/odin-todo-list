@@ -7,7 +7,7 @@ class Task {
     category = 'Inbox',
     note = '',
     subtasks = [],
-    priority = 'Medium'
+    priority = null
   ) {
     this.id = id;
     this.text = text;

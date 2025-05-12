@@ -27,7 +27,7 @@ class TaskManager {
               t.category || 'Inbox',
               typeof t.note === 'string' ? t.note : '',
               Array.isArray(t.subtasks) ? t.subtasks : [],
-              t.priority || 'Medium'
+              t.priority || null
             )
         );
         this.#nextId =
@@ -51,7 +51,7 @@ class TaskManager {
     return [...this.#tasks];
   }
 
-  createTask(text, due = null, category = 'Inbox', priority = 'Medium') {
+  createTask(text, due = null, category = 'Inbox', priority = null) {
     const newTask = new Task(
       this.#nextId,
       text,
@@ -155,7 +155,10 @@ class TaskManager {
 
   updateTaskPriority(id, newPriority) {
     const task = this.#tasks.find((t) => t.id === id);
-    if (task && ['Low', 'Medium', 'High'].includes(newPriority)) {
+    if (
+      task &&
+      (newPriority === null || ['Low', 'Medium', 'High'].includes(newPriority))
+    ) {
       task.priority = newPriority;
       this.#saveTasks();
       return task;

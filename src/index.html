@@ -24,6 +24,13 @@
       <main id="app" class="main-content container">
         <h1 class="text-center">Todo List</h1>
         <form id="todo-form" class="todo-form">
+          <select id="todo-priority" aria-label="priority">
+            <option value="" selected>None</option>
+            <option value="Low">🛌 Low</option>
+            <option value="Medium">⚡ Medium</option>
+            <option value="High">🔥 High</option>
+          </select>
+
           <input
             type="text"
             id="todo-input"
