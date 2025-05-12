@@ -75,7 +75,12 @@ if (todoListElement) {
     }
 
     if (target.matches('button.edit-btn')) {
-      appRenderer.setEditingId(taskId);
+      if (appRenderer.getCurrentEditingId() === taskId) {
+        appRenderer.setEditingId(null);
+      } else {
+        appRenderer.setEditingId(taskId);
+      }
+      return;
     }
 
     if (target.matches('button.save-edit-btn')) {

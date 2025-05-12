@@ -105,6 +105,10 @@ class Renderer {
     this.renderTasks(tasksManager.list);
   }
 
+  getCurrentEditingId() {
+    return this.#editingId;
+  }
+
   renderTasks(allTasks) {
     if (!this.#todoListElement) return;
     this.#todoListElement.innerHTML = '';
