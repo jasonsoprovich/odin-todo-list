@@ -361,3 +361,29 @@ ul {
   font-size: 1.1rem;
   line-height: 1;
 }
+
+.project-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-name {
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+button.delete-category-btn {
+  all: unset;
+  color: #cc0000;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-left: 8px;
+  padding: 2px 4px;
+  line-height: 1;
+}
+
+button.delete-category-btn:hover {
+  color: #ff0000;
+  font-weight: bold;
+}

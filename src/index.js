@@ -17,8 +17,27 @@ const taskPrioritySelect = qs('#todo-priority');
 
 const categoryForm = qs('#cat-form');
 const categoryInput = qs('#cat-input');
+const categoryListElement = qs('#category-list');
 
 const todoListElement = qs('#todo-list');
+
+if (categoryListElement) {
+  categoryListElement.addEventListener('click', (e) => {
+    const { target } = e;
+
+    if (target.matches('button.delete-category-btn')) {
+      const { categoryName } = target.dataset;
+      if (categoryName) {
+        if (
+          // eslint-disable-next-line no-alert
+          confirm(`Are you sure you want to delete category "${categoryName}?`)
+        ) {
+          projectsManager.deleteProject(categoryName);
+        }
+      }
+    }
+  });
+}
 
 if (categoryForm) {
   categoryForm.addEventListener('submit', (e) => {

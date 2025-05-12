@@ -54,20 +54,52 @@ class Renderer {
 
     const allLi = document.createElement('li');
     allLi.textContent = 'All';
-    if (activeCategoryName === 'All') allLi.classList.add('active');
+    allLi.classList.add('project-item');
+    allLi.dataset.projectName = 'All';
+    if (activeCategoryName === 'All') {
+      allLi.classList.add('active');
+    }
     allLi.addEventListener('click', () => {
       projectsManager.setCurrentProject('All');
     });
     this.#categoryListElement.appendChild(allLi);
 
     categories.forEach((project) => {
-      const li = document.createElement('li');
-      li.textContent = project.name;
-      if (project.name === activeCategoryName) li.classList.add('active');
-      li.addEventListener('click', () => {
+      // const li = document.createElement('li');
+      // li.textContent = project.name;
+      // if (project.name === activeCategoryName) li.classList.add('active');
+      // li.addEventListener('click', () => {
+      //   projectsManager.setCurrentProject(project.name);
+      // });
+      if (project.name === 'All') return;
+
+      const projectLi = document.createElement('li');
+      projectLi.classList.add('project-item');
+      projectLi.dataset.projectName = project.name;
+
+      const projectNameSpan = document.createElement('span');
+      projectNameSpan.textContent = project.name;
+      projectNameSpan.classList.add('project-name');
+      projectNameSpan.addEventListener('click', () => {
         projectsManager.setCurrentProject(project.name);
       });
-      this.#categoryListElement.appendChild(li);
+
+      if (project.name === activeCategoryName) {
+        projectLi.classList.add('active');
+      }
+      projectLi.appendChild(projectNameSpan);
+
+      const SYSTEM_PROJECT_NAMES = ['Inbox', 'Today', 'Upcoming', 'All'];
+      if (!SYSTEM_PROJECT_NAMES.includes(project.name)) {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-category-btn');
+        deleteBtn.textContent = '✕';
+        deleteBtn.setAttribute('aria-label', `Delete category ${project.name}`);
+        deleteBtn.dataset.categoryName = project.name;
+        projectLi.appendChild(deleteBtn);
+      }
+
+      this.#categoryListElement.appendChild(projectLi);
     });
   }
 
