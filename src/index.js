@@ -29,7 +29,7 @@ if (categoryListElement) {
       const { categoryName } = target.dataset;
       if (categoryName) {
         if (
-          // eslint-disable-next-line no-alert
+          // eslint-disable-next-line no-alert, no-restricted-globals
           confirm(`Are you sure you want to delete category "${categoryName}?`)
         ) {
           projectsManager.deleteProject(categoryName);

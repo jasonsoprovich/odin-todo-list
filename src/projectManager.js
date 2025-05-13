@@ -2,7 +2,7 @@ import Events from './pubsub';
 import Project from './project';
 
 const PROJECTS_STORAGE_KEY = 'todos-app-projects';
-const DEFAULT_PROJECTS = ['Inbox', 'Today', 'Upcoming'];
+const DEFAULT_PROJECTS = ['All', 'Inbox', 'Today', 'Upcoming'];
 const [defaultInboxProjectName] = DEFAULT_PROJECTS;
 
 class ProjectManager {
