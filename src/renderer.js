@@ -1,4 +1,10 @@
-import { format, parseISO, isValid as isValidDate } from 'date-fns';
+import {
+  isToday,
+  isFuture,
+  format,
+  parseISO,
+  isValid as isValidDate,
+} from 'date-fns';
 import Events from './pubsub';
 import tasksManager from './taskManager';
 import projectsManager from './projectManager';
@@ -141,18 +147,35 @@ class Renderer {
     this.#todoListElement.innerHTML = '';
 
     const { currentProjectName } = projectsManager;
-    let filteredTasks = tasksToDisplay;
+    // let filteredTasks = tasksToDisplay;
+    let filteredTasks = [];
 
-    if (currentProjectName && currentProjectName !== 'All') {
-      if (currentProjectName === 'Today') {
-        // placeholder for 'today' logic - currently shows 'all'
-        // tasksToRender = allTasks.filter(task => isToday(parseISO(task.due)));
-      } else if (currentProjectName === 'Upcoming') {
-        // placeholder for 'today' logic - currently shows 'all'
-        // tasksToRender = allTasks.filter(task => task.due && !isPast(parseISO(task.due)));
-      } else {
-        filteredTasks = tasksToDisplay;
-      }
+    if (!currentProjectName || currentProjectName === 'All') {
+      filteredTasks = tasksToDisplay;
+    } else if (currentProjectName === 'Today') {
+      filteredTasks = tasksToDisplay.filter((task) => {
+        if (!task.due) return false;
+        try {
+          const dueDate = parseISO(task.due);
+          return isValidDate(dueDate) && isToday(dueDate);
+        } catch (e) {
+          return false;
+        }
+      });
+    } else if (currentProjectName === 'Upcoming') {
+      filteredTasks = tasksToDisplay.filter((task) => {
+        if (!task.due) return false;
+        try {
+          const dueDate = parseISO(task.due);
+          return isValidDate(dueDate) && isFuture(dueDate) && !isToday(dueDate);
+        } catch (e) {
+          return false;
+        }
+      });
+    } else {
+      filteredTasks = tasksToDisplay.filter(
+        (task) => task.category === currentProjectName
+      );
     }
 
     filteredTasks.forEach((task) => {
