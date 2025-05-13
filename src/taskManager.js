@@ -1,3 +1,4 @@
+import { parseISO, compareAsc, compareDesc } from 'date-fns';
 import Events from './pubsub';
 import Task from './task';
 
@@ -7,6 +8,8 @@ class TaskManager {
   #tasks = [];
 
   #nextId = 1;
+
+  #currentSortCriteria = { field: null, direction: 'asc' };
 
   constructor() {
     this.#loadTasks();
@@ -48,7 +51,44 @@ class TaskManager {
   }
 
   get list() {
-    return [...this.#tasks];
+    // return [...this.#tasks];
+    const sortedTasks = [...this.#tasks];
+
+    if (this.#currentSortCriteria.field) {
+      const { field, direction } = this.#currentSortCriteria;
+      sortedTasks.sort((a, b) => {
+        let valA = a[field];
+        let valB = b[field];
+
+        if (field === 'due') {
+          if (valA === null && valB === null) return 0;
+          if (valA === null) return 1;
+          if (valB === null) return -1;
+
+          valA = parseISO(valA);
+          valB = parseISO(valB);
+          return direction === 'asc'
+            ? compareAsc(valA, valB)
+            : compareDesc(valA, valB);
+        }
+
+        if (valA < valB) return direction === 'asc' ? -1 : 1;
+        if (valA > valB) return direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortedTasks;
+  }
+
+  setSortCriteria(field, direction = 'asc') {
+    if (this.#currentSortCriteria.field === field) {
+      this.#currentSortCriteria.direction =
+        this.#currentSortCriteria.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.#currentSortCriteria.field = field;
+      this.#currentSortCriteria.direction = direction;
+    }
+    Events.emit('tasksUpdated', this.list);
   }
 
   createTask(text, due = null, category = 'Inbox', priority = null) {

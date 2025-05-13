@@ -387,3 +387,14 @@ button.delete-category-btn:hover {
   color: #ff0000;
   font-weight: bold;
 }
+
+.toolbar {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbar button {
+  padding: 0.4em 0.8em;
+  font-size: 0.9rem;
+}

@@ -136,12 +136,12 @@ class Renderer {
     return this.#editingId;
   }
 
-  renderTasks(allTasks) {
+  renderTasks(tasksToDisplay) {
     if (!this.#todoListElement) return;
     this.#todoListElement.innerHTML = '';
 
     const { currentProjectName } = projectsManager;
-    let tasksToRender = allTasks;
+    let filteredTasks = tasksToDisplay;
 
     if (currentProjectName && currentProjectName !== 'All') {
       if (currentProjectName === 'Today') {
@@ -151,13 +151,11 @@ class Renderer {
         // placeholder for 'today' logic - currently shows 'all'
         // tasksToRender = allTasks.filter(task => task.due && !isPast(parseISO(task.due)));
       } else {
-        tasksToRender = allTasks.filter(
-          (task) => task.category === currentProjectName
-        );
+        filteredTasks = tasksToDisplay;
       }
     }
 
-    tasksToRender.forEach((task) => {
+    filteredTasks.forEach((task) => {
       const li = document.createElement('li');
       li.dataset.id = task.id;
       if (task.done) li.classList.add('done');

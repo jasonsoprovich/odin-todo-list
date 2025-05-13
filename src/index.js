@@ -21,6 +21,14 @@ const categoryListElement = qs('#category-list');
 
 const todoListElement = qs('#todo-list');
 
+const sortByDueDateBtn = qs('#sort-by-due-date-btn');
+
+if (sortByDueDateBtn) {
+  sortByDueDateBtn.addEventListener('click', () => {
+    tasksManager.setSortCriteria('due');
+  });
+}
+
 if (categoryListElement) {
   categoryListElement.addEventListener('click', (e) => {
     const { target } = e;
