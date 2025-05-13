@@ -1,6 +1,7 @@
 import {
   isToday,
   isFuture,
+  isPast,
   format,
   parseISO,
   isValid as isValidDate,
@@ -90,7 +91,13 @@ class Renderer {
       }
       projectLi.appendChild(projectNameSpan);
 
-      const SYSTEM_PROJECT_NAMES = ['Inbox', 'Today', 'Upcoming', 'All'];
+      const SYSTEM_PROJECT_NAMES = [
+        'Inbox',
+        'Today',
+        'Upcoming',
+        'All',
+        'Overdue',
+      ];
       if (!SYSTEM_PROJECT_NAMES.includes(project.name)) {
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('delete-category-btn');
@@ -147,7 +154,6 @@ class Renderer {
     this.#todoListElement.innerHTML = '';
 
     const { currentProjectName } = projectsManager;
-    // let filteredTasks = tasksToDisplay;
     let filteredTasks = [];
 
     if (!currentProjectName || currentProjectName === 'All') {
@@ -168,6 +174,16 @@ class Renderer {
         try {
           const dueDate = parseISO(task.due);
           return isValidDate(dueDate) && isFuture(dueDate) && !isToday(dueDate);
+        } catch (e) {
+          return false;
+        }
+      });
+    } else if (currentProjectName === 'Overdue') {
+      filteredTasks = tasksToDisplay.filter((task) => {
+        if (!task.due || task.done) return false;
+        try {
+          const dueDate = parseISO(task.due);
+          return isValidDate(dueDate) && isPast(dueDate) && !isToday(dueDate);
         } catch (e) {
           return false;
         }
