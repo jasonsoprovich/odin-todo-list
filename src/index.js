@@ -22,10 +22,17 @@ const categoryListElement = qs('#category-list');
 const todoListElement = qs('#todo-list');
 
 const sortByDueDateBtn = qs('#sort-by-due-date-btn');
+const sortByPriorityBtn = qs('#sort-by-priority-btn');
 
 if (sortByDueDateBtn) {
   sortByDueDateBtn.addEventListener('click', () => {
     tasksManager.setSortCriteria('due');
+  });
+}
+
+if (sortByPriorityBtn) {
+  sortByPriorityBtn.addEventListener('click', () => {
+    tasksManager.setSortCriteria('priority');
   });
 }
 

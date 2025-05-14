@@ -1,4 +1,9 @@
-import { parseISO, compareAsc, compareDesc } from 'date-fns';
+import {
+  parseISO,
+  compareAsc,
+  compareDesc,
+  isValid as isValidDate,
+} from 'date-fns';
 import Events from './pubsub';
 import Task from './task';
 
@@ -51,42 +56,79 @@ class TaskManager {
   }
 
   get list() {
-    // return [...this.#tasks];
     const sortedTasks = [...this.#tasks];
 
     if (this.#currentSortCriteria.field) {
       const { field, direction } = this.#currentSortCriteria;
+      const priorityOrder = {
+        High: 3,
+        Medium: 2,
+        Low: 1,
+        null: 0,
+      };
+
       sortedTasks.sort((a, b) => {
-        let valA = a[field];
-        let valB = b[field];
+        const valA = a[field];
+        const valB = b[field];
 
         if (field === 'due') {
-          if (valA === null && valB === null) return 0;
-          if (valA === null) return 1;
-          if (valB === null) return -1;
+          const aIsNull = valA === null || typeof valA === 'undefined';
+          const bIsNull = valB === null || typeof valB === 'undefined';
 
-          valA = parseISO(valA);
-          valB = parseISO(valB);
-          return direction === 'asc'
-            ? compareAsc(valA, valB)
-            : compareDesc(valA, valB);
+          if (aIsNull && bIsNull) return 0;
+          if (aIsNull) return 1;
+          if (bIsNull) return -1;
+
+          if (typeof valA !== 'string' || typeof valB !== 'string') return 0;
+
+          try {
+            const dateA = parseISO(valA);
+            const dateB = parseISO(valB);
+
+            if (!isValidDate(dateA) && !isValidDate(dateB)) return 0;
+            if (!isValidDate(dateA)) return 1;
+            if (!isValidDate(dateB)) return -1;
+
+            return direction === 'asc'
+              ? compareAsc(dateA, dateB)
+              : compareDesc(dateA, dateB);
+          } catch (error) {
+            return 0;
+          }
+
+          // valA = parseISO(valA);
+          // valB = parseISO(valB);
+          // return direction === 'asc'
+          //   ? compareAsc(valA, valB)
+          //   : compareDesc(valA, valB);
+        } else if (field === 'priority') {
+          const priorityA = priorityOrder[valA === null ? 'null' : valA] || 0;
+          const priorityB = priorityOrder[valB === null ? 'null' : valB] || 0;
+
+          if (priorityA === priorityB) return 0;
+
+          if (direction === 'asc') {
+            return priorityA < priorityB ? -1 : 1;
+          }
+          return priorityA > priorityB ? -1 : 1;
+        } else {
+          if (valA < valB) return direction === 'asc' ? -1 : 1;
+          if (valA > valB) return direction === 'asc' ? 1 : -1;
         }
-
-        if (valA < valB) return direction === 'asc' ? -1 : 1;
-        if (valA > valB) return direction === 'asc' ? 1 : -1;
         return 0;
       });
     }
     return sortedTasks;
   }
 
-  setSortCriteria(field, direction = 'asc') {
+  setSortCriteria(field, defaultDirection = 'asc') {
     if (this.#currentSortCriteria.field === field) {
       this.#currentSortCriteria.direction =
         this.#currentSortCriteria.direction === 'asc' ? 'desc' : 'asc';
     } else {
       this.#currentSortCriteria.field = field;
-      this.#currentSortCriteria.direction = direction;
+      this.#currentSortCriteria.direction =
+        field === 'priority' ? 'desc' : defaultDirection;
     }
     Events.emit('tasksUpdated', this.list);
   }
