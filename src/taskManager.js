@@ -42,12 +42,12 @@ class TaskManager {
         this.#nextId = 1;
       }
     }
-    Events.emit('tasksUpdated', this.#tasks);
+    Events.emit('tasksUpdated', this.list);
   }
 
   #saveTasks() {
     localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(this.#tasks));
-    Events.emit('tasksUpdated', this.#tasks);
+    Events.emit('tasksUpdated', this.list);
   }
 
   get list() {
