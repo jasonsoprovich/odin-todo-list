@@ -47,7 +47,7 @@ class Renderer {
     this.renderCategories(data.projects, data.current);
     this.renderCategoryOptionsInForm(
       data.projects.filter(
-        (p) => !['All', 'Today', 'Upcoming'].includes(p.name)
+        (p) => !['All', 'Today', 'Upcoming', 'Overdue'].includes(p.name)
       )
     );
     if (this.#projectTitleElement) {
