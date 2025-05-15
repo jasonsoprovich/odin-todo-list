@@ -16,16 +16,25 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 
 ### 🎯 Roadmap / Upcoming Enhancements
 
-1. In‑line task editing
-2. Due dates & reminders
-3. Sub‑tasks / checklist support
-4. Task notes & rich text entry
-5. Priority levels (e.g. Low / Medium / High)
-6. Project / category grouping
-7. Sidebar navigation for projects & filters
+1. In‑line task editing ✅
+2. Due dates ✅
+3. Sub‑tasks / checklist support ✅
+4. Task notes ✅
+5. Priority levels (e.g. Low / Medium / High) ✅
+6. Project / category grouping ✅
+7. Sidebar navigation for projects & filters ✅
 8. Drag‑and‑drop ordering
-9. Filtering & sorting (by date, priority, status)
-10. Responsive layout & theming (light/dark mode)
+9. Filtering & sorting (by date, priority, status) ✅
+10. Custom confirmation modal ✅
+11. Refine "Add Task" category select/edit
+12. Refine task inline editing and deletion
+13. Sort criteria persistence
+14. Overhaul CSS styling and layout
+15. Replace emojis with Google icons
+16. Consistent CSS color variables
+17. Light/Dark mode
+18. Responsive layout
+19. Drag & drop reordering
 
 ---
 
@@ -37,6 +46,7 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 - ESLint (Airbnb rules)
 - Prettier (code formatting)
 - CSS Modules & PostCSS
+- Date-fns
 
 ---
 
