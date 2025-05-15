@@ -23,6 +23,7 @@ const todoListElement = qs('#todo-list');
 
 const sortByDueDateBtn = qs('#sort-by-due-date-btn');
 const sortByPriorityBtn = qs('#sort-by-priority-btn');
+const sortByNameBtn = qs('#sort-by-name-btn');
 
 if (sortByDueDateBtn) {
   sortByDueDateBtn.addEventListener('click', () => {
@@ -33,6 +34,12 @@ if (sortByDueDateBtn) {
 if (sortByPriorityBtn) {
   sortByPriorityBtn.addEventListener('click', () => {
     tasksManager.setSortCriteria('priority');
+  });
+}
+
+if (sortByNameBtn) {
+  sortByNameBtn.addEventListener('click', () => {
+    tasksManager.setSortCriteria('text');
   });
 }
 

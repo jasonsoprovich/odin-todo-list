@@ -111,6 +111,14 @@ class TaskManager {
             return priorityA < priorityB ? -1 : 1;
           }
           return priorityA > priorityB ? -1 : 1;
+        } else if (field === 'text') {
+          const textA = String(valA || '').toLocaleLowerCase();
+          const textB = String(valB || '').toLocaleLowerCase();
+
+          if (direction === 'asc') {
+            return textA.localeCompare(textB);
+          }
+          return textB.localeCompare(textA);
         } else {
           if (valA < valB) return direction === 'asc' ? -1 : 1;
           if (valA > valB) return direction === 'asc' ? 1 : -1;
