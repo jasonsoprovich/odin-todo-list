@@ -4,6 +4,7 @@ import Events from './pubsub';
 import tasksManager from './taskManager';
 import projectsManager from './projectManager';
 import appRenderer from './renderer';
+import confirmationDialog from './confirmationDialog';
 
 function qs(selector) {
   return document.querySelector(selector);
@@ -44,16 +45,17 @@ if (sortByNameBtn) {
 }
 
 if (categoryListElement) {
-  categoryListElement.addEventListener('click', (e) => {
+  categoryListElement.addEventListener('click', async (e) => {
     const { target } = e;
 
     if (target.matches('button.delete-category-btn')) {
       const { categoryName } = target.dataset;
       if (categoryName) {
-        if (
-          // eslint-disable-next-line no-alert, no-restricted-globals
-          confirm(`Are you sure you want to delete category "${categoryName}?`)
-        ) {
+        const confirmed = await confirmationDialog.show(
+          `Are you sure you want to delete category "${categoryName}"? Tasks will not be deleted.`
+        );
+        // maybe delete tasks within category? or move to inbox?
+        if (confirmed) {
           projectsManager.deleteProject(categoryName);
         }
       }
