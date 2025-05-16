@@ -48,16 +48,16 @@ if (categoryListElement) {
   categoryListElement.addEventListener('click', async (e) => {
     const { target } = e;
 
-    if (target.matches('button.delete-category-btn')) {
-      const { categoryName } = target.dataset;
+    const deleteCategoryButton = target.closest('button.delete-category-btn');
+    if (deleteCategoryButton) {
+      const { categoryName } = deleteCategoryButton.dataset;
       if (categoryName) {
-        const confirmed = await confirmationDialog.show(
-          `Are you sure you want to delete category "${categoryName}"? Tasks will not be deleted.`
+        confirmationDialog.open(
+          `Are you sure you want to delete category "${categoryName}"? This will also delete all associated tasks.`,
+          () => {
+            projectsManager.deleteProject(categoryName);
+          }
         );
-        // maybe delete tasks within category? or move to inbox?
-        if (confirmed) {
-          projectsManager.deleteProject(categoryName);
-        }
       }
     }
   });
@@ -102,121 +102,121 @@ if (mainTaskForm) {
 if (todoListElement) {
   todoListElement.addEventListener('click', (e) => {
     const { target } = e;
-    const taskLi = target.closest('li[data-id]');
-    if (!taskLi) return;
 
-    const taskId = Number(taskLi.dataset.id);
-
-    if (target.matches('button.toggle')) {
-      tasksManager.toggleTaskComplete(taskId);
+    const editButton = target.closest('button.edit-btn');
+    if (editButton) {
+      const todoId = Number(editButton.dataset.id);
+      const currentEditingId = appRenderer.getCurrentEditingId();
+      appRenderer.setEditingId(currentEditingId === todoId ? null : todoId);
       return;
     }
 
-    if (target.matches('button.remove')) {
-      tasksManager.deleteTask(taskId);
-      return;
-    }
-
-    if (target.matches('button.edit-btn')) {
-      if (appRenderer.getCurrentEditingId() === taskId) {
-        appRenderer.setEditingId(null);
-      } else {
-        appRenderer.setEditingId(taskId);
-      }
-      return;
-    }
-
-    if (target.matches('button.save-edit-btn')) {
-      const editForm = taskLi.querySelector('form.edit-task-form');
-      if (editForm) {
-        const textInput = editForm.querySelector('input.edit-task-text');
-        const dateInput = editForm.querySelector('input.edit-task-due');
-        const priorityInput = editForm.querySelector(
-          'select.edit-task-priority'
-        );
+    const saveEditButton = target.closest('button.save-edit-btn');
+    if (saveEditButton) {
+      const todoId = Number(saveEditButton.dataset.id);
+      const taskLi = saveEditButton.closest('li[data-id]');
+      if (taskLi) {
+        const textInput = taskLi.querySelector('input.edit-task-text');
+        const dateInput = taskLi.querySelector('input.edit-task-due');
+        const priorityInput = taskLi.querySelector('select.edit-task-priority');
 
         const newText = textInput ? textInput.value.trim() : null;
-        const newDueDate = dateInput ? dateInput.value || null : null;
-
-        const priorityValueFromEdit = priorityInput ? priorityInput.value : '';
+        const newDueDate = dateInput ? dateInput.value : null;
         const newPriority =
-          priorityValueFromEdit === '' ? null : priorityValueFromEdit;
+          priorityInput && priorityInput.value !== ''
+            ? priorityInput.value
+            : null;
 
-        const updatedProperties = {};
-        if (textInput && newText !== '') {
-          updatedProperties.text = newText;
-        }
-        if (dateInput) {
-          updatedProperties.due = newDueDate;
-        }
-        if (priorityInput) {
-          updatedProperties.priority = newPriority;
-        }
-
-        if (Object.keys(updatedProperties).length > 0) {
-          tasksManager.updateTask(taskId, updatedProperties);
+        if (newText) {
+          tasksManager.updateTask(todoId, {
+            text: newText,
+            due: newDueDate || null,
+            priority: newPriority,
+          });
         }
       }
       appRenderer.setEditingId(null);
       return;
     }
 
-    if (target.matches('button.note-btn')) {
-      const noteArea = taskLi.querySelector('.note-area');
-      if (noteArea) noteArea.classList.toggle('hidden');
+    const toggleButton = target.closest('button.toggle');
+    if (toggleButton) {
+      const todoId = Number(toggleButton.dataset.id);
+      tasksManager.toggleTaskComplete(todoId);
       return;
     }
 
-    if (target.matches('button.save-note-btn')) {
-      const textArea = taskLi.querySelector('.note-area textarea.note-text');
-      if (textArea) {
-        const noteText = textArea.value.trim();
-        tasksManager.updateTaskNote(taskId, noteText);
-        const noteArea = taskLi.querySelector('.note-area');
-        if (noteArea && !noteText) noteArea.classList.add('hidden');
+    const removeButton = target.closest('button.remove');
+    if (removeButton) {
+      const todoId = Number(removeButton.dataset.id);
+      confirmationDialog.open(
+        'Are you sure you want to delete this task?',
+        () => {
+          tasksManager.deleteTask(todoId);
+        }
+      );
+      return;
+    }
+
+    const noteButton = target.closest('button.note-btn');
+    if (noteButton) {
+      const taskLi = noteButton.closest('li[data-id]');
+      if (taskLi) {
+        taskLi.querySelector('.note-area').classList.toggle('hidden');
       }
       return;
     }
 
-    if (target.matches('button.list-btn')) {
-      const listArea = taskLi.querySelector('.list-area');
-      if (listArea) listArea.classList.toggle('hidden');
-      return;
-    }
-
-    if (target.matches('button.sub-toggle')) {
-      const subTaskId = Number(target.dataset.subId);
-      if (subTaskId) {
-        tasksManager.toggleSubtask(taskId, subTaskId);
+    const saveNoteButton = target.closest('button.save-note-btn');
+    if (saveNoteButton) {
+      const todoId = Number(saveNoteButton.dataset.id);
+      const taskLi = saveNoteButton.closest('li[data-id]');
+      if (taskLi) {
+        const textArea = taskLi.querySelector('textarea.note-text');
+        if (textArea) {
+          tasksManager.updateTaskNote(todoId, textArea.value.trim());
+          if (!textArea.value.trim()) {
+            taskLi.querySelector('.note-area').classList.add('hidden');
+          }
+        }
       }
       return;
     }
 
-    if (target.matches('button.sub-remove')) {
-      const subTaskId = Number(target.dataset.subId);
-      if (subTaskId) {
-        tasksManager.deleteSubtask(taskId, subTaskId);
+    const listButton = target.closest('button.list-btn');
+    if (listButton) {
+      const taskLi = listButton.closest('li[data-id]');
+      if (taskLi) {
+        taskLi.querySelector('.list-area').classList.toggle('hidden');
       }
+      return;
+    }
+
+    const subToggleButton = target.closest('button.sub-toggle');
+    if (subToggleButton) {
+      const todoId = Number(subToggleButton.dataset.id);
+      const subId = Number(subToggleButton.dataset.subId);
+      tasksManager.toggleSubtask(todoId, subId);
+      return;
+    }
+
+    const subRemoveButton = target.closest('button.sub-remove');
+    if (subRemoveButton) {
+      const todoId = Number(subRemoveButton.dataset.id);
+      const subId = Number(subRemoveButton.dataset.subId);
+      tasksManager.deleteSubtask(todoId, subId);
     }
   });
 
   todoListElement.addEventListener('submit', (e) => {
-    const { target } = e;
-
-    if (target.matches('form.sub-form')) {
-      e.preventDefault();
-      const taskLi = target.closest('li[data-id]');
-      if (!taskLi) return;
-      const taskId = Number(taskLi.dataset.id);
-
-      const subInput = target.querySelector('input.sub-input');
-      if (subInput) {
-        const text = subInput.value.trim();
-        if (text) {
-          tasksManager.addSubtask(taskId, text);
-        }
-        subInput.value = '';
-      }
+    if (!e.target.matches('.sub-form')) return;
+    e.preventDefault();
+    const todoId = Number(e.target.dataset.id);
+    const subInput = e.target.querySelector('.sub-input');
+    const text = subInput.value.trim();
+    if (text) {
+      tasksManager.addSubtask(todoId, text);
     }
+    subInput.value = '';
   });
 }

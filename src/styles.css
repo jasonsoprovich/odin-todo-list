@@ -104,6 +104,11 @@ ul {
   list-style: none;
 }
 
+.material-icons-outlined {
+  pointer-events: none;
+  vertical-align: middle;
+}
+
 .layout {
   display: flex;
   height: 100vh;

@@ -1,61 +1,77 @@
 function qs(selector, scope = document) {
+  if (!scope) return null;
   return scope.querySelector(selector);
 }
 
 const dialogElement = qs('#confirmation-dialog');
-const messageElement = qs('#confirmation-message', dialogElement);
-const confirmOkBtn = qs('#confirm-ok-btn', dialogElement);
-const confirmCancelBtn = qs('#confirm-cancel-btn', dialogElement);
+let messageElement = null;
+let confirmButton = null;
+let cancelButton = null;
+let currentConfirmCallback = null;
 
-let currentResolve = null;
+function closeDialog() {
+  if (dialogElement) {
+    dialogElement.close();
+  }
+  currentConfirmCallback = null;
+}
 
-function show(message = 'Are you sure?') {
-  return new Promise((resolve) => {
-    currentResolve = resolve;
-    messageElement.textContent = message;
-    if (dialogElement && typeof dialogElement.showModal === 'function') {
+function handleConfirm() {
+  if (currentConfirmCallback) {
+    currentConfirmCallback();
+  }
+  closeDialog();
+}
+
+if (dialogElement) {
+  messageElement = qs('#confirmation-message', dialogElement);
+  confirmButton = qs('#confirm-yes-btn', dialogElement);
+  cancelButton = qs('#confirm-no-btn', dialogElement);
+
+  if (confirmButton) {
+    confirmButton.addEventListener('click', handleConfirm);
+  } else {
+    // eslint-disable-next-line no-console
+    console.error(
+      'Confirmation dialog: Confirm button (#confirm-yes-btn) not found.'
+    );
+  }
+
+  if (cancelButton) {
+    cancelButton.addEventListener('click', closeDialog);
+  } else {
+    // eslint-disable-next-line no-console
+    console.error(
+      'Confirmation dialog: Cancel button (#confirm-no-btn) not found.'
+    );
+  }
+
+  if (!messageElement) {
+    // eslint-disable-next-line no-console
+    console.error(
+      'Confirmation dialog: Message element (#confirmation-message) not found.'
+    );
+  }
+} else {
+  // eslint-disable-next-line no-console
+  console.error(
+    'Confirmation dialog element (#confirmation-dialog) not found in the DOM. Dialog will not function.'
+  );
+}
+
+const confirmationDialog = {
+  open(message, onConfirm) {
+    if (dialogElement && messageElement) {
+      messageElement.textContent = message;
+      currentConfirmCallback = onConfirm;
       dialogElement.showModal();
     } else {
       // eslint-disable-next-line no-console
       console.error(
-        'Confirmation dialog element not found or showModal not supported.'
+        'Cannot open confirmation dialog: essential elements are missing. Check initialization logs.'
       );
-      resolve(false);
     }
-  });
-}
-
-function handleConfirmation(confirmed) {
-  if (dialogElement && typeof dialogElement.close === 'function') {
-    dialogElement.close();
-  }
-  if (currentResolve) {
-    currentResolve(confirmed);
-    currentResolve = null;
-  }
-}
-
-if (confirmOkBtn) {
-  confirmOkBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    handleConfirmation(true);
-  });
-}
-
-if (confirmCancelBtn) {
-  confirmCancelBtn.addEventListener('click', () => {
-    handleConfirmation(false);
-  });
-}
-
-if (dialogElement) {
-  dialogElement.addEventListener('close', () => {
-    if (currentResolve) {
-      handleConfirmation(false);
-    }
-  });
-}
-
-export default {
-  show,
+  },
 };
+
+export default confirmationDialog;

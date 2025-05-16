@@ -4,6 +4,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%=htmlWebpackPlugin.options.title%></title>
     <link rel="icon" href="data:," />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
@@ -57,15 +61,11 @@
     </div>
 
     <dialog id="confirmation-dialog">
-      <form method="dialog" class="confirmation-form">
-        <p id="confirmation-message">Are you sure?</p>
-        <div class="dialog-buttons">
-          <button type="button" id="confirm-cancel-btn" value="cancel">
-            Cancel
-          </button>
-          <button type="submit" id="confirm-ok-btn" value="okay">Okay</button>
-        </div>
-      </form>
+      <p id="confirmation-message">Are you sure?</p>
+      <div class="dialog-actions">
+        <button id="confirm-yes-btn">Yes</button>
+        <button id="confirm-no-btn" autofocus>No</button>
+      </div>
     </dialog>
   </body>
 </html>

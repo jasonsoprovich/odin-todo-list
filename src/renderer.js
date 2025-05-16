@@ -101,7 +101,8 @@ class Renderer {
       if (!SYSTEM_PROJECT_NAMES.includes(project.name)) {
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('delete-category-btn');
-        deleteBtn.textContent = '✕';
+        deleteBtn.innerHTML =
+          '<i class="material-icons-outlined" title="Delete category">delete</i>';
         deleteBtn.setAttribute('aria-label', `Delete category ${project.name}`);
         deleteBtn.dataset.categoryName = project.name;
         projectLi.appendChild(deleteBtn);
@@ -205,9 +206,25 @@ class Renderer {
           'todo-priority',
           task.priority.toLowerCase()
         );
-        prioritySpan.textContent =
-          { High: '🔥', Medium: '⚡', Low: '🛌' }[task.priority] ||
-          ` ${task.priority}`;
+        let iconName = '';
+        switch (task.priority) {
+          case 'High':
+            iconName = 'star';
+            break;
+          case 'Medium':
+            iconName = 'bolt';
+            break;
+          case 'Low':
+            iconName = 'king_bed';
+            break;
+          default:
+            break;
+        }
+        if (iconName) {
+          prioritySpan.innerHTML = `<i class="material-icons-outlined" title="${task.priority} priority">${iconName}</i>`;
+        } else {
+          prioritySpan.textContent = task.priority; // Fallback if no icon defined
+        }
         li.appendChild(prioritySpan);
       }
 
@@ -216,7 +233,10 @@ class Renderer {
       editBtn.classList.add('edit-btn');
       editBtn.dataset.id = task.id;
       editBtn.setAttribute('aria-label', 'Edit todo');
-      editBtn.textContent = task.id === this.#editingId ? '✖️' : '✏️';
+      const editIconName = task.id === this.#editingId ? 'close' : 'edit';
+      editBtn.innerHTML = `<i class="material-icons-outlined" title="${
+        editIconName === 'close' ? 'Cancel edit' : 'Edit task'
+      }">${editIconName}</i>`;
       li.appendChild(editBtn);
 
       if (task.id === this.#editingId) {
@@ -240,10 +260,10 @@ class Renderer {
         priorityEditSelect.classList.add('edit-input', 'edit-task-priority');
 
         const priorityOptions = [
-          { value: '', text: '⚪ None' }, // value="" represents null
-          { value: 'Low', text: '🛌 Low' },
-          { value: 'Medium', text: '⚡ Medium' },
-          { value: 'High', text: '🔥 High' },
+          { value: '', text: 'None' },
+          { value: 'Low', text: 'Low' },
+          { value: 'Medium', text: 'Medium' },
+          { value: 'High', text: 'High' },
         ];
 
         priorityOptions.forEach((opt) => {
@@ -261,7 +281,7 @@ class Renderer {
         saveBtn.type = 'submit';
         saveBtn.classList.add('save-edit-btn');
         saveBtn.dataset.id = task.id;
-        saveBtn.textContent = 'Save';
+        saveBtn.innerHTML = `<i class="material-icons-outlined" title="Save changes">save</i> Save`;
         editForm.appendChild(saveBtn);
 
         li.appendChild(editForm);
@@ -278,14 +298,17 @@ class Renderer {
         try {
           const dateObject = parseISO(task.due);
           if (isValidDate(dateObject)) {
-            dueSpan.textContent = `📅 ${format(dateObject, 'MMM d')}`;
+            dueSpan.innerHTML = `<i class="material-icons-outlined" title="Due date">event</i> ${format(
+              dateObject,
+              'MMM d'
+            )}`;
           } else {
-            dueSpan.textContent = `📅 ${task.due}`;
+            dueSpan.innerHTML = `<i class="material-icons-outlined" title="Due date">event</i> ${task.due}`;
           }
         } catch (e) {
           // eslint-disable-next-line no-console
           console.warn('Error parsing due date:', task.due, e);
-          dueSpan.textContent = `📅 ${task.due}`;
+          dueSpan.innerHTML = `<i class="material-icons-outlined" title="Due date">event</i> ${task.due}`;
         }
         li.appendChild(dueSpan);
       }
@@ -294,21 +317,23 @@ class Renderer {
       toggleBtn.type = 'button';
       toggleBtn.classList.add('toggle');
       toggleBtn.dataset.id = task.id;
-      toggleBtn.textContent = task.done ? '↺' : '✓';
+      const toggleIconName = task.done ? 'replay' : 'check_circle_outline';
+      const toggleIconTitle = task.done ? 'Mark as not done' : 'Mark as done';
+      toggleBtn.innerHTML = `<i class="material-icons-outlined" title="${toggleIconTitle}">${toggleIconName}</i>`;
       li.appendChild(toggleBtn);
 
       const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.classList.add('remove');
       removeBtn.dataset.id = task.id;
-      removeBtn.textContent = '✕';
+      removeBtn.innerHTML = `<i class="material-icons-outlined" title="Remove task">delete</i>`;
       li.appendChild(removeBtn);
 
       const noteBtn = document.createElement('button');
       noteBtn.type = 'button';
       noteBtn.classList.add('note-btn');
       noteBtn.dataset.id = task.id;
-      noteBtn.textContent = '📝';
+      noteBtn.innerHTML = `<i class="material-icons-outlined" title="Edit notes">description</i>`;
       noteBtn.setAttribute('aria-label', 'Edit notes');
       li.appendChild(noteBtn);
 
@@ -335,7 +360,7 @@ class Renderer {
       listBtn.type = 'button';
       listBtn.classList.add('list-btn');
       listBtn.dataset.id = task.id;
-      listBtn.textContent = '🗒️';
+      listBtn.innerHTML = `<i class="material-icons-outlined" title="Toggle checklist">checklist</i>`;
       listBtn.setAttribute('aria-label', 'Toggle checklist');
       li.appendChild(listBtn);
 
@@ -372,7 +397,13 @@ class Renderer {
           subChk.classList.add('sub-toggle');
           subChk.dataset.id = task.id;
           subChk.dataset.subId = subItem.id;
-          subChk.textContent = subItem.done ? '☑️' : '⬜';
+          const subToggleIconName = subItem.done
+            ? 'check_box'
+            : 'check_box_outline_blank';
+          const subToggleIconTitle = subItem.done
+            ? 'Mark as not done'
+            : 'Mark as done';
+          subChk.innerHTML = `<i class="material-icons-outlined" title="${subToggleIconTitle}">${subToggleIconName}</i>`;
           subLi.appendChild(subChk);
 
           const subSpan = document.createElement('span');
@@ -385,7 +416,7 @@ class Renderer {
           subDel.classList.add('sub-remove');
           subDel.dataset.id = task.id;
           subDel.dataset.subId = subItem.id;
-          subDel.textContent = '✕';
+          subDel.innerHTML = `<i class="material-icons-outlined" title="Remove subtask">delete</i>`;
           subLi.appendChild(subDel);
           subUl.appendChild(subLi);
         });
