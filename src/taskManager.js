@@ -8,6 +8,7 @@ import Events from './pubsub';
 import Task from './task';
 
 const TASKS_STORAGE_KEY = 'todos-app-tasks';
+const SORT_CRITERIA_STORAGE_KEY = 'todos-app-sort-criteria';
 
 class TaskManager {
   #tasks = [];
@@ -17,7 +18,35 @@ class TaskManager {
   #currentSortCriteria = { field: null, direction: 'asc' };
 
   constructor() {
+    this.#loadSortCriteria();
     this.#loadTasks();
+  }
+
+  #loadSortCriteria() {
+    const storedCriteria = localStorage.getItem(SORT_CRITERIA_STORAGE_KEY);
+    if (storedCriteria) {
+      try {
+        const parsedCriteria = JSON.parse(storedCriteria);
+        if (
+          parsedCriteria &&
+          typeof parsedCriteria.field === 'string' &&
+          (parsedCriteria.direction === 'asc' ||
+            parsedCriteria.direction === 'desc')
+        ) {
+          this.#currentSortCriteria = parsedCriteria;
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error loading sort criteria from localStorage', error);
+      }
+    }
+  }
+
+  #saveSortCriteria() {
+    localStorage.setItem(
+      SORT_CRITERIA_STORAGE_KEY,
+      JSON.stringify(this.#currentSortCriteria)
+    );
   }
 
   #loadTasks() {
@@ -95,12 +124,6 @@ class TaskManager {
           } catch (error) {
             return 0;
           }
-
-          // valA = parseISO(valA);
-          // valB = parseISO(valB);
-          // return direction === 'asc'
-          //   ? compareAsc(valA, valB)
-          //   : compareDesc(valA, valB);
         } else if (field === 'priority') {
           const priorityA = priorityOrder[valA === null ? 'null' : valA] || 0;
           const priorityB = priorityOrder[valB === null ? 'null' : valB] || 0;
@@ -130,7 +153,10 @@ class TaskManager {
   }
 
   setSortCriteria(field, defaultDirection = 'asc') {
-    if (this.#currentSortCriteria.field === field) {
+    if (
+      this.#currentSortCriteria.field === field &&
+      this.#currentSortCriteria.field !== null
+    ) {
       this.#currentSortCriteria.direction =
         this.#currentSortCriteria.direction === 'asc' ? 'desc' : 'asc';
     } else {
@@ -138,6 +164,7 @@ class TaskManager {
       this.#currentSortCriteria.direction =
         field === 'priority' ? 'desc' : defaultDirection;
     }
+    this.#saveSortCriteria();
     Events.emit('tasksUpdated', this.list);
   }
 
