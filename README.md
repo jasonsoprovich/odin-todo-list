@@ -23,18 +23,19 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 5. Priority levels (e.g. Low / Medium / High) ✅
 6. Project / category grouping ✅
 7. Sidebar navigation for projects & filters ✅
-8. Drag‑and‑drop ordering
+8. Drag‑and‑drop ordering 🚀
 9. Filtering & sorting (by date, priority, status) ✅
 10. Custom confirmation modal ✅
-11. Refine "Add Task" category select/edit
-12. Refine task inline editing and deletion
-13. Sort criteria persistence
-14. Overhaul CSS styling and layout
-15. Replace emojis with Google icons
-16. Consistent CSS color variables
-17. Light/Dark mode
-18. Responsive layout
-19. Drag & drop reordering
+11. Refine "Add Task" category select/edit ✅
+12. Refine task inline editing and deletion 🚀
+13. Sort criteria persistence ✅
+14. Overhaul CSS styling and layout 🚀
+15. Replace emojis with Google icons ✅
+16. Replace priority icons with color coded flags 🚀
+17. Consistent CSS color variables 🚀
+18. Light/Dark mode 🚀
+19. Responsive layout 🚀
+20. Drag & drop reordering 🚀
 
 ---
 
