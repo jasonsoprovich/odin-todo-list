@@ -109,6 +109,39 @@ ul {
   vertical-align: middle;
 }
 
+button .material-icons-outlined {
+  vertical-align: middle;
+  margin-right: 4px;
+  font-size: inherit;
+}
+button.edit-btn,
+button.remove-btn {
+  padding: 0.3em 0.5em;
+}
+.todo-list button.toggle,
+.todo-list button.remove,
+.todo-list button.edit-btn,
+.todo-list button.note-btn,
+.todo-list button.list-btn,
+.sub-list button.sub-toggle,
+.sub-list button.sub-remove,
+button.delete-category-btn {
+  all: unset;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--color-text); /* Or a specific icon color */
+}
+.todo-list button.toggle .material-icons-outlined {
+  color: green;
+}
+.todo-list button.remove .material-icons-outlined {
+  color: var(--color-accent);
+}
+button.delete-category-btn .material-icons-outlined {
+  color: #cc0000;
+}
+/* etc. for specific icon colors */
+
 .layout {
   display: flex;
   height: 100vh;
