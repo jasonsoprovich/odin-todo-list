@@ -1,4 +1,3 @@
-/* ===== Reset & Box Sizing ===== */
 *,
 *::before,
 *::after {
@@ -7,23 +6,49 @@
   box-sizing: border-box;
 }
 
-/* ===== CSS Variables ===== */
 :root {
-  --font-sans: 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'Source Code Pro', monospace;
-  --color-bg: #f9f9f9;
-  --color-text: #333;
-  --color-accent: #007acc;
-  --max-width: 800px;
+  --color-primary-accent: #007aff;
+  --color-primary-accent-hover: #005ecb;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-text-on-accent: #ffffff;
+
+  --color-background-app: #f5f5f7;
+  --color-background-content: #ffffff;
+  --color-background-sidebar: #f0f0f5;
+  --color-background-hover: #e8e8ed;
+
+  --color-border-light: #d1d1d6;
+  --color-border-medium: #c7c7cc;
+
+  --color-danger: #ff3b30;
+  --color-danger-hover: #d92c23;
+  --color-success: #34c759;
+  --color-warning: #ff9500;
+
+  --color-priority-high-bg: #ffe5e5;
+  --color-priority-high-text: #d00;
+  --color-priority-medium-bg: #fff5e5;
+  --color-priority-medium-text: #d60;
+  --color-priority-low-bg: #e5ffe5;
+  --color-priority-low-text: #080;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+    monospace;
+
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --max-content-width: 800px;
 }
 
-/* ===== Base Typography ===== */
 html {
   font-size: 16px;
   line-height: 1.5;
   font-family: var(--font-sans);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--color-background-app);
+  color: var(--color-text-primary);
 }
 
 body {
@@ -32,12 +57,12 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
+  background-color: var(--color-background-app);
 }
 
-/* ===== Utility Classes ===== */
 .container {
   width: 100%;
-  max-width: var(--max-width);
+  max-width: var(--max-content-width);
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -46,7 +71,6 @@ body {
   text-align: center;
 }
 
-/* ===== Headings ===== */
 h1,
 h2,
 h3,
@@ -55,27 +79,30 @@ h5,
 h6 {
   font-family: var(--font-sans);
   margin-bottom: 0.5em;
-  color: var(--color-accent);
+  color: var(--color-primary-accent);
 }
 
-/* ===== Links & Buttons ===== */
 a {
-  color: var(--color-accent);
+  color: var(--color-primary-accent);
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+  color: var(--color-primary-accent-hover);
 }
 
 button {
   font: inherit;
   cursor: pointer;
-  background-color: var(--color-accent);
-  color: #fff;
+  background-color: var(--color-primary-accent);
+  color: var(--color-text-on-accent);
   border: none;
   padding: 0.5em 1em;
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
+}
+button:hover:not(:disabled) {
+  background-color: var(--color-primary-accent-hover);
 }
 
 button:disabled {
@@ -83,23 +110,23 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* ===== Forms ===== */
 input,
 textarea {
   font: inherit;
   padding: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-background-content);
+  color: var(--color-text-primary);
 }
 
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+  border-color: var(--color-primary-accent);
+  box-shadow: 0 0 0 2px var(--color-primary-accent);
 }
 
-/* ===== Misc ===== */
 ul {
   list-style: none;
 }
@@ -129,30 +156,35 @@ button.delete-category-btn {
   all: unset;
   cursor: pointer;
   line-height: 1;
-  color: var(--color-text); /* Or a specific icon color */
+  color: var(--color-text-secondary);
 }
 .todo-list button.toggle .material-icons-outlined {
-  color: green;
+  color: var(--color-success);
 }
 .todo-list button.remove .material-icons-outlined {
-  color: var(--color-accent);
+  color: var(--color-danger);
 }
 button.delete-category-btn .material-icons-outlined {
-  color: #cc0000;
+  color: var(--color-danger);
 }
-/* etc. for specific icon colors */
+button.delete-category-btn:hover .material-icons-outlined {
+  color: var(--color-danger-hover);
+}
 
 .layout {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  width: 100%;
+  background-color: var(--color-background-app);
 }
 
 .sidebar {
   width: 220px;
   padding: 1rem;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid var(--color-border-light);
   overflow-y: auto;
+  background-color: var(--color-background-sidebar);
 }
 
 .sidebar ul {
@@ -163,17 +195,24 @@ button.delete-category-btn .material-icons-outlined {
 .sidebar li {
   padding: 0.25rem 0.5rem;
   cursor: pointer;
+  border-radius: var(--border-radius-small);
+  color: var(--color-text-primary);
+}
+.sidebar li:hover {
+  background-color: var(--color-background-hover);
 }
 
 .sidebar li.active {
   font-weight: bold;
-  color: var(--color-accent);
+  color: var(--color-primary-accent);
+  background-color: var(--color-background-hover);
 }
 
 .main-content {
   flex: 1;
   padding: 1rem 2rem;
   overflow-y: auto;
+  background-color: var(--color-background-content);
 }
 
 .todo-form {
@@ -210,9 +249,8 @@ button.delete-category-btn .material-icons-outlined {
 }
 
 .cat-form input {
-  width: 100px;
   flex: 1;
-  font-weight: 0.9rem;
+  font-size: 0.9rem;
 }
 
 .cat-form button {
@@ -222,7 +260,7 @@ button.delete-category-btn .material-icons-outlined {
 
 .todo-list {
   width: 100%;
-  max-width: var(--max-width);
+  max-width: var(--max-content-width);
   margin: 0 auto;
   padding: 0;
 }
@@ -232,81 +270,61 @@ button.delete-category-btn .material-icons-outlined {
   align-items: center;
   padding: 0.5rem;
   margin-bottom: 0.25rem;
-  background: #fff;
-  border-radius: 4px;
+  background: var(--color-background-content);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border-light);
 }
 
-.todo-list li:nth-child(odd) {
-  background-color: #f0f0f0;
+.todo-list li:hover {
+  background-color: var(--color-background-hover);
 }
 
 .todo-list .todo-text {
   flex: 1;
+  color: var(--color-text-primary);
 }
 
-.todo-list li.done {
+.todo-list li.done .todo-text {
   text-decoration: line-through;
-  opacity: 0.6;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+.todo-list li.done {
+  opacity: 0.7;
 }
 
 .todo-list .todo-due {
-  display: inline-block;
-  background: #e0f3ff;
-  color: #007acc;
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--color-background-sidebar);
+  color: var(--color-text-secondary);
   font-size: 0.85rem;
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
   margin-left: auto;
   margin-right: 0.5rem;
   text-decoration: none;
+}
+.todo-list .todo-due .material-icons-outlined {
+  font-size: 1em;
+  margin-right: 0.25em;
 }
 
 .todo-form .todo-due-label {
   display: flex;
   align-items: center;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-text-primary);
   margin-left: 0.5rem;
 }
 
 .todo-form .todo-due-label input[type='date'] {
   margin-left: 0.25rem;
   padding: 0.25em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-small);
   font-size: 0.9rem;
-  background: #fff;
-}
-
-.todo-list button.toggle,
-.todo-list button.remove {
-  all: unset;
-  cursor: pointer;
-  font-size: 1.2rem;
-  line-height: 1;
-  margin-left: 0.5rem;
-}
-
-.todo-list button.toggle {
-  color: green;
-}
-
-.todo-list button.edit-btn {
-  all: unset;
-  cursor: pointer;
-  margin-left: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.todo-list button.remove {
-  color: var(--color-accent);
-}
-
-.todo-list button.note-btn {
-  all: unset;
-  cursor: pointer;
-  margin-left: 0.5rem;
-  font-size: 1.2rem;
+  background: var(--color-background-content);
 }
 
 .edit-input {
@@ -314,17 +332,15 @@ button.delete-category-btn .material-icons-outlined {
   font: inherit;
   padding: 0.4em;
   margin: 0 0.5rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 4px;
+  border: 1px solid var(--color-primary-accent);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-background-content);
 }
 
 .save-edit-btn {
   margin-left: 0.5rem;
   padding: 0.3em 0.6em;
   font-size: 0.9rem;
-  background-color: var(--color-accent);
-  color: #fff;
-  border-radius: 4px;
 }
 
 .note-area {
@@ -332,6 +348,7 @@ button.delete-category-btn .material-icons-outlined {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  width: 100%;
 }
 
 .hidden {
@@ -342,8 +359,9 @@ button.delete-category-btn .material-icons-outlined {
   width: 100%;
   font: inherit;
   padding: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-background-content);
 }
 
 .save-note-btn {
@@ -352,17 +370,11 @@ button.delete-category-btn .material-icons-outlined {
   padding: 0.25em 0.5em;
 }
 
-.todo-list button.list-btn {
-  all: unset;
-  cursor: pointer;
-  margin-left: 0.5rem;
-  font-size: 1.2rem;
-}
-
 .list-area {
   margin: 0.5rem 0 0 1.5rem;
   padding-left: 1rem;
-  border-left: 2px solid #ddd;
+  border-left: 2px solid var(--color-border-light);
+  width: 100%;
 }
 
 .sub-form {
@@ -386,18 +398,16 @@ button.delete-category-btn .material-icons-outlined {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
+  background-color: transparent;
+  border: none;
+}
+.sub-list li .sub-text {
+  color: var(--color-text-primary);
 }
 .sub-list li.done .sub-text {
   text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.sub-list button.sub-toggle,
-.sub-list button.sub-remove {
-  all: unset;
-  cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
 }
 
 .project-item {
@@ -411,21 +421,6 @@ button.delete-category-btn .material-icons-outlined {
   cursor: pointer;
 }
 
-button.delete-category-btn {
-  all: unset;
-  color: #cc0000;
-  cursor: pointer;
-  font-size: 1.1rem;
-  margin-left: 8px;
-  padding: 2px 4px;
-  line-height: 1;
-}
-
-button.delete-category-btn:hover {
-  color: #ff0000;
-  font-weight: bold;
-}
-
 .toolbar {
   margin-bottom: 1rem;
   display: flex;
@@ -435,14 +430,22 @@ button.delete-category-btn:hover {
 .toolbar button {
   padding: 0.4em 0.8em;
   font-size: 0.9rem;
+  background-color: var(--color-background-sidebar);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-light);
+}
+.toolbar button:hover {
+  background-color: var(--color-background-hover);
 }
 
 #confirmation-dialog {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--border-radius-medium);
   padding: 20px;
   min-width: 300px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-background-content);
+  color: var(--color-text-primary);
 }
 
 #confirmation-dialog::backdrop {
@@ -453,6 +456,7 @@ button.delete-category-btn:hover {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 1.1rem;
+  color: var(--color-text-primary);
 }
 
 .confirmation-form .dialog-buttons {
@@ -466,7 +470,37 @@ button.delete-category-btn:hover {
 }
 
 #confirm-cancel-btn {
-  background-color: #eee;
-  color: #333;
-  border: 1px solid #ccc;
+  background-color: var(--color-background-hover);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-light);
+}
+#confirm-cancel-btn:hover {
+  background-color: var(--color-border-light);
+}
+
+.todo-priority {
+  font-size: 0.8rem;
+  padding: 0.2em 0.4em;
+  border-radius: var(--border-radius-small);
+  margin-right: 0.5rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+.todo-priority .material-icons-outlined {
+  font-size: 1em;
+  margin-right: 0.15em;
+}
+
+.todo-priority.high {
+  background-color: var(--color-priority-high-bg);
+  color: var(--color-priority-high-text);
+}
+.todo-priority.medium {
+  background-color: var(--color-priority-medium-bg);
+  color: var(--color-priority-medium-text);
+}
+.todo-priority.low {
+  background-color: var(--color-priority-low-bg);
+  color: var(--color-priority-low-text);
 }
