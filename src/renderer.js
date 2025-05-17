@@ -230,9 +230,9 @@ class Renderer {
 
       const editBtn = document.createElement('button');
       editBtn.type = 'button';
-      editBtn.classList.add('edit-btn');
+      editBtn.classList.add('edit-btn', 'action-icon-btn');
       editBtn.dataset.id = task.id;
-      editBtn.setAttribute('aria-label', 'Edit todo');
+      editBtn.setAttribute('aria-label', 'Edit task');
       const editIconName = task.id === this.#editingId ? 'close' : 'edit';
       editBtn.innerHTML = `<i class="material-icons-outlined" title="${
         editIconName === 'close' ? 'Cancel edit' : 'Edit task'
@@ -277,13 +277,24 @@ class Renderer {
         });
         editForm.appendChild(priorityEditSelect);
 
+        const editFormActions = document.createElement('div');
+        editFormActions.classList.add('edit-form-actions');
+
         const saveBtn = document.createElement('button');
         saveBtn.type = 'submit';
         saveBtn.classList.add('save-edit-btn');
         saveBtn.dataset.id = task.id;
         saveBtn.innerHTML = `<i class="material-icons-outlined" title="Save changes">save</i> Save`;
-        editForm.appendChild(saveBtn);
+        editFormActions.appendChild(saveBtn);
 
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.classList.add('cancel-edit-btn');
+        cancelBtn.dataset.id = task.id;
+        cancelBtn.innerHTML = `<i class="material-icons-outlined" title="Cancel">cancel</i> Cancel`;
+        editFormActions.appendChild(cancelBtn);
+
+        editForm.appendChild(editFormActions);
         li.appendChild(editForm);
       } else {
         const textSpan = document.createElement('span');
