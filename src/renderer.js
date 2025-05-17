@@ -387,7 +387,11 @@ class Renderer {
       li.appendChild(listBtn);
 
       const listArea = document.createElement('div');
-      listArea.classList.add('list-area', 'hidden');
+      listArea.classList.add('list-area');
+      // unhide if subtasks exist
+      if (!task.subtasks || task.subtasks.length === 0) {
+        listArea.classList.add('hidden');
+      }
 
       const subForm = document.createElement('form');
       subForm.classList.add('sub-form');
