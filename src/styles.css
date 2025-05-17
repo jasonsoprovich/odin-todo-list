@@ -451,14 +451,40 @@ button.cancel-edit-btn:hover {
 .list-area {
   flex-basis: 100%;
   margin-top: var(--spacing-sm);
-  padding-left: calc(
-    var(--spacing-sm) + 24px + var(--spacing-sm)
-  ); /* Indent past priority + edit icon + gaps */
+  padding-left: calc(var(--spacing-sm) + 24px + var(--spacing-sm));
 }
 .note-area textarea {
   width: 100%;
   font-size: 0.9rem;
 }
+
+.note-area-actions,
+.sub-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+button.cancel-note-btn,
+button.cancel-subtask-form-btn {
+  background-color: var(--color-background-hover);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.85rem;
+}
+button.cancel-note-btn:hover,
+button.cancel-subtask-form-btn:hover {
+  background-color: var(--color-border-light);
+}
+
+.note-area-actions .save-note-btn,
+.sub-form-actions button[type='submit'] {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.85rem;
+}
+
 .save-note-btn {
   align-self: flex-end;
   font-size: 0.85rem;

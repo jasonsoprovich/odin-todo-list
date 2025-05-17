@@ -358,13 +358,24 @@ class Renderer {
       textArea.placeholder = 'Notes';
       noteArea.appendChild(textArea);
 
+      const noteAreaActions = document.createElement('div');
+      noteAreaActions.classList.add('note-area-actions');
+
       const saveNoteBtn = document.createElement('button');
       saveNoteBtn.type = 'button';
       saveNoteBtn.classList.add('save-note-btn');
       saveNoteBtn.dataset.id = task.id;
       saveNoteBtn.textContent = 'Save';
       saveNoteBtn.setAttribute('aria-label', 'Save note');
-      noteArea.appendChild(saveNoteBtn);
+      noteAreaActions.appendChild(saveNoteBtn);
+
+      const cancelNoteBtn = document.createElement('button');
+      cancelNoteBtn.type = 'button';
+      cancelNoteBtn.classList.add('cancel-note-btn');
+      cancelNoteBtn.textContent = 'Cancel';
+      noteAreaActions.appendChild(cancelNoteBtn);
+
+      noteArea.appendChild(noteAreaActions);
       li.appendChild(noteArea);
 
       const listBtn = document.createElement('button');
@@ -389,10 +400,21 @@ class Renderer {
       subInput.classList.add('sub-input');
       subForm.appendChild(subInput);
 
+      const subFormActions = document.createElement('div');
+      subFormActions.classList.add('sub-form-actions');
+
       const subAddBtn = document.createElement('button');
       subAddBtn.type = 'submit';
       subAddBtn.textContent = 'Add';
-      subForm.appendChild(subAddBtn);
+      subFormActions.appendChild(subAddBtn);
+
+      const cancelSubtaskFormBtn = document.createElement('button');
+      cancelSubtaskFormBtn.type = 'button';
+      cancelSubtaskFormBtn.classList.add('cancel-subtask-form-btn');
+      cancelSubtaskFormBtn.textContent = 'Cancel';
+      subFormActions.appendChild(cancelSubtaskFormBtn);
+
+      subForm.appendChild(subFormActions);
       listArea.appendChild(subForm);
 
       const subUl = document.createElement('ul');

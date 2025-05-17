@@ -111,6 +111,34 @@ if (todoListElement) {
       return;
     }
 
+    if (target.matches('button.cancel-note-btn')) {
+      const taskLi = target.closest('li[data-id]');
+      if (taskLi) {
+        const noteArea = taskLi.querySelector('.note-area');
+        if (noteArea) {
+          noteArea.classList.add('hidden');
+          const textArea = noteArea.querySelector('textarea.note-text');
+          const taskId = Number(taskLi.dataset.id);
+          const task = tasksManager.list.find((t) => t.id === taskId);
+          if (textArea && task) textArea.value = task.note || '';
+        }
+      }
+      return;
+    }
+
+    if (target.matches('button.cancel-subtask-form-btn')) {
+      const taskLi = target.closest('li[data-id]');
+      if (taskLi) {
+        const listArea = taskLi.querySelector('.list-area');
+        if (listArea) {
+          listArea.classList.add('hidden');
+          const subInput = listArea.querySelector('input.sub-input');
+          if (subInput) subInput.value = '';
+        }
+      }
+      return;
+    }
+
     const saveEditButton = target.closest('button.save-edit-btn');
     if (saveEditButton) {
       const todoId = Number(saveEditButton.dataset.id);
