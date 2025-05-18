@@ -39,11 +39,11 @@
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
     monospace;
 
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
 
   --border-radius-small: 4px;
   --border-radius-medium: 8px;
@@ -137,7 +137,7 @@ select {
   border-radius: var(--border-radius-small);
   background-color: var(--color-background-input);
   color: var(--color-text-primary);
-  width: 100%;
+  width: 100%; /* Default width, flex items will override */
 }
 input:focus,
 textarea:focus,
@@ -151,16 +151,20 @@ textarea {
   min-height: 60px;
 }
 label {
+  /* This is for the "Due:" label in the main form */
   font-size: 0.85rem;
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-xs);
-  display: block;
+  display: inline-flex; /* Changed for better alignment with input */
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .material-icons-outlined {
-  vertical-align: middle;
-  font-size: 1.2em;
+  vertical-align: middle; /* Fallback */
+  font-size: 1.2em; /* Base icon size */
   line-height: 1;
+  display: inline-block; /* Helps with consistent rendering */
 }
 
 .layout {
@@ -210,6 +214,26 @@ label {
 }
 .sidebar li.project-item .project-name {
   flex-grow: 1;
+}
+.action-icon-btn-sidebar {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-secondary);
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+.action-icon-btn-sidebar:hover {
+  background-color: var(--color-background-hover);
+  color: var(--color-danger);
+}
+.action-icon-btn-sidebar .material-icons-outlined {
+  font-size: 1.1rem;
 }
 
 .cat-form {
@@ -272,9 +296,9 @@ label {
   flex-grow: 2;
 }
 .todo-form > .todo-due-label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  flex-basis: 180px;
+  flex-basis: auto;
   flex-grow: 1;
   margin-left: 0;
 }
@@ -297,34 +321,28 @@ label {
 }
 .todo-list li {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
+  justify-content: space-between; /* Key for left/right groups */
+  align-items: center; /* Changed from flex-start to center for better vertical alignment of groups */
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md); /* Adjusted padding */
   margin-bottom: var(--spacing-sm);
   background: var(--color-background-content);
   border-radius: var(--border-radius-medium);
   border: 1px solid var(--color-border-light);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: background-color 0.2s ease;
-  /* position: relative; */
+  flex-wrap: wrap; /* Allow note/list areas to wrap */
+}
+.todo-list li:hover {
+  background-color: var(--color-background-hover);
 }
 
-/* .task-content-area {
+.task-group-left {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   flex-grow: 1;
-}
-
-.task-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  flex-shrink: 0;
-} */
-
-.todo-list li:hover {
-  background-color: var(--color-background-hover);
+  min-width: 0;
 }
 
 .todo-list .todo-priority {
@@ -332,9 +350,10 @@ label {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  color: var(--color-text-secondary);
 }
 .todo-list .todo-priority .material-icons-outlined {
-  font-size: 1.1em;
+  font-size: 1.2em;
 }
 .todo-list .todo-priority.high .material-icons-outlined {
   color: var(--color-priority-high-text);
@@ -346,27 +365,14 @@ label {
   color: var(--color-priority-low-text);
 }
 
-.todo-list .action-icon-btn.has-content .material-icons-outlined {
-  color: var(--color-primary-accent);
-}
-
-.todo-list .action-icon-btn .subtask-count {
-  font-size: 0.65rem;
-  line-height: 1;
-  color: var(--color-text-on-accent);
-  background-color: var(--color-text-secondary);
-  padding: 0.1em 0.3em;
-  border-radius: var(--border-radius-small);
-  margin-left: var(--spacing-xs);
-  font-weight: 600;
-  vertical-align: text-top;
-}
-
 .todo-list .todo-text {
   flex-grow: 1;
   font-size: 0.95rem;
   line-height: 1.4;
   color: var(--color-text-primary);
+  padding-top: 1px; /* Minor adjustment for alignment with icons */
+  padding-bottom: 1px;
+  word-break: break-word;
 }
 .todo-list li.done .todo-text {
   text-decoration: line-through;
@@ -376,25 +382,30 @@ label {
   opacity: 0.7;
 }
 
+.task-group-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
 .todo-list .todo-due {
   display: inline-flex;
   align-items: center;
-  background-color: transparent;
   color: var(--color-text-secondary);
   font-size: 0.8rem;
-  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-small);
-  margin-left: auto;
   flex-shrink: 0;
+  white-space: nowrap;
+  padding: var(--spacing-xs) 0; /* Remove horizontal padding if only icon+text */
 }
 .todo-list .todo-due .material-icons-outlined {
-  font-size: 1em;
+  font-size: 1.1em;
   margin-right: var(--spacing-xs);
   color: inherit;
 }
 
-.todo-list .action-icon-btn,
-button.delete-category-btn {
+.todo-list .action-icon-btn {
   all: unset;
   display: inline-flex;
   align-items: center;
@@ -402,22 +413,19 @@ button.delete-category-btn {
   cursor: pointer;
   padding: var(--spacing-xs);
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   color: var(--color-text-secondary);
   transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
   flex-shrink: 0;
 }
 .todo-list .action-icon-btn:hover,
-button.delete-category-btn:hover,
-.todo-list .action-icon-btn:focus,
-button.delete-category-btn:focus {
+.todo-list .action-icon-btn:focus {
   background-color: var(--color-background-hover);
   color: var(--color-primary-accent);
   outline: none;
 }
-.todo-list .action-icon-btn .material-icons-outlined,
-button.delete-category-btn .material-icons-outlined {
+.todo-list .action-icon-btn .material-icons-outlined {
   font-size: 1.25rem;
   display: block;
 }
@@ -430,44 +438,59 @@ button.delete-category-btn .material-icons-outlined {
 .todo-list .action-icon-btn.remove:hover .material-icons-outlined {
   color: var(--color-danger-hover);
 }
-button.delete-category-btn .material-icons-outlined {
-  color: var(--color-danger);
+.todo-list .action-icon-btn.has-content .material-icons-outlined {
+  color: var(--color-primary-accent);
 }
-button.delete-category-btn:hover .material-icons-outlined {
-  color: var(--color-danger-hover);
+.todo-list .action-icon-btn .subtask-count {
+  font-size: 0.65rem;
+  line-height: 1;
+  color: var(--color-text-on-accent);
+  background-color: var(--color-text-secondary);
+  padding: 1px 4px;
+  border-radius: 7px;
+  margin-left: var(--spacing-xs);
+  font-weight: 600;
+}
+.todo-list .action-icon-btn.list-btn {
+  position: relative; /* For absolute positioning of count if needed, but inline is fine */
+  display: inline-flex; /* To keep icon and count on same line */
+  align-items: center;
 }
 
 .edit-task-form {
-  display: flex;
-  flex-grow: 1;
+  display: flex; /* Changed from flex to inline-flex if it's inside .task-group-left */
+  /* flex-grow: 1; /* This should be on .task-group-left or the form's parent */
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   align-items: center;
+  width: 100%; /* Ensure it can take space */
 }
 .edit-task-form .edit-input {
   padding: var(--spacing-xs);
   font-size: 0.9rem;
   margin: 0;
   border-radius: var(--border-radius-small);
+  line-height: 1.4; /* Match text line-height */
 }
 .edit-task-form .edit-task-text {
-  flex: 2 1 120px;
+  flex: 2 1 150px;
 }
 .edit-task-form .edit-task-due {
-  flex: 1 1 120px;
+  flex: 1 1 130px;
 }
 .edit-task-form .edit-task-priority {
-  flex: 1 1 100px;
+  flex: 1 1 110px;
 }
-
 .edit-task-form .edit-task-category {
-  flex: 1 1 120px;
+  flex: 1 1 110px;
 }
 
 .edit-form-actions {
   display: flex;
   gap: var(--spacing-sm);
-  margin-left: var(--spacing-sm);
+  flex-basis: 100%; /* Make action buttons take full width on new line */
+  justify-content: flex-end;
+  padding-top: var(--spacing-sm);
 }
 button.save-edit-btn,
 button.cancel-edit-btn {
@@ -487,13 +510,16 @@ button.cancel-edit-btn:hover {
 .list-area {
   flex-basis: 100%;
   margin-top: var(--spacing-sm);
-  padding-left: calc(var(--spacing-sm) + 24px + var(--spacing-sm));
+  padding-top: var(--spacing-sm);
+  padding-left: calc(
+    var(--spacing-sm) + 30px + var(--spacing-sm)
+  ); /* Indent past an icon + gap */
+  border-top: 1px solid var(--color-divider);
 }
 .note-area textarea {
   width: 100%;
   font-size: 0.9rem;
 }
-
 .note-area-actions,
 .sub-form-actions {
   display: flex;
@@ -501,7 +527,6 @@ button.cancel-edit-btn:hover {
   gap: var(--spacing-sm);
   margin-top: var(--spacing-sm);
 }
-
 button.cancel-note-btn,
 button.cancel-subtask-form-btn {
   background-color: var(--color-background-hover);
@@ -514,18 +539,10 @@ button.cancel-note-btn:hover,
 button.cancel-subtask-form-btn:hover {
   background-color: var(--color-border-light);
 }
-
 .note-area-actions .save-note-btn,
 .sub-form-actions button[type='submit'] {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: 0.85rem;
-}
-
-.save-note-btn {
-  align-self: flex-end;
-  font-size: 0.85rem;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  margin-top: var(--spacing-xs);
 }
 
 .sub-form {
@@ -574,10 +591,25 @@ button.cancel-subtask-form-btn:hover {
   border-radius: var(--border-radius-medium);
   padding: var(--spacing-lg);
   min-width: 320px;
+  max-width: 400px; /* Added max-width */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   background-color: var(--color-background-content);
   color: var(--color-text-primary);
+  /* For centering: */
+  margin: auto; /* This helps if the parent is a flex container and dialog is direct child */
+  /* If not, JS might be needed or position fixed with transforms */
 }
+/* To truly center a <dialog> opened with showModal(), often no extra CSS is needed
+   as the browser handles it. If it's not centered, it might be due to other
+   conflicting styles or how it's placed in the DOM relative to positioned ancestors.
+   The `margin: auto` is a good start if its display allows it.
+   If using position:fixed:
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+*/
+
 #confirmation-dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.3);
 }
