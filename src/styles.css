@@ -316,7 +316,16 @@ label {
 }
 
 .todo-form > button[type='submit'],
-.cat-form button {
+.cat-form button[type='submit'] {
+  height: 2.25rem;
+  padding: 0 var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-form > button[type='submit'],
+.cat-form button[type='submit'] {
   padding-top: var(--spacing-sm);
   padding-bottom: var(--spacing-sm);
   padding-left: var(--spacing-md);
@@ -452,32 +461,53 @@ todo-form,
   font-size: 1.25rem;
   display: block;
 }
-.todo-list .action-icon-btn.toggle .material-icons-outlined {
+
+.todo-list .action-icon-btn .material-icons-outlined {
+  color: var(--color-text-secondary);
+}
+
+.todo-list li.done .action-icon-btn.toggle .material-icons-outlined {
   color: var(--color-success);
 }
-.todo-list .action-icon-btn.remove .material-icons-outlined {
+
+.todo-list .action-icon-btn.remove:hover .material-icons-outlined,
+.todo-list .action-icon-btn.remove:focus .material-icons-outlined {
   color: var(--color-danger);
 }
-.todo-list .action-icon-btn.remove:hover .material-icons-outlined {
-  color: var(--color-danger-hover);
-}
-.todo-list .action-icon-btn.has-content .material-icons-outlined {
+
+.todo-list .action-icon-btn.has-content.list-btn .material-icons-outlined,
+.todo-list .action-icon-btn.list-btn:hover .material-icons-outlined,
+.todo-list .action-icon-btn.list-btn:focus .material-icons-outlined {
   color: var(--color-primary-accent);
 }
-.todo-list .action-icon-btn .subtask-count {
-  font-size: 0.65rem;
-  line-height: 1;
-  color: var(--color-text-on-accent);
-  background-color: var(--color-text-secondary);
-  padding: 1px 4px;
-  border-radius: 7px;
-  margin-left: var(--spacing-xs);
-  font-weight: 600;
+.todo-list .action-icon-btn.note-btn:hover .material-icons-outlined,
+.todo-list .action-icon-btn.note-btn:focus .material-icons-outlined {
+  color: var(--color-primary-accent);
 }
-.todo-list .action-icon-btn.list-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
+
+.todo-list .action-icon-btn.toggle:hover .material-icons-outlined,
+.todo-list .action-icon-btn.toggle:focus .material-icons-outlined,
+.todo-list .action-icon-btn.edit-btn:hover .material-icons-outlined,
+.todo-list .action-icon-btn.edit-btn:focus .material-icons-outlined {
+  color: var(--color-primary-accent);
+}
+
+button.delete-category-btn,
+.action-icon-btn-sidebar {
+  background: transparent;
+}
+button.delete-category-btn:hover,
+button.delete-category-btn:focus,
+.action-icon-btn-sidebar:hover,
+.action-icon-btn-sidebar:focus {
+  outline: none;
+}
+button.delete-category-btn:hover .material-icons-outlined,
+button.delete-category-btn:focus .material-icons-outlined,
+.action-icon-btn-sidebar:hover .material-icons-outlined,
+.action-icon-btn-sidebar:focus .material-icons-outlined {
+  color: var(--color-danger);
+  background: transparent;
 }
 
 .edit-task-form {
@@ -663,4 +693,10 @@ button.cancel-subtask-form-btn:hover {
 .cat-form input[type='text'],
 .cat-form button[type='submit'] {
   height: 2.25rem;
+}
+
+.sidebar button.delete-category-btn,
+.sidebar button.delete-category-btn:hover,
+.sidebar button.delete-category-btn:focus {
+  background-color: transparent;
 }

@@ -1,4 +1,3 @@
-// src/renderer.js
 import {
   isToday,
   isFuture,
@@ -47,18 +46,12 @@ class Renderer {
     this.renderCategories(data.projects, data.current);
     this.renderCategoryOptionsInForm(
       data.projects.filter(
-        (p) =>
-          !['All', 'Inbox', 'Today', 'Upcoming', 'Overdue'].includes(p.name) // Ensure Inbox is also excluded if it's a default assignable
+        (p) => !['All', 'Today', 'Upcoming', 'Overdue'].includes(p.name)
       )
     );
     if (this.#projectTitleElement) {
       this.#projectTitleElement.textContent = data.current || 'Todo List';
     }
-    // No longer call this.renderTasks here; 'projectsUpdated' might not always mean tasks need full re-filter/re-render
-    // 'tasksFilterChanged' event will handle task re-rendering when the current project changes.
-    // However, if changing project implies tasks *must* re-render immediately, keep it.
-    // For now, let's assume 'tasksFilterChanged' is sufficient.
-    // If not, uncomment: this.renderTasks(tasksManager.list);
   }
 
   renderCategories(categories, activeCategoryName) {
@@ -94,7 +87,7 @@ class Renderer {
         deleteBtn.classList.add(
           'delete-category-btn',
           'action-icon-btn-sidebar'
-        ); // Specific class for sidebar icons
+        );
         deleteBtn.innerHTML =
           '<i class="material-icons-outlined" title="Delete category">delete</i>';
         deleteBtn.setAttribute('aria-label', `Delete category ${project.name}`);
