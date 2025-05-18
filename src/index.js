@@ -158,12 +158,12 @@ if (todoListElement) {
         );
 
         const newText = textInput ? textInput.value.trim() : '';
-        const newDueDate = dateInput ? dateInput.value : null;
+        const newDueDate = dateInput ? dateInput.value || null : null;
         const priorityValueFromEdit = priorityInput ? priorityInput.value : '';
         const newPriority =
           priorityValueFromEdit === '' ? null : priorityValueFromEdit;
         const newCategory = categoryEditSelectInput
-          ? categoryInput.value
+          ? categoryEditSelectInput.value
           : null;
         const updatedProperties = {};
 
@@ -176,7 +176,7 @@ if (todoListElement) {
         if (priorityInput) {
           updatedProperties.priority = newPriority;
         }
-        if (categoryEditSelectInput && newCategory) {
+        if (categoryEditSelectInput && typeof newCategory === 'string') {
           updatedProperties.category = newCategory;
         }
         if (newText) {
