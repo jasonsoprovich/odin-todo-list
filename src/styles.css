@@ -39,11 +39,11 @@
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
     monospace;
 
-  --spacing-xs: 0.25rem; /* 4px */
-  --spacing-sm: 0.5rem; /* 8px */
-  --spacing-md: 1rem; /* 16px */
-  --spacing-lg: 1.5rem; /* 24px */
-  --spacing-xl: 2rem; /* 32px */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
 
   --border-radius-small: 4px;
   --border-radius-medium: 8px;
@@ -113,6 +113,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
+  line-height: 1.4;
 }
 button:hover:not(:disabled) {
   background-color: var(--color-primary-accent-hover);
@@ -137,7 +138,8 @@ select {
   border-radius: var(--border-radius-small);
   background-color: var(--color-background-input);
   color: var(--color-text-primary);
-  width: 100%; /* Default width, flex items will override */
+  width: 100%;
+  line-height: 1.4;
 }
 input:focus,
 textarea:focus,
@@ -151,20 +153,19 @@ textarea {
   min-height: 60px;
 }
 label {
-  /* This is for the "Due:" label in the main form */
   font-size: 0.85rem;
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-xs);
-  display: inline-flex; /* Changed for better alignment with input */
+  display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
 }
 
 .material-icons-outlined {
-  vertical-align: middle; /* Fallback */
-  font-size: 1.2em; /* Base icon size */
+  vertical-align: middle;
+  font-size: 1.2em;
   line-height: 1;
-  display: inline-block; /* Helps with consistent rendering */
+  display: inline-block;
 }
 
 .layout {
@@ -314,6 +315,28 @@ label {
   flex-shrink: 0;
 }
 
+.todo-form > button[type='submit'],
+.cat-form button {
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  font-size: 0.9rem;
+  border-radius: var(--border-radius-small);
+  flex-shrink: 0;
+}
+
+todo-form,
+.cat-form {
+  align-items: stretch;
+}
+
+.todo-form > .todo-due-label {
+  align-items: center;
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+}
+
 .todo-list {
   list-style: none;
   padding: 0;
@@ -321,17 +344,17 @@ label {
 }
 .todo-list li {
   display: flex;
-  justify-content: space-between; /* Key for left/right groups */
-  align-items: center; /* Changed from flex-start to center for better vertical alignment of groups */
+  justify-content: space-between;
+  align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-md); /* Adjusted padding */
+  padding: var(--spacing-sm) var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   background: var(--color-background-content);
   border-radius: var(--border-radius-medium);
   border: 1px solid var(--color-border-light);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: background-color 0.2s ease;
-  flex-wrap: wrap; /* Allow note/list areas to wrap */
+  flex-wrap: wrap;
 }
 .todo-list li:hover {
   background-color: var(--color-background-hover);
@@ -370,7 +393,7 @@ label {
   font-size: 0.95rem;
   line-height: 1.4;
   color: var(--color-text-primary);
-  padding-top: 1px; /* Minor adjustment for alignment with icons */
+  padding-top: 1px;
   padding-bottom: 1px;
   word-break: break-word;
 }
@@ -397,7 +420,7 @@ label {
   border-radius: var(--border-radius-small);
   flex-shrink: 0;
   white-space: nowrap;
-  padding: var(--spacing-xs) 0; /* Remove horizontal padding if only icon+text */
+  padding: var(--spacing-xs) 0;
 }
 .todo-list .todo-due .material-icons-outlined {
   font-size: 1.1em;
@@ -452,25 +475,25 @@ label {
   font-weight: 600;
 }
 .todo-list .action-icon-btn.list-btn {
-  position: relative; /* For absolute positioning of count if needed, but inline is fine */
-  display: inline-flex; /* To keep icon and count on same line */
+  position: relative;
+  display: inline-flex;
   align-items: center;
 }
 
 .edit-task-form {
-  display: flex; /* Changed from flex to inline-flex if it's inside .task-group-left */
-  /* flex-grow: 1; /* This should be on .task-group-left or the form's parent */
+  display: flex;
+
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   align-items: center;
-  width: 100%; /* Ensure it can take space */
+  width: 100%;
 }
 .edit-task-form .edit-input {
   padding: var(--spacing-xs);
   font-size: 0.9rem;
   margin: 0;
   border-radius: var(--border-radius-small);
-  line-height: 1.4; /* Match text line-height */
+  line-height: 1.4;
 }
 .edit-task-form .edit-task-text {
   flex: 2 1 150px;
@@ -488,7 +511,7 @@ label {
 .edit-form-actions {
   display: flex;
   gap: var(--spacing-sm);
-  flex-basis: 100%; /* Make action buttons take full width on new line */
+  flex-basis: 100%;
   justify-content: flex-end;
   padding-top: var(--spacing-sm);
 }
@@ -511,9 +534,7 @@ button.cancel-edit-btn:hover {
   flex-basis: 100%;
   margin-top: var(--spacing-sm);
   padding-top: var(--spacing-sm);
-  padding-left: calc(
-    var(--spacing-sm) + 30px + var(--spacing-sm)
-  ); /* Indent past an icon + gap */
+  padding-left: calc(var(--spacing-sm) + 30px + var(--spacing-sm));
   border-top: 1px solid var(--color-divider);
 }
 .note-area textarea {
@@ -591,13 +612,12 @@ button.cancel-subtask-form-btn:hover {
   border-radius: var(--border-radius-medium);
   padding: var(--spacing-lg);
   min-width: 320px;
-  max-width: 400px; /* Added max-width */
+  max-width: 400px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   background-color: var(--color-background-content);
   color: var(--color-text-primary);
-  /* For centering: */
-  margin: auto; /* This helps if the parent is a flex container and dialog is direct child */
-  /* If not, JS might be needed or position fixed with transforms */
+
+  margin: auto;
 }
 /* To truly center a <dialog> opened with showModal(), often no extra CSS is needed
    as the browser handles it. If it's not centered, it might be due to other
@@ -632,7 +652,15 @@ button.cancel-subtask-form-btn:hover {
 #confirm-cancel-btn:hover {
   background-color: var(--color-border-light);
 }
-
 .hidden {
   display: none !important;
+}
+
+.todo-form > input[type='text'],
+.todo-form > select,
+.todo-form > .todo-due-label input[type='date'],
+.todo-form > button[type='submit'],
+.cat-form input[type='text'],
+.cat-form button[type='submit'] {
+  height: 2.25rem;
 }
