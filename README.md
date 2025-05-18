@@ -36,6 +36,9 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 18. Responsive layout 🚀
 19. Drag & drop reordering 🚀
 20. Add header/footer logo information 🚀
+21. Change delete icon for category and task to grey with hover of red 🚀
+22. Change note icon to be the same whether notes are filled or blank 🚀
+23. Change normal state color of icons to grey 🚀
 
 ---
 
