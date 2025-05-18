@@ -580,7 +580,7 @@ button.cancel-subtask-form-btn:hover {
 }
 .sub-list li.done .sub-text {
   text-decoration: line-through;
-  color: var(--color-text-placeholder);
+  color: var(--color-text-secondary);
 }
 .sub-list .action-icon-btn .material-icons-outlined {
   font-size: 1.1rem;
