@@ -330,6 +330,22 @@ label {
   color: var(--color-priority-low-text);
 }
 
+.todo-list .action-icon-btn.has-content .material-icons-outlined {
+  color: var(--color-primary-accent);
+}
+
+.todo-list .action-icon-btn .subtask-count {
+  font-size: 0.65rem;
+  line-height: 1;
+  color: var(--color-text-on-accent);
+  background-color: var(--color-text-secondary);
+  padding: 0.1em 0.3em;
+  border-radius: var(--border-radius-small);
+  margin-left: var(--spacing-xs);
+  font-weight: 600;
+  vertical-align: text-top;
+}
+
 .todo-list .todo-text {
   flex-grow: 1;
   font-size: 0.95rem;
@@ -426,6 +442,10 @@ button.delete-category-btn:hover .material-icons-outlined {
 }
 .edit-task-form .edit-task-priority {
   flex: 1 1 100px;
+}
+
+.edit-task-form .edit-task-category {
+  flex: 1 1 120px;
 }
 
 .edit-form-actions {

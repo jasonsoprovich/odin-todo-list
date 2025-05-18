@@ -259,6 +259,23 @@ class Renderer {
         const priorityEditSelect = document.createElement('select');
         priorityEditSelect.classList.add('edit-input', 'edit-task-priority');
 
+        const categoryEditSelect = document.createElement('select');
+        categoryEditSelect.classList.add('edit-input', 'edit-task-category');
+        const assignableCategories = projectsManager.list.filter(
+          (p) => !['All', 'Today', 'Upcoming', 'Overdue'].includes(p.name)
+        );
+
+        assignableCategories.forEach((cat) => {
+          const option = document.createElement('option');
+          option.value = cat.name;
+          option.textContent = cat.name;
+          if (cat.name === task.category) {
+            option.selected = true;
+          }
+          categoryEditSelect.appendChild(option);
+        });
+        editForm.appendChild(categoryEditSelect);
+
         const priorityOptions = [
           { value: '', text: 'None' },
           { value: 'Low', text: 'Low' },
@@ -342,10 +359,15 @@ class Renderer {
 
       const noteBtn = document.createElement('button');
       noteBtn.type = 'button';
-      noteBtn.classList.add('note-btn');
+      noteBtn.classList.add('note-btn', 'action-icon-btn');
       noteBtn.dataset.id = task.id;
-      noteBtn.innerHTML = `<i class="material-icons-outlined" title="Edit notes">description</i>`;
-      noteBtn.setAttribute('aria-label', 'Edit notes');
+      noteBtn.setAttribute('aria-label', 'Notes');
+      if (task.note && task.note.trim() !== '') {
+        noteBtn.classList.add('has-content');
+        noteBtn.innerHTML = `<i class="material-icons-outlined" title="View/Edit Notes">description</i>`;
+      } else {
+        noteBtn.innerHTML = `<i class="material-icons-outlined" title="Add Notes">feed</i>`;
+      }
       li.appendChild(noteBtn);
 
       const noteArea = document.createElement('div');
@@ -380,14 +402,21 @@ class Renderer {
 
       const listBtn = document.createElement('button');
       listBtn.type = 'button';
-      listBtn.classList.add('list-btn');
+      listBtn.classList.add('list-btn', 'action-icon-btn');
       listBtn.dataset.id = task.id;
-      listBtn.innerHTML = `<i class="material-icons-outlined" title="Toggle checklist">checklist</i>`;
       listBtn.setAttribute('aria-label', 'Toggle checklist');
+
+      if (task.subtasks && task.subtasks.length > 0) {
+        listBtn.classList.add('has-content');
+        const doneCount = task.subtasks.filter((s) => s.done).length;
+        listBtn.innerHTML = `<i class="material-icons-outlined" title="View/Edit Checklist">checklist</i> <span class="subtask-count">${doneCount}/${task.subtasks.length}</span>`;
+      } else {
+        listBtn.innerHTML = `<i class="material-icons-outlined" title="Add Checklist Items">playlist_add</i>`;
+      }
       li.appendChild(listBtn);
 
       const listArea = document.createElement('div');
-      listArea.classList.add('list-area');
+      listArea.classList.add('list-area', 'hidden');
       // unhide if subtasks exist
       if (!task.subtasks || task.subtasks.length === 0) {
         listArea.classList.add('hidden');

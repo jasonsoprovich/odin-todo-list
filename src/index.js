@@ -111,6 +111,12 @@ if (todoListElement) {
       return;
     }
 
+    const cancelEditButton = target.closest('button.cancel-edit-btn');
+    if (cancelEditButton) {
+      appRenderer.setEditingId(null);
+      return;
+    }
+
     if (target.matches('button.cancel-note-btn')) {
       const taskLi = target.closest('li[data-id]');
       if (taskLi) {
@@ -147,20 +153,41 @@ if (todoListElement) {
         const textInput = taskLi.querySelector('input.edit-task-text');
         const dateInput = taskLi.querySelector('input.edit-task-due');
         const priorityInput = taskLi.querySelector('select.edit-task-priority');
+        const categoryEditSelectInput = taskLi.querySelector(
+          'select.edit-task-category'
+        );
 
-        const newText = textInput ? textInput.value.trim() : null;
+        const newText = textInput ? textInput.value.trim() : '';
         const newDueDate = dateInput ? dateInput.value : null;
+        const priorityValueFromEdit = priorityInput ? priorityInput.value : '';
         const newPriority =
-          priorityInput && priorityInput.value !== ''
-            ? priorityInput.value
-            : null;
+          priorityValueFromEdit === '' ? null : priorityValueFromEdit;
+        const newCategory = categoryEditSelectInput
+          ? categoryInput.value
+          : null;
+        const updatedProperties = {};
 
+        if (textInput && newText) {
+          updatedProperties.text = newText;
+        }
+        if (dateInput) {
+          updatedProperties.due = newDueDate;
+        }
+        if (priorityInput) {
+          updatedProperties.priority = newPriority;
+        }
+        if (categoryEditSelectInput && newCategory) {
+          updatedProperties.category = newCategory;
+        }
         if (newText) {
           tasksManager.updateTask(todoId, {
             text: newText,
             due: newDueDate || null,
             priority: newPriority,
           });
+        }
+        if (Object.keys(updatedProperties).length > 0) {
+          tasksManager.updateTask(todoId, updatedProperties);
         }
       }
       appRenderer.setEditingId(null);
