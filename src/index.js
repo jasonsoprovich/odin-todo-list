@@ -31,6 +31,28 @@ const allSortButtons = [
   { button: sortByPriorityBtn, field: 'priority', name: 'Priority' },
 ];
 
+function autoSelectCategoryInForm(projectName) {
+  if (!taskCategorySelect) return;
+  const FILTER_VIEWS = ['All', 'Today', 'Upcoming', 'Overdue'];
+  let target = projectName;
+  if (FILTER_VIEWS.includes(projectName) && projectName !== 'Inbox') {
+    target = 'Inbox';
+  }
+  const hasOption = Array.from(taskCategorySelect.options).some(
+    (opt) => opt.value === target
+  );
+  if (!hasOption) target = 'Inbox';
+  taskCategorySelect.value = target;
+}
+
+Events.on('projectsUpdated', ({ current }) => {
+  autoSelectCategoryInForm(current);
+});
+
+Events.on('tasksFilterChanged', (projectName) => {
+  autoSelectCategoryInForm(projectName);
+});
+
 function updateSortButtonActiveStates() {
   const currentCriteria = tasksManager.getCurrentSortCriteria();
 
