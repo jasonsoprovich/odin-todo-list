@@ -5,17 +5,16 @@ import {
   isValid as isValidDate,
 } from 'date-fns';
 import Events from './pubsub';
-import Task from './task';
 
-const TASKS_STORAGE_KEY = 'todos-app-tasks';
-const SORT_CRITERIA_STORAGE_KEY = 'todos-app-sort-criteria';
+const TASKS_STORAGE_KEY = 'todoTasks';
+const SORT_CRITERIA_KEY = 'todoSortCriteria';
 
 class TaskManager {
   #tasks = [];
 
   #nextId = 1;
 
-  #currentSortCriteria = { field: null, direction: 'asc' };
+  #currentSortCriteria = { field: 'text', direction: 'asc' };
 
   constructor() {
     this.#loadSortCriteria();
@@ -23,28 +22,21 @@ class TaskManager {
   }
 
   #loadSortCriteria() {
-    const storedCriteria = localStorage.getItem(SORT_CRITERIA_STORAGE_KEY);
+    const storedCriteria = localStorage.getItem(SORT_CRITERIA_KEY);
     if (storedCriteria) {
       try {
-        const parsedCriteria = JSON.parse(storedCriteria);
-        if (
-          parsedCriteria &&
-          typeof parsedCriteria.field === 'string' &&
-          (parsedCriteria.direction === 'asc' ||
-            parsedCriteria.direction === 'desc')
-        ) {
-          this.#currentSortCriteria = parsedCriteria;
-        }
-      } catch (error) {
+        this.#currentSortCriteria = JSON.parse(storedCriteria);
+      } catch (e) {
         // eslint-disable-next-line no-console
-        console.error('Error loading sort criteria from localStorage', error);
+        console.error('Error loading sort criteria from localStorage:', e);
+        this.#currentSortCriteria = { field: 'text', direction: 'asc' };
       }
     }
   }
 
   #saveSortCriteria() {
     localStorage.setItem(
-      SORT_CRITERIA_STORAGE_KEY,
+      SORT_CRITERIA_KEY,
       JSON.stringify(this.#currentSortCriteria)
     );
   }
@@ -53,22 +45,9 @@ class TaskManager {
     const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY);
     if (storedTasks) {
       try {
-        const parsedTasks = JSON.parse(storedTasks);
-        this.#tasks = parsedTasks.map(
-          (t) =>
-            new Task(
-              t.id,
-              t.text || '',
-              Boolean(t.done),
-              t.due || null,
-              t.category || 'Inbox',
-              typeof t.note === 'string' ? t.note : '',
-              Array.isArray(t.subtasks) ? t.subtasks : [],
-              t.priority || null
-            )
-        );
+        this.#tasks = JSON.parse(storedTasks);
         this.#nextId =
-          this.#tasks.reduce((max, task) => Math.max(max, task.id), 0) + 1;
+          this.#tasks.reduce((max, task) => Math.max(max, task.id || 0), 0) + 1;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Error loading tasks from localStorage:', error);
@@ -84,6 +63,49 @@ class TaskManager {
     Events.emit('tasksUpdated', this.list);
   }
 
+  createTask(
+    text,
+    due = null,
+    category = 'Inbox',
+    priority = null,
+    note = '',
+    subtasks = [],
+    done = false
+  ) {
+    const newTask = {
+      id: (this.#nextId += 1),
+      text,
+      due,
+      category,
+      priority,
+      note,
+      subtasks,
+      done,
+      createdAt: new Date().toISOString(),
+    };
+    this.#tasks.push(newTask);
+    this.#saveTasks();
+    return newTask;
+  }
+
+  setSortCriteria(field) {
+    if (this.#currentSortCriteria.field === field) {
+      this.#currentSortCriteria.direction =
+        this.#currentSortCriteria.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.#currentSortCriteria.field = field;
+      this.#currentSortCriteria.direction =
+        field === 'priority' ? 'desc' : 'asc';
+    }
+    this.#saveSortCriteria();
+    Events.emit('sortCriteriaChanged', this.#currentSortCriteria);
+    Events.emit('tasksUpdated', this.list);
+  }
+
+  getCurrentSortCriteria() {
+    return { ...this.#currentSortCriteria };
+  }
+
   get list() {
     const sortedTasks = [...this.#tasks];
 
@@ -94,57 +116,59 @@ class TaskManager {
         Medium: 2,
         Low: 1,
         null: 0,
+        undefined: 0,
+        '': 0,
       };
 
       sortedTasks.sort((a, b) => {
-        const valA = a[field];
-        const valB = b[field];
+        let valA = a[field];
+        let valB = b[field];
 
-        if (field === 'due') {
-          const aIsNull = valA === null || typeof valA === 'undefined';
-          const bIsNull = valB === null || typeof valB === 'undefined';
+        if (field !== 'priority') {
+          const aIsNull = valA === null || valA === undefined || valA === '';
+          const bIsNull = valB === null || valB === undefined || valB === '';
 
           if (aIsNull && bIsNull) return 0;
-          if (aIsNull) return 1;
-          if (bIsNull) return -1;
+          if (aIsNull) return direction === 'asc' ? 1 : -1;
+          if (bIsNull) return direction === 'asc' ? -1 : 1;
+        }
 
-          if (typeof valA !== 'string' || typeof valB !== 'string') return 0;
-
+        if (field === 'due') {
           try {
-            const dateA = parseISO(valA);
-            const dateB = parseISO(valB);
+            const dateA =
+              typeof valA === 'string' && valA ? parseISO(valA) : null;
+            const dateB =
+              typeof valB === 'string' && valB ? parseISO(valB) : null;
 
-            if (!isValidDate(dateA) && !isValidDate(dateB)) return 0;
-            if (!isValidDate(dateA)) return 1;
-            if (!isValidDate(dateB)) return -1;
+            const aIsValid = dateA && isValidDate(dateA);
+            const bIsValid = dateB && isValidDate(dateB);
+
+            if (!aIsValid && !bIsValid) return 0;
+            if (!aIsValid) return direction === 'asc' ? 1 : -1;
+            if (!bIsValid) return direction === 'asc' ? -1 : 1;
 
             return direction === 'asc'
               ? compareAsc(dateA, dateB)
               : compareDesc(dateA, dateB);
           } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error comparing dates:', error, valA, valB);
             return 0;
           }
         } else if (field === 'priority') {
-          const priorityA = priorityOrder[valA === null ? 'null' : valA] || 0;
-          const priorityB = priorityOrder[valB === null ? 'null' : valB] || 0;
+          const priorityA = priorityOrder[valA] || 0;
+          const priorityB = priorityOrder[valB] || 0;
 
           if (priorityA === priorityB) return 0;
-
-          if (direction === 'asc') {
-            return priorityA < priorityB ? -1 : 1;
-          }
-          return priorityA > priorityB ? -1 : 1;
+          return direction === 'asc'
+            ? priorityA - priorityB
+            : priorityB - priorityA;
         } else if (field === 'text') {
-          const textA = String(valA || '').toLocaleLowerCase();
-          const textB = String(valB || '').toLocaleLowerCase();
-
-          if (direction === 'asc') {
-            return textA.localeCompare(textB);
-          }
-          return textB.localeCompare(textA);
-        } else {
+          valA = String(valA ?? '').toLowerCase();
+          valB = String(valB ?? '').toLowerCase();
           if (valA < valB) return direction === 'asc' ? -1 : 1;
           if (valA > valB) return direction === 'asc' ? 1 : -1;
+          return 0;
         }
         return 0;
       });
@@ -152,54 +176,10 @@ class TaskManager {
     return sortedTasks;
   }
 
-  setSortCriteria(field, defaultDirection = 'asc') {
-    if (
-      this.#currentSortCriteria.field === field &&
-      this.#currentSortCriteria.field !== null
-    ) {
-      this.#currentSortCriteria.direction =
-        this.#currentSortCriteria.direction === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.#currentSortCriteria.field = field;
-      this.#currentSortCriteria.direction =
-        field === 'priority' ? 'desc' : defaultDirection;
-    }
-    this.#saveSortCriteria();
-    Events.emit('tasksUpdated', this.list);
-  }
-
-  createTask(text, due = null, category = 'Inbox', priority = null) {
-    const newTask = new Task(
-      this.#nextId,
-      text,
-      false,
-      due,
-      category,
-      '',
-      [],
-      priority
-    );
-    this.#tasks.push(newTask);
-    this.#nextId += 1;
-    this.#saveTasks();
-    return newTask;
-  }
-
-  updateTask(id, updatedProperties) {
+  updateTask(id, updates) {
     const taskIndex = this.#tasks.findIndex((task) => task.id === id);
     if (taskIndex > -1) {
-      const oldTaskData = this.#tasks[taskIndex];
-      const updatedData = { ...oldTaskData, ...updatedProperties };
-      this.#tasks[taskIndex] = new Task(
-        updatedData.id,
-        updatedData.text,
-        updatedData.done,
-        updatedData.due,
-        updatedData.category,
-        updatedData.note,
-        updatedData.subtasks,
-        updatedData.priority
-      );
+      this.#tasks[taskIndex] = { ...this.#tasks[taskIndex], ...updates };
       this.#saveTasks();
       return this.#tasks[taskIndex];
     }
@@ -216,71 +196,8 @@ class TaskManager {
     return false;
   }
 
-  toggleTaskComplete(id) {
-    const task = this.#tasks.find((t) => t.id === id);
-    if (task) {
-      task.toggleComplete();
-      this.#saveTasks();
-      return task;
-    }
-    return null;
-  }
-
-  updateTaskNote(id, noteText) {
-    const task = this.#tasks.find((t) => t.id === id);
-    if (task) {
-      task.note = noteText;
-      this.#saveTasks();
-      return task;
-    }
-    return null;
-  }
-
-  addSubtask(taskId, text) {
-    const task = this.#tasks.find((t) => t.id === taskId);
-    if (!task) return null;
-
-    const nextSubId =
-      (task.subtasks.reduce((max, s) => Math.max(max, s.id), 0) || 0) + 1;
-    const newSubtask = { id: nextSubId, text, done: false };
-    task.subtasks.push(newSubtask);
-    this.#saveTasks();
-    return newSubtask;
-  }
-
-  toggleSubtask(taskId, subId) {
-    const task = this.#tasks.find((t) => t.id === taskId);
-    if (!task) return false;
-    const subtask = task.subtasks.find((s) => s.id === subId);
-    if (!subtask) return false;
-    subtask.done = !subtask.done;
-    this.#saveTasks();
-    return true;
-  }
-
-  deleteSubtask(taskId, subId) {
-    const task = this.#tasks.find((t) => t.id === taskId);
-    if (!task) return false;
-    const initialLength = task.subtasks.length;
-    task.subtasks = task.subtasks.filter((s) => s.id !== subId);
-    if (task.subtasks.length < initialLength) {
-      this.#saveTasks();
-      return true;
-    }
-    return false;
-  }
-
-  updateTaskPriority(id, newPriority) {
-    const task = this.#tasks.find((t) => t.id === id);
-    if (
-      task &&
-      (newPriority === null || ['Low', 'Medium', 'High'].includes(newPriority))
-    ) {
-      task.priority = newPriority;
-      this.#saveTasks();
-      return task;
-    }
-    return null;
+  findTaskById(id) {
+    return this.#tasks.find((task) => task.id === id);
   }
 }
 

@@ -277,6 +277,22 @@ label {
 .toolbar button:hover {
   background-color: var(--color-background-hover);
 }
+.toolbar button.active-sort {
+  background-color: var(--color-primary-accent);
+  color: var(--color-text-on-accent);
+  border-color: var(--color-primary-accent);
+}
+
+.toolbar button.active-sort:hover {
+  background-color: var(--color-primary-accent-hover);
+  border-color: var(--color-primary-accent-hover);
+}
+
+.toolbar button .sort-arrow {
+  margin-left: var(--spacing-xs);
+  font-size: 0.8em;
+  line-height: 1;
+}
 
 .todo-form {
   display: flex;
@@ -481,7 +497,6 @@ todo-form,
   color: var(--color-primary-accent);
 }
 
-/* Add this rule for the note button when it has content */
 .todo-list .action-icon-btn.note-btn.has-content .material-icons-outlined {
   color: var(--color-primary-accent);
 }
@@ -655,16 +670,6 @@ button.cancel-subtask-form-btn:hover {
 
   margin: auto;
 }
-/* To truly center a <dialog> opened with showModal(), often no extra CSS is needed
-   as the browser handles it. If it's not centered, it might be due to other
-   conflicting styles or how it's placed in the DOM relative to positioned ancestors.
-   The `margin: auto` is a good start if its display allows it.
-   If using position:fixed:
-   position: fixed;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-*/
 
 #confirmation-dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.3);

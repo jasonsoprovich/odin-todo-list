@@ -1,5 +1,4 @@
 import './styles.css';
-// eslint-disable-next-line no-unused-vars
 import Events from './pubsub';
 import tasksManager from './taskManager';
 import projectsManager from './projectManager';
@@ -25,6 +24,35 @@ const todoListElement = qs('#todo-list');
 const sortByDueDateBtn = qs('#sort-by-due-date-btn');
 const sortByPriorityBtn = qs('#sort-by-priority-btn');
 const sortByNameBtn = qs('#sort-by-name-btn');
+
+const allSortButtons = [
+  { button: sortByNameBtn, field: 'text', name: 'Name' },
+  { button: sortByDueDateBtn, field: 'due', name: 'Due Date' },
+  { button: sortByPriorityBtn, field: 'priority', name: 'Priority' },
+];
+
+function updateSortButtonActiveStates() {
+  const currentCriteria = tasksManager.getCurrentSortCriteria();
+
+  allSortButtons.forEach(({ button, field }) => {
+    if (button) {
+      button.classList.remove('active-sort');
+      const existingArrow = button.querySelector('.sort-arrow');
+      if (existingArrow) {
+        existingArrow.remove();
+      }
+
+      if (currentCriteria.field === field) {
+        button.classList.add('active-sort');
+        const arrow = document.createElement('span');
+        arrow.classList.add('sort-arrow');
+        arrow.innerHTML =
+          currentCriteria.direction === 'asc' ? ' &uarr;' : ' &darr;';
+        button.appendChild(arrow);
+      }
+    }
+  });
+}
 
 if (sortByDueDateBtn) {
   sortByDueDateBtn.addEventListener('click', () => {
@@ -275,3 +303,9 @@ if (todoListElement) {
     subInput.value = '';
   });
 }
+
+Events.on('sortCriteriaChanged', updateSortButtonActiveStates);
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateSortButtonActiveStates();
+});

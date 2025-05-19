@@ -23,5 +23,6 @@
   "emmet.preferences": {
     // Ensures tag expansions also use double quotes
     "output.attributeQuotes": "double"
-  }
+  },
+  "cSpell.words": ["darr", "uarr"]
 }
