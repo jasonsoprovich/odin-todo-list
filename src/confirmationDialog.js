@@ -17,7 +17,8 @@ function closeDialog() {
 }
 
 function handleConfirm() {
-  if (currentConfirmCallback) {
+  console.log('✅ handleConfirm fired; callback=', currentConfirmCallback);
+  if (typeof currentConfirmCallback === 'function') {
     currentConfirmCallback();
   }
   closeDialog();
@@ -28,30 +29,8 @@ if (dialogElement) {
   confirmButton = qs('#confirm-yes-btn', dialogElement);
   cancelButton = qs('#confirm-no-btn', dialogElement);
 
-  if (confirmButton) {
-    confirmButton.addEventListener('click', handleConfirm);
-  } else {
-    // eslint-disable-next-line no-console
-    console.error(
-      'Confirmation dialog: Confirm button (#confirm-yes-btn) not found.'
-    );
-  }
-
-  if (cancelButton) {
-    cancelButton.addEventListener('click', closeDialog);
-  } else {
-    // eslint-disable-next-line no-console
-    console.error(
-      'Confirmation dialog: Cancel button (#confirm-no-btn) not found.'
-    );
-  }
-
-  if (!messageElement) {
-    // eslint-disable-next-line no-console
-    console.error(
-      'Confirmation dialog: Message element (#confirmation-message) not found.'
-    );
-  }
+  confirmButton.addEventListener('click', handleConfirm);
+  cancelButton.addEventListener('click', closeDialog);
 } else {
   // eslint-disable-next-line no-console
   console.error(

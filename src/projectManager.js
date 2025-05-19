@@ -1,5 +1,6 @@
 import Events from './pubsub';
 import Project from './project';
+import tasksManager from './taskManager';
 
 const PROJECTS_STORAGE_KEY = 'todos-app-projects';
 const DEFAULT_PROJECTS = ['All', 'Inbox', 'Today', 'Upcoming', 'Overdue'];
@@ -50,6 +51,10 @@ class ProjectManager {
   #saveProjects() {
     const projectNames = this.#projects.map((p) => p.name);
     localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projectNames));
+    console.log('➡️ emitting projectsUpdated', {
+      projects: this.list,
+      current: this.#currentProjectName,
+    });
     Events.emit('projectsUpdated', {
       projects: this.list,
       current: this.#currentProjectName,
@@ -93,19 +98,19 @@ class ProjectManager {
   }
 
   deleteProject(projectName) {
-    if (DEFAULT_PROJECTS.includes(projectName)) {
-      // eslint-disable-next-line no-console
-      console.warn(`Cannot delete default project: ${projectName}`);
-      return false;
-    }
+    console.log('🗑 deleteProject called with:', projectName);
+    if (projectName === defaultInboxProjectName) return false;
 
-    const initialLength = this.#projects.length;
-    this.#projects = this.#projects.filter((p) => p.name !== projectName);
+    const idx = this.#projects.findIndex((p) => p.name === projectName);
+    if (idx > -1) {
+      tasksManager.deleteTasksByCategory(projectName);
 
-    if (this.#projects.length < initialLength) {
+      this.#projects.splice(idx, 1);
+
       if (this.#currentProjectName === projectName) {
         this.setCurrentProject(defaultInboxProjectName);
       }
+
       this.#saveProjects();
       return true;
     }

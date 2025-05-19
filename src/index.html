@@ -13,13 +13,13 @@
   <body>
     <div class="layout">
       <aside class="sidebar">
-        <h2>Categories</h2>
-        <ul id="category-list"></ul>
-        <form id="cat-form" class="cat-form">
+        <h2 id="sidebar-heading">Projects</h2>
+        <ul id="project-list"></ul>
+        <form id="proj-form" class="proj-form">
           <input
             type="text"
-            id="cat-input"
-            placeholder="New category"
+            id="proj-input"
+            placeholder="New project"
             required
           />
           <button type="submit">Add</button>
@@ -53,7 +53,7 @@
             Due:
             <input type="date" id="todo-due" />
           </label>
-          <select name="todo-cat" id="todo-cat"></select>
+          <select id="todo-project" name="todo-project"></select>
           <button type="submit">Add</button>
         </form>
         <ul id="todo-list" class="todo-list"></ul>

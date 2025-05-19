@@ -17,22 +17,25 @@ function qs(selector, scope = document) {
 class Renderer {
   #todoListElement;
 
-  #categoryListElement;
+  #projectListElement;
 
   #projectTitleElement;
 
-  #categorySelectInForm;
+  #projectSelectInForm;
 
   #editingId = null;
 
   constructor() {
     this.#todoListElement = qs('#todo-list');
-    this.#categoryListElement = qs('#category-list');
+    this.#projectListElement = qs('#project-list');
     this.#projectTitleElement = qs('#app h1.text-center');
-    this.#categorySelectInForm = qs('#todo-cat');
+    this.#projectSelectInForm = qs('#todo-project');
 
     Events.on('tasksUpdated', (tasks) => this.renderTasks(tasks));
-    Events.on('projectsUpdated', (data) => this.#handleProjectsUpdate(data));
+    Events.on('projectsUpdated', (data) => {
+      console.log('⬅️ got projectsUpdated in Renderer', data);
+      this.#handleProjectsUpdate(data);
+    });
     Events.on('tasksFilterChanged', () => this.renderTasks(tasksManager.list));
 
     this.#handleProjectsUpdate({
@@ -43,8 +46,8 @@ class Renderer {
   }
 
   #handleProjectsUpdate(data) {
-    this.renderCategories(data.projects, data.current);
-    this.renderCategoryOptionsInForm(
+    this.renderProjects(data.projects, data.current);
+    this.renderProjectOptionsInForm(
       data.projects.filter(
         (p) => !['All', 'Today', 'Upcoming', 'Overdue'].includes(p.name)
       )
@@ -54,9 +57,9 @@ class Renderer {
     }
   }
 
-  renderCategories(categories, activeCategoryName) {
-    if (!this.#categoryListElement) return;
-    this.#categoryListElement.innerHTML = '';
+  renderProjects(categories, activeCategoryName) {
+    if (!this.#projectListElement) return;
+    this.#projectListElement.innerHTML = '';
     const SYSTEM_PROJECT_NAMES = [
       'Inbox',
       'Today',
@@ -65,64 +68,60 @@ class Renderer {
       'Overdue',
     ];
 
-    const createCategoryLi = (project, isAll = false) => {
-      const projectLi = document.createElement('li');
-      projectLi.classList.add('project-item');
-      projectLi.dataset.projectName = project.name;
+    const createProjectLi = (project, isAll = false) => {
+      const li = document.createElement('li');
+      li.classList.add('project-item');
+      li.dataset.projectName = project.name;
 
-      const projectNameSpan = document.createElement('span');
-      projectNameSpan.textContent = project.name;
-      projectNameSpan.classList.add('project-name');
-      projectNameSpan.addEventListener('click', () => {
+      const span = document.createElement('span');
+      span.textContent = project.name;
+      span.classList.add('project-name');
+      span.addEventListener('click', () => {
         projectsManager.setCurrentProject(project.name);
       });
-      projectLi.appendChild(projectNameSpan);
+      li.appendChild(span);
 
       if (project.name === activeCategoryName) {
-        projectLi.classList.add('active');
+        li.classList.add('active');
       }
 
       if (!isAll && !SYSTEM_PROJECT_NAMES.includes(project.name)) {
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add(
-          'delete-category-btn',
-          'action-icon-btn-sidebar'
-        );
-        deleteBtn.innerHTML =
-          '<i class="material-icons-outlined" title="Delete category">delete</i>';
-        deleteBtn.setAttribute('aria-label', `Delete category ${project.name}`);
-        deleteBtn.dataset.categoryName = project.name;
-        projectLi.appendChild(deleteBtn);
+        const btn = document.createElement('button');
+        btn.classList.add('delete-project-btn', 'action-icon-btn-sidebar');
+        btn.innerHTML =
+          '<i class="material-icons-outlined" title="Delete project">delete</i>';
+        btn.setAttribute('aria-label', `Delete project ${project.name}`);
+        btn.dataset.projectName = project.name;
+        li.appendChild(btn);
       }
-      return projectLi;
+      return li;
     };
 
-    this.#categoryListElement.appendChild(
-      createCategoryLi({ name: 'All' }, true)
+    this.#projectListElement.appendChild(
+      createProjectLi({ name: 'All' }, true)
     );
-
-    categories.forEach((project) => {
-      if (project.name === 'All') return;
-      this.#categoryListElement.appendChild(createCategoryLi(project));
+    categories.forEach((p) => {
+      if (p.name === 'All') return;
+      this.#projectListElement.appendChild(createProjectLi(p));
     });
   }
 
-  renderCategoryOptionsInForm(projects) {
-    if (!this.#categorySelectInForm) return;
-    this.#categorySelectInForm.innerHTML = '';
+  renderProjectOptionsInForm(projects) {
+    if (!this.#projectSelectInForm) return;
+    this.#projectSelectInForm.innerHTML = '';
     let inboxSelected = false;
-    projects.forEach((project) => {
-      const option = document.createElement('option');
-      option.value = project.name;
-      option.textContent = project.name;
-      if (project.name === 'Inbox') {
-        option.selected = true;
+    projects.forEach((p) => {
+      const opt = document.createElement('option');
+      opt.value = p.name;
+      opt.textContent = p.name;
+      if (p.name === 'Inbox') {
+        opt.selected = true;
         inboxSelected = true;
       }
-      this.#categorySelectInForm.appendChild(option);
+      this.#projectSelectInForm.appendChild(opt);
     });
-    if (!inboxSelected && this.#categorySelectInForm.options.length > 0) {
-      this.#categorySelectInForm.options[0].selected = true;
+    if (!inboxSelected && this.#projectSelectInForm.options.length > 0) {
+      this.#projectSelectInForm.options[0].selected = true;
     }
   }
 
@@ -246,10 +245,10 @@ class Renderer {
         const priorityEditSelect = document.createElement('select');
         priorityEditSelect.classList.add('edit-input', 'edit-task-priority');
         const priorityOptions = [
-          { value: '', text: '⚪ None' },
-          { value: 'Low', text: '🛌 Low' },
-          { value: 'Medium', text: '⚡ Medium' },
-          { value: 'High', text: '🔥 High' },
+          { value: '', text: 'None' },
+          { value: 'Low', text: 'Low' },
+          { value: 'Medium', text: 'Medium' },
+          { value: 'High', text: 'High' },
         ];
         priorityOptions.forEach((opt) => {
           const option = document.createElement('option');

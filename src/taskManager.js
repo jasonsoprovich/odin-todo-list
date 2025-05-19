@@ -236,6 +236,25 @@ class TaskManager {
       this.#saveTasks();
     }
   }
+
+  deleteTasksByCategory(categoryName) {
+    const before = this.#tasks.length;
+    this.#tasks = this.#tasks.filter((t) => t.category !== categoryName);
+    if (this.#tasks.length !== before) {
+      this.#saveTasks();
+    }
+  }
+
+  deleteTask(taskId) {
+    const idx = this.#tasks.findIndex((t) => t.id === taskId);
+    if (idx > -1) {
+      this.#tasks.splice(idx, 1);
+      this.#saveTasks();
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn(`deleteTask: no task found with id ${taskId}`);
+    }
+  }
 }
 
 const tasksManager = new TaskManager();

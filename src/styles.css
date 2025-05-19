@@ -188,7 +188,7 @@ label {
   margin-bottom: var(--spacing-md);
   padding-left: var(--spacing-sm);
 }
-.sidebar ul#category-list {
+.sidebar ul#project-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -237,16 +237,16 @@ label {
   font-size: 1.1rem;
 }
 
-.cat-form {
+.proj-form {
   margin-top: var(--spacing-md);
   display: flex;
   gap: var(--spacing-sm);
 }
-.cat-form input {
+.proj-form input {
   flex-grow: 1;
   font-size: 0.9rem;
 }
-.cat-form button {
+.proj-form button {
   padding: var(--spacing-sm);
   font-size: 0.9rem;
   flex-shrink: 0;
@@ -323,7 +323,7 @@ label {
   width: auto;
   margin-left: var(--spacing-xs);
 }
-.todo-form > #todo-cat {
+.todo-form > #todo-project {
   flex-basis: 150px;
   flex-grow: 1;
 }
@@ -332,7 +332,7 @@ label {
 }
 
 .todo-form > button[type='submit'],
-.cat-form button[type='submit'] {
+.proj-form button[type='submit'] {
   height: 2.25rem;
   padding: 0 var(--spacing-md);
   display: inline-flex;
@@ -341,7 +341,7 @@ label {
 }
 
 .todo-form > button[type='submit'],
-.cat-form button[type='submit'] {
+.proj-form button[type='submit'] {
   padding-top: var(--spacing-sm);
   padding-bottom: var(--spacing-sm);
   padding-left: var(--spacing-md);
@@ -352,7 +352,7 @@ label {
 }
 
 todo-form,
-.cat-form {
+.proj-form {
   align-items: stretch;
 }
 
@@ -710,8 +710,8 @@ button.cancel-subtask-form-btn:hover {
 .todo-form > select,
 .todo-form > .todo-due-label input[type='date'],
 .todo-form > button[type='submit'],
-.cat-form input[type='text'],
-.cat-form button[type='submit'] {
+.proj-form input[type='text'],
+.proj-form button[type='submit'] {
   height: 2.25rem;
 }
 

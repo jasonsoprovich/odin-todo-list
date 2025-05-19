@@ -12,12 +12,12 @@ function qs(selector) {
 const mainTaskForm = qs('#todo-form');
 const taskInput = qs('#todo-input');
 const taskDueInput = qs('#todo-due');
-const taskCategorySelect = qs('#todo-cat');
+const taskProjectSelect = qs('#todo-project');
 const taskPrioritySelect = qs('#todo-priority');
 
-const categoryForm = qs('#cat-form');
-const categoryInput = qs('#cat-input');
-const categoryListElement = qs('#category-list');
+const projectForm = qs('#proj-form');
+const projectInput = qs('#proj-input');
+const projectListElement = qs('#project-list');
 
 const todoListElement = qs('#todo-list');
 
@@ -31,26 +31,26 @@ const allSortButtons = [
   { button: sortByPriorityBtn, field: 'priority', name: 'Priority' },
 ];
 
-function autoSelectCategoryInForm(projectName) {
-  if (!taskCategorySelect) return;
+function autoSelectProjectInForm(projectName) {
+  if (!taskProjectSelect) return;
   const FILTER_VIEWS = ['All', 'Today', 'Upcoming', 'Overdue'];
   let target = projectName;
   if (FILTER_VIEWS.includes(projectName) && projectName !== 'Inbox') {
     target = 'Inbox';
   }
-  const hasOption = Array.from(taskCategorySelect.options).some(
+  const hasOption = Array.from(taskProjectSelect.options).some(
     (opt) => opt.value === target
   );
   if (!hasOption) target = 'Inbox';
-  taskCategorySelect.value = target;
+  taskProjectSelect.value = target;
 }
 
 Events.on('projectsUpdated', ({ current }) => {
-  autoSelectCategoryInForm(current);
+  autoSelectProjectInForm(current);
 });
 
 Events.on('tasksFilterChanged', (projectName) => {
-  autoSelectCategoryInForm(projectName);
+  autoSelectProjectInForm(projectName);
 });
 
 function updateSortButtonActiveStates() {
@@ -94,36 +94,29 @@ if (sortByNameBtn) {
   });
 }
 
-if (categoryListElement) {
-  categoryListElement.addEventListener('click', async (e) => {
-    const { target } = e;
-
-    const deleteCategoryButton = target.closest('button.delete-category-btn');
-    if (deleteCategoryButton) {
-      const { categoryName } = deleteCategoryButton.dataset;
-      if (categoryName) {
-        confirmationDialog.open(
-          `Are you sure you want to delete category "${categoryName}"? This will also delete all associated tasks.`,
-          () => {
-            projectsManager.deleteProject(categoryName);
-          }
-        );
-      }
+if (projectListElement) {
+  projectListElement.addEventListener('click', (e) => {
+    const deleteProjectButton = e.target.closest('button.delete-project-btn');
+    if (deleteProjectButton) {
+      const { projectName } = deleteProjectButton.dataset;
+      confirmationDialog.open(`Delete project "${projectName}"?`, () => {
+        projectsManager.deleteProject(projectName);
+      });
     }
   });
 }
 
-if (categoryForm) {
-  categoryForm.addEventListener('submit', (e) => {
+if (projectForm) {
+  projectForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const categoryName = categoryInput.value.trim();
-    if (categoryName) {
-      const added = projectsManager.addProject(categoryName);
+    const projectName = projectInput.value.trim();
+    if (projectName) {
+      const added = projectsManager.addProject(projectName);
       if (added) {
-        categoryInput.value = '';
+        projectInput.value = '';
       } else {
         // eslint-disable-next-line no-alert
-        alert(`Category "${categoryName}" already exists or is invalid.`);
+        alert(`Project "${projectName}" already exists or is invalid.`);
       }
     }
   });
@@ -134,7 +127,7 @@ if (mainTaskForm) {
     e.preventDefault();
     const text = taskInput.value.trim();
     const due = taskDueInput.value || null;
-    const category = taskCategorySelect.value;
+    const category = taskProjectSelect.value;
 
     const priorityValue = taskPrioritySelect ? taskPrioritySelect.value : '';
     const priorityForNewTask = priorityValue === '' ? null : priorityValue;
@@ -273,13 +266,10 @@ if (todoListElement) {
 
     const removeButton = target.closest('button.remove');
     if (removeButton) {
-      const todoId = Number(removeButton.dataset.id);
-      confirmationDialog.open(
-        'Are you sure you want to delete this task?',
-        () => {
-          tasksManager.deleteTask(todoId);
-        }
-      );
+      const taskId = Number(removeButton.dataset.id);
+      confirmationDialog.open('Delete task?', () => {
+        tasksManager.deleteTask(taskId);
+      });
       return;
     }
 
