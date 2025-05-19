@@ -30,7 +30,7 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 12. Sort criteria persistence ✅
 13. Overhaul CSS styling and layout ✅
 14. Replace emojis with Google icons ✅
-15. Replace priority icons with color coded flags 🚀
+15. Replace priority icons with color coded flags ✅
 16. Consistent CSS color variables ✅
 17. Light/Dark mode 🚀
 18. Responsive layout 🚀
@@ -41,6 +41,8 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 23. Change normal state color of icons to grey ✅
 24. Adjust spacing on confirmation dialog modal 🚀
 25. Delete tasks within category when category is deleted 🚀
+26. Adjust color/size of subtask counter 🚀
+27. Adjust sizing of save/add/cancel confirmation buttons 🚀
 
 ---
 
@@ -53,6 +55,8 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 - Prettier (code formatting)
 - CSS Modules & PostCSS
 - Date-fns
+- Sortable.js (drag & drop sorting) - coming soon
+- GSAP (drag & drop animation) - coming soon
 
 ---
 
