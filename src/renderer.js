@@ -203,6 +203,15 @@ class Renderer {
       prioritySpan.innerHTML = `<i class="material-icons-outlined" title="${priorityTitle}">${iconName}</i>`;
       leftGroup.appendChild(prioritySpan);
 
+      const toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.classList.add('toggle', 'action-icon-btn');
+      toggleBtn.dataset.id = task.id;
+      const toggleIconName = task.done ? 'replay' : 'check_circle_outline';
+      const toggleIconTitle = task.done ? 'Mark as not done' : 'Mark as done';
+      toggleBtn.innerHTML = `<i class="material-icons-outlined" title="${toggleIconTitle}">${toggleIconName}</i>`;
+      leftGroup.appendChild(toggleBtn);
+
       if (task.id === this.#editingId) {
         const editForm = document.createElement('form');
         editForm.classList.add('edit-task-form');
@@ -308,15 +317,6 @@ class Renderer {
       editBtn.innerHTML =
         '<i class="material-icons-outlined" title="Edit task">edit</i>';
       rightGroup.appendChild(editBtn);
-
-      const toggleBtn = document.createElement('button');
-      toggleBtn.type = 'button';
-      toggleBtn.classList.add('toggle', 'action-icon-btn');
-      toggleBtn.dataset.id = task.id;
-      const toggleIconName = task.done ? 'replay' : 'check_circle_outline';
-      const toggleIconTitle = task.done ? 'Mark as not done' : 'Mark as done';
-      toggleBtn.innerHTML = `<i class="material-icons-outlined" title="${toggleIconTitle}">${toggleIconName}</i>`;
-      rightGroup.appendChild(toggleBtn);
 
       const noteBtn = document.createElement('button');
       noteBtn.type = 'button';

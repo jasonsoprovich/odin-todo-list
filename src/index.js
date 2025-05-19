@@ -222,10 +222,30 @@ if (todoListElement) {
       return;
     }
 
-    const toggleButton = target.closest('button.toggle');
+    const toggleButton = target.closest('.toggle');
     if (toggleButton) {
-      const todoId = Number(toggleButton.dataset.id);
-      tasksManager.toggleTaskComplete(todoId);
+      const taskId = toggleButton.dataset.id;
+      if (!taskId) {
+        // eslint-disable-next-line
+        console.error(
+          'Toggle button clicked, but data-id is missing!',
+          toggleButton
+        );
+        return;
+      }
+      try {
+        const numericTaskId = parseInt(taskId, 10);
+        const task = tasksManager.findTaskById(numericTaskId);
+        if (!task) {
+          // eslint-disable-next-line
+          console.error(`Task with ID ${numericTaskId} not found for toggle.`);
+          return;
+        }
+        tasksManager.updateTask(numericTaskId, { done: !task.done });
+      } catch (t) {
+        // eslint-disable-next-line
+        console.error('Error processing task toggle:', e, 'Task ID:', taskId);
+      }
       return;
     }
 
