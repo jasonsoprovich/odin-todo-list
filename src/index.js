@@ -314,32 +314,126 @@ if (todoListElement) {
       return;
     }
 
-    const subToggleButton = target.closest('button.sub-toggle');
-    if (subToggleButton) {
-      const todoId = Number(subToggleButton.dataset.id);
-      const subId = Number(subToggleButton.dataset.subId);
-      tasksManager.toggleSubtask(todoId, subId);
+    const subToggleBtn = e.target.closest('.sub-toggle');
+    if (subToggleBtn) {
+      const taskId = subToggleBtn.dataset.id;
+      const subtaskId = subToggleBtn.dataset.subId;
+      // eslint-disable-next-line no-console
+      console.log(
+        'Subtask toggle clicked. TaskID:',
+        taskId,
+        'SubtaskID:',
+        subtaskId
+      );
+
+      if (taskId && subtaskId) {
+        try {
+          tasksManager.toggleSubtask(parseInt(taskId, 10), subtaskId);
+          // eslint-disable-next-line no-console
+          console.log('tasksManager.toggleSubtask called for', subtaskId);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error toggling subtask:', err);
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(
+          'Missing taskId or subtaskId for subtask toggle.',
+          subToggleBtn
+        );
+      }
       return;
     }
 
-    const subRemoveButton = target.closest('button.sub-remove');
-    if (subRemoveButton) {
-      const todoId = Number(subRemoveButton.dataset.id);
-      const subId = Number(subRemoveButton.dataset.subId);
-      tasksManager.deleteSubtask(todoId, subId);
+    const subRemoveBtn = e.target.closest('.sub-remove');
+    if (subRemoveBtn) {
+      const taskId = subRemoveBtn.dataset.id;
+      const subtaskId = subRemoveBtn.dataset.subId;
+      // eslint-disable-next-line no-console
+      console.log(
+        'Subtask remove clicked. TaskID:',
+        taskId,
+        'SubtaskID:',
+        subtaskId
+      );
+
+      if (taskId && subtaskId) {
+        try {
+          tasksManager.deleteSubtask(parseInt(taskId, 10), subtaskId);
+          // eslint-disable-next-line no-console
+          console.log('tasksManager.deleteSubtask called for', subtaskId);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error deleting subtask:', err);
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(
+          'Missing taskId or subtaskId for subtask removal.',
+          subRemoveBtn
+        );
+      }
     }
   });
 
   todoListElement.addEventListener('submit', (e) => {
     if (!e.target.matches('.sub-form')) return;
     e.preventDefault();
-    const todoId = Number(e.target.dataset.id);
-    const subInput = e.target.querySelector('.sub-input');
-    const text = subInput.value.trim();
-    if (text) {
-      tasksManager.addSubtask(todoId, text);
+    // eslint-disable-next-line no-console
+    console.log('Sub-form submitted. Target:', e.target);
+
+    const form = e.target;
+    const taskId = form.dataset.id;
+    const subtaskInput = form.querySelector('.sub-input');
+
+    // eslint-disable-next-line no-console
+    console.log('Task ID for subtask:', taskId, 'Input element:', subtaskInput);
+
+    if (!taskId) {
+      // eslint-disable-next-line no-console
+      console.error('Task ID is missing. Cannot add subtask.');
+      return;
     }
-    subInput.value = '';
+    if (!subtaskInput) {
+      // eslint-disable-next-line no-console
+      console.error(
+        'Subtask input not found for task ID:',
+        taskId,
+        'within form:',
+        form
+      );
+      return;
+    }
+    try {
+      const subtaskText = subtaskInput.value.trim();
+      // eslint-disable-next-line no-console
+      console.log('Subtask text to add:', subtaskText);
+
+      if (subtaskText) {
+        // eslint-disable-next-line no-console
+        console.log(
+          'Attempting to call tasksManager.addSubtask with taskId:',
+          parseInt(taskId, 10),
+          'and text:',
+          subtaskText
+        );
+        tasksManager.addSubtask(parseInt(taskId, 10), subtaskText);
+        // eslint-disable-next-line no-console
+        console.log('tasksManager.addSubtask called.');
+        subtaskInput.value = '';
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('Subtask text is empty. Not adding.');
+      }
+    } catch (t) {
+      // eslint-disable-next-line no-console
+      console.error(
+        'Error processing add subtask in index.js:',
+        t,
+        'Task ID:',
+        taskId
+      );
+    }
   });
 }
 

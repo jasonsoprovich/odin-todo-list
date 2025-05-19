@@ -176,6 +176,10 @@ class TaskManager {
     return sortedTasks;
   }
 
+  findTaskById(id) {
+    return this.#tasks.find((task) => task.id === id);
+  }
+
   updateTask(id, updates) {
     const taskIndex = this.#tasks.findIndex((task) => task.id === id);
     if (taskIndex > -1) {
@@ -183,21 +187,54 @@ class TaskManager {
       this.#saveTasks();
       return this.#tasks[taskIndex];
     }
+    // eslint-disable-next-line no-console
+    console.warn(`Task with ID ${id} not found for update.`);
     return null;
   }
 
-  deleteTask(id) {
-    const initialLength = this.#tasks.length;
-    this.#tasks = this.#tasks.filter((task) => task.id !== id);
-    if (this.#tasks.length < initialLength) {
+  addSubtask(taskId, subtaskText) {
+    const task = this.findTaskById(taskId);
+    if (task) {
+      if (!Array.isArray(task.subtasks)) {
+        task.subtasks = [];
+      }
+      const newSubtask = {
+        id: Date.now() + Math.random().toString(36).substring(2, 7),
+        text: subtaskText,
+        done: false,
+      };
+      task.subtasks.push(newSubtask);
+      // eslint-disable-next-line no-console
+      console.log(
+        'Subtask added in TaskManager:',
+        newSubtask,
+        'to task:',
+        task
+      );
       this.#saveTasks();
-      return true;
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(`Task with ID ${taskId} not found. Cannot add subtask.`);
     }
-    return false;
   }
 
-  findTaskById(id) {
-    return this.#tasks.find((task) => task.id === id);
+  toggleSubtask(taskId, subtaskId) {
+    const task = this.findTaskById(taskId);
+    if (task && Array.isArray(task.subtasks)) {
+      const subtask = task.subtasks.find((st) => st.id === subtaskId);
+      if (subtask) {
+        subtask.done = !subtask.done;
+        this.#saveTasks();
+      }
+    }
+  }
+
+  deleteSubtask(taskId, subtaskId) {
+    const task = this.findTaskById(taskId);
+    if (task && Array.isArray(task.subtasks)) {
+      task.subtasks = task.subtasks.filter((st) => st.id !== subtaskId);
+      this.#saveTasks();
+    }
   }
 }
 

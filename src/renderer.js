@@ -387,10 +387,10 @@ class Renderer {
       subForm.classList.add('sub-form');
       subForm.dataset.id = task.id;
       const subInput = document.createElement('input');
+      subInput.classList.add('sub-input');
       subInput.type = 'text';
       subInput.placeholder = 'New subtask';
       subInput.required = true;
-      subInput.classList.add('sub-input');
       subForm.appendChild(subInput);
       const subFormActions = document.createElement('div');
       subFormActions.classList.add('sub-form-actions');
@@ -425,10 +425,12 @@ class Renderer {
             : 'Mark as done';
           subChk.innerHTML = `<i class="material-icons-outlined" title="${subToggleIconTitle}">${subToggleIconName}</i>`;
           subLi.appendChild(subChk);
+
           const subSpan = document.createElement('span');
           subSpan.classList.add('sub-text');
           subSpan.textContent = subItem.text;
           subLi.appendChild(subSpan);
+
           const subDel = document.createElement('button');
           subDel.type = 'button';
           subDel.classList.add('sub-remove', 'action-icon-btn');
@@ -436,6 +438,7 @@ class Renderer {
           subDel.dataset.subId = subItem.id;
           subDel.innerHTML = `<i class="material-icons-outlined" title="Remove subtask">delete</i>`;
           subLi.appendChild(subDel);
+
           subUl.appendChild(subLi);
         });
       }
