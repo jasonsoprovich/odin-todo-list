@@ -188,31 +188,20 @@ class Renderer {
       const leftGroup = document.createElement('div');
       leftGroup.classList.add('task-group-left');
 
-      if (task.priority && task.priority !== null) {
-        const prioritySpan = document.createElement('span');
-        prioritySpan.classList.add(
-          'todo-priority',
-          task.priority.toLowerCase()
-        );
-        let iconName = '';
-        switch (task.priority) {
-          case 'High':
-            iconName = 'star';
-            break;
-          case 'Medium':
-            iconName = 'bolt';
-            break;
-          case 'Low':
-            iconName = 'king_bed';
-            break;
-          default:
-            break;
-        }
-        if (iconName) {
-          prioritySpan.innerHTML = `<i class="material-icons-outlined" title="${task.priority} priority">${iconName}</i>`;
-        }
-        leftGroup.appendChild(prioritySpan);
+      const prioritySpan = document.createElement('span');
+      prioritySpan.classList.add('todo-priority');
+
+      const iconName = 'flag';
+      let priorityTitle = 'No priority';
+
+      if (task.priority && task.priority.trim() !== '') {
+        const lowerCasePriority = task.priority.toLowerCase();
+        prioritySpan.classList.add(lowerCasePriority);
+        priorityTitle = `${task.priority} Priority`;
       }
+
+      prioritySpan.innerHTML = `<i class="material-icons-outlined" title="${priorityTitle}">${iconName}</i>`;
+      leftGroup.appendChild(prioritySpan);
 
       if (task.id === this.#editingId) {
         const editForm = document.createElement('form');

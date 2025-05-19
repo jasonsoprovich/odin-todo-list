@@ -401,16 +401,20 @@ todo-form,
   color: var(--color-text-secondary);
 }
 .todo-list .todo-priority .material-icons-outlined {
+  color: var(--color-text-secondary);
   font-size: 1.2em;
 }
+
 .todo-list .todo-priority.high .material-icons-outlined {
-  color: var(--color-priority-high-text);
+  color: var(--color-danger);
 }
+
 .todo-list .todo-priority.medium .material-icons-outlined {
-  color: var(--color-priority-medium-text);
+  color: var(--color-warning);
 }
+
 .todo-list .todo-priority.low .material-icons-outlined {
-  color: var(--color-priority-low-text);
+  color: var(--color-primary-accent);
 }
 
 .todo-list .todo-text {
