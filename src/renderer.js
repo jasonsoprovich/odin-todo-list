@@ -272,8 +272,7 @@ class Renderer {
         cancelBtn.type = 'button';
         cancelBtn.classList.add('cancel-edit-btn');
         cancelBtn.dataset.id = task.id;
-        cancelBtn.innerHTML =
-          '<i class="material-icons-outlined">cancel</i> Cancel';
+        cancelBtn.innerHTML = 'Cancel';
         editFormActions.appendChild(cancelBtn);
         editForm.appendChild(editFormActions);
         leftGroup.appendChild(editForm);

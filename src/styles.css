@@ -683,8 +683,8 @@ button.cancel-subtask-form-btn:hover {
 
 .confirmation-form p {
   margin-top: 0;
-  margin-bottom: var(--spacing-lg);
-  font-size: 1rem;
+  margin-bottom: var(--spacing-xs);
+  font-size: 1.1rem;
   line-height: 1.5;
 }
 .confirmation-form .dialog-buttons {
@@ -692,14 +692,25 @@ button.cancel-subtask-form-btn:hover {
   justify-content: flex-end;
   gap: var(--spacing-sm);
 }
-#confirm-cancel-btn {
+
+#confirm-no-btn {
   background-color: var(--color-background-hover);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-light);
 }
-#confirm-cancel-btn:hover {
+#confirm-no-btn:hover {
   background-color: var(--color-border-light);
 }
+
+#confirm-yes-btn {
+  background-color: var(--color-primary-accent);
+  color: var(--color-text-on-accent);
+  border: 1px solid var(--color-border-light);
+}
+#confirm-yes-btn:hover {
+  background-color: var(--color-primary-accent-hover);
+}
+
 .hidden {
   display: none !important;
 }
@@ -717,4 +728,12 @@ button.cancel-subtask-form-btn:hover {
 .sidebar button.delete-category-btn:hover,
 .sidebar button.delete-category-btn:focus {
   background-color: transparent;
+}
+
+.todo-form > button[type='submit']:hover,
+.proj-form > button[type='submit']:hover,
+.edit-form-actions button.save-edit-btn:hover,
+.note-area-actions button.save-note-btn:hover,
+.sub-form-actions button[type='submit']:hover {
+  background-color: var(--color-primary-accent-hover);
 }

@@ -61,11 +61,13 @@
     </div>
 
     <dialog id="confirmation-dialog">
-      <p id="confirmation-message">Are you sure?</p>
-      <div class="dialog-actions">
-        <button id="confirm-yes-btn">Yes</button>
-        <button id="confirm-no-btn" autofocus>No</button>
-      </div>
+      <form class="confirmation-form">
+        <p id="confirmation-message"></p>
+        <div class="dialog-actions">
+          <button id="confirm-yes-btn" type="button">Yes</button>
+          <button id="confirm-no-btn" type="button" autofocus>Cancel</button>
+        </div>
+      </form>
     </dialog>
   </body>
 </html>
