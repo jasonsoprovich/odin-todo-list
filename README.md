@@ -43,6 +43,7 @@ Start by adding, removing or toggling tasks—everything you need to manage your
 25. Delete tasks within category when category is deleted 🚀
 26. Adjust color/size of subtask counter 🚀
 27. Adjust sizing of save/add/cancel confirmation buttons 🚀
+28. Auto-select category in task form based on current selection ✅
 
 ---
 
