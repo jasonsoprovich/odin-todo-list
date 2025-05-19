@@ -1,3 +1,5 @@
+import { debugLog } from './logger';
+
 function qs(selector, scope = document) {
   if (!scope) return null;
   return scope.querySelector(selector);
@@ -17,7 +19,7 @@ function closeDialog() {
 }
 
 function handleConfirm() {
-  console.log('✅ handleConfirm fired; callback=', currentConfirmCallback);
+  debugLog('✅ handleConfirm fired; callback=', currentConfirmCallback);
   if (typeof currentConfirmCallback === 'function') {
     currentConfirmCallback();
   }
@@ -32,8 +34,7 @@ if (dialogElement) {
   confirmButton.addEventListener('click', handleConfirm);
   cancelButton.addEventListener('click', closeDialog);
 } else {
-  // eslint-disable-next-line no-console
-  console.error(
+  debugLog(
     'Confirmation dialog element (#confirmation-dialog) not found in the DOM. Dialog will not function.'
   );
 }
@@ -45,8 +46,7 @@ const confirmationDialog = {
       currentConfirmCallback = onConfirm;
       dialogElement.showModal();
     } else {
-      // eslint-disable-next-line no-console
-      console.error(
+      debugLog(
         'Cannot open confirmation dialog: essential elements are missing. Check initialization logs.'
       );
     }

@@ -9,6 +9,7 @@ import {
 import Events from './pubsub';
 import tasksManager from './taskManager';
 import projectsManager from './projectManager';
+import { debugLog, debugWarn } from './logger';
 
 function qs(selector, scope = document) {
   return scope.querySelector(selector);
@@ -33,7 +34,7 @@ class Renderer {
 
     Events.on('tasksUpdated', (tasks) => this.renderTasks(tasks));
     Events.on('projectsUpdated', (data) => {
-      console.log('⬅️ got projectsUpdated in Renderer', data);
+      debugLog('⬅️ got projectsUpdated in Renderer', data);
       this.#handleProjectsUpdate(data);
     });
     Events.on('tasksFilterChanged', () => this.renderTasks(tasksManager.list));
@@ -301,8 +302,7 @@ class Renderer {
             dueSpan.innerHTML = `<i class="material-icons-outlined" title="Due date">event</i> ${task.due}`;
           }
         } catch (e) {
-          // eslint-disable-next-line no-console
-          console.warn('Error parsing due date:', task.due, e);
+          debugWarn('Error parsing due date:', task.due, e);
           dueSpan.innerHTML = `<i class="material-icons-outlined" title="Due date">event</i> ${task.due}`;
         }
         rightGroup.appendChild(dueSpan);

@@ -4,6 +4,7 @@ import tasksManager from './taskManager';
 import projectsManager from './projectManager';
 import appRenderer from './renderer';
 import confirmationDialog from './confirmationDialog';
+import { debugLog, debugWarn, debugError } from './logger';
 
 function qs(selector) {
   return document.querySelector(selector);
@@ -115,8 +116,7 @@ if (projectForm) {
       if (added) {
         projectInput.value = '';
       } else {
-        // eslint-disable-next-line no-alert
-        alert(`Project "${projectName}" already exists or is invalid.`);
+        debugWarn(`Project "${projectName}" already exists or is invalid.`);
       }
     }
   });
@@ -241,8 +241,7 @@ if (todoListElement) {
     if (toggleButton) {
       const taskId = toggleButton.dataset.id;
       if (!taskId) {
-        // eslint-disable-next-line no-console
-        console.error(
+        debugError(
           'Toggle button clicked, but data-id is missing!',
           toggleButton
         );
@@ -252,14 +251,12 @@ if (todoListElement) {
         const numericTaskId = parseInt(taskId, 10);
         const task = tasksManager.findTaskById(numericTaskId);
         if (!task) {
-          // eslint-disable-next-line no-console
-          console.error(`Task with ID ${numericTaskId} not found for toggle.`);
+          debugError(`Task with ID ${numericTaskId} not found for toggle.`);
           return;
         }
         tasksManager.updateTask(numericTaskId, { done: !task.done });
       } catch (t) {
-        // eslint-disable-next-line no-console
-        console.error('Error processing task toggle:', e, 'Task ID:', taskId);
+        debugError('Error processing task toggle:', e, 'Task ID:', taskId);
       }
       return;
     }
@@ -287,19 +284,16 @@ if (todoListElement) {
       const taskId = saveNoteButton.dataset.id;
       const listItem = saveNoteButton.closest('li');
       if (!listItem) {
-        // eslint-disable-next-line no-console
-        console.error('Could not find parent <li> for save note button.');
+        debugError('Could not find parent <li> for save note button.');
         return;
       }
       const noteTextArea = listItem.querySelector('.note-area .note-text');
       if (!taskId) {
-        // eslint-disable-next-line no-alert
-        alert('Task ID is missing. Unable to save note.');
+        debugWarn('Task ID is missing. Unable to save note.');
         return;
       }
       if (!noteTextArea) {
-        // eslint-disable-next-line no-console
-        console.error(
+        debugError(
           'Note textarea not found for task ID:',
           taskId,
           'within LI:',
@@ -311,8 +305,7 @@ if (todoListElement) {
         const noteText = noteTextArea.value;
         tasksManager.updateTask(parseInt(taskId, 10), { note: noteText });
       } catch (t) {
-        // eslint-disable-next-line no-console
-        console.error('Error processing save note:', e, 'Task ID:', taskId);
+        debugError('Error processing save note:', e, 'Task ID:', taskId);
       }
       return;
     }
@@ -330,8 +323,7 @@ if (todoListElement) {
     if (subToggleBtn) {
       const taskId = subToggleBtn.dataset.id;
       const subtaskId = subToggleBtn.dataset.subId;
-      // eslint-disable-next-line no-console
-      console.log(
+      debugLog(
         'Subtask toggle clicked. TaskID:',
         taskId,
         'SubtaskID:',
@@ -341,15 +333,12 @@ if (todoListElement) {
       if (taskId && subtaskId) {
         try {
           tasksManager.toggleSubtask(parseInt(taskId, 10), subtaskId);
-          // eslint-disable-next-line no-console
-          console.log('tasksManager.toggleSubtask called for', subtaskId);
+          debugLog('tasksManager.toggleSubtask called for', subtaskId);
         } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error('Error toggling subtask:', err);
+          debugError('Error toggling subtask:', err);
         }
       } else {
-        // eslint-disable-next-line no-console
-        console.error(
+        debugError(
           'Missing taskId or subtaskId for subtask toggle.',
           subToggleBtn
         );
@@ -361,8 +350,7 @@ if (todoListElement) {
     if (subRemoveBtn) {
       const taskId = subRemoveBtn.dataset.id;
       const subtaskId = subRemoveBtn.dataset.subId;
-      // eslint-disable-next-line no-console
-      console.log(
+      debugLog(
         'Subtask remove clicked. TaskID:',
         taskId,
         'SubtaskID:',
@@ -372,15 +360,12 @@ if (todoListElement) {
       if (taskId && subtaskId) {
         try {
           tasksManager.deleteSubtask(parseInt(taskId, 10), subtaskId);
-          // eslint-disable-next-line no-console
-          console.log('tasksManager.deleteSubtask called for', subtaskId);
+          debugLog('tasksManager.deleteSubtask called for', subtaskId);
         } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error('Error deleting subtask:', err);
+          debugError('Error deleting subtask:', err);
         }
       } else {
-        // eslint-disable-next-line no-console
-        console.error(
+        debugError(
           'Missing taskId or subtaskId for subtask removal.',
           subRemoveBtn
         );
@@ -391,24 +376,20 @@ if (todoListElement) {
   todoListElement.addEventListener('submit', (e) => {
     if (!e.target.matches('.sub-form')) return;
     e.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log('Sub-form submitted. Target:', e.target);
+    debugLog('Sub-form submitted. Target:', e.target);
 
     const form = e.target;
     const taskId = form.dataset.id;
     const subtaskInput = form.querySelector('.sub-input');
 
-    // eslint-disable-next-line no-console
-    console.log('Task ID for subtask:', taskId, 'Input element:', subtaskInput);
+    debugLog('Task ID for subtask:', taskId, 'Input element:', subtaskInput);
 
     if (!taskId) {
-      // eslint-disable-next-line no-console
-      console.error('Task ID is missing. Cannot add subtask.');
+      debugError('Task ID is missing. Cannot add subtask.');
       return;
     }
     if (!subtaskInput) {
-      // eslint-disable-next-line no-console
-      console.error(
+      debugError(
         'Subtask input not found for task ID:',
         taskId,
         'within form:',
@@ -418,28 +399,23 @@ if (todoListElement) {
     }
     try {
       const subtaskText = subtaskInput.value.trim();
-      // eslint-disable-next-line no-console
-      console.log('Subtask text to add:', subtaskText);
+      debugLog('Subtask text to add:', subtaskText);
 
       if (subtaskText) {
-        // eslint-disable-next-line no-console
-        console.log(
+        debugLog(
           'Attempting to call tasksManager.addSubtask with taskId:',
           parseInt(taskId, 10),
           'and text:',
           subtaskText
         );
         tasksManager.addSubtask(parseInt(taskId, 10), subtaskText);
-        // eslint-disable-next-line no-console
-        console.log('tasksManager.addSubtask called.');
+        debugLog('tasksManager.addSubtask called.');
         subtaskInput.value = '';
       } else {
-        // eslint-disable-next-line no-console
-        console.log('Subtask text is empty. Not adding.');
+        debugLog('Subtask text is empty. Not adding.');
       }
     } catch (t) {
-      // eslint-disable-next-line no-console
-      console.error(
+      debugError(
         'Error processing add subtask in index.js:',
         t,
         'Task ID:',

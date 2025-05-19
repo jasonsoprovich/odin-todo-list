@@ -1,6 +1,7 @@
 import Events from './pubsub';
 import Project from './project';
 import tasksManager from './taskManager';
+import { debugLog, debugError } from './logger';
 
 const PROJECTS_STORAGE_KEY = 'todos-app-projects';
 const DEFAULT_PROJECTS = ['All', 'Inbox', 'Today', 'Upcoming', 'Overdue'];
@@ -13,7 +14,6 @@ class ProjectManager {
 
   constructor() {
     this.#loadProjects();
-    // eslint-disable-next-line no-underscore-dangle
     Project.prototype._projectManager = this;
   }
 
@@ -30,8 +30,7 @@ class ProjectManager {
         ];
         this.#projects = uniqueProjectNames.map((name) => new Project(name));
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error loading projects from localStorage:', error);
+        debugError('Error loading projects from localStorage:', error);
         this.#projects = DEFAULT_PROJECTS.map((name) => new Project(name));
       }
     } else {
@@ -51,7 +50,7 @@ class ProjectManager {
   #saveProjects() {
     const projectNames = this.#projects.map((p) => p.name);
     localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projectNames));
-    console.log('➡️ emitting projectsUpdated', {
+    debugLog('➡️ emitting projectsUpdated', {
       projects: this.list,
       current: this.#currentProjectName,
     });
@@ -98,7 +97,7 @@ class ProjectManager {
   }
 
   deleteProject(projectName) {
-    console.log('🗑 deleteProject called with:', projectName);
+    debugLog('🗑 deleteProject called with:', projectName);
     if (projectName === defaultInboxProjectName) return false;
 
     const idx = this.#projects.findIndex((p) => p.name === projectName);
@@ -119,13 +118,10 @@ class ProjectManager {
 }
 
 Project.prototype.setAsCurrent = function setAsCurrent() {
-  // eslint-disable-next-line no-underscore-dangle
   if (this._projectManager) {
-    // eslint-disable-next-line no-underscore-dangle
     this._projectManager.setCurrentProject(this.name);
   } else {
-    // eslint-disable-next-line no-console
-    console.error(
+    debugError(
       'ProjectManager not linked to Project instances for setAsCurrent'
     );
   }

@@ -5,6 +5,7 @@ import {
   isValid as isValidDate,
 } from 'date-fns';
 import Events from './pubsub';
+import { debugLog, debugWarn, debugError } from './logger';
 
 const TASKS_STORAGE_KEY = 'todoTasks';
 const SORT_CRITERIA_KEY = 'todoSortCriteria';
@@ -27,8 +28,7 @@ class TaskManager {
       try {
         this.#currentSortCriteria = JSON.parse(storedCriteria);
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error('Error loading sort criteria from localStorage:', e);
+        debugError('Error loading sort criteria from localStorage:', e);
         this.#currentSortCriteria = { field: 'text', direction: 'asc' };
       }
     }
@@ -49,8 +49,7 @@ class TaskManager {
         this.#nextId =
           this.#tasks.reduce((max, task) => Math.max(max, task.id || 0), 0) + 1;
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error loading tasks from localStorage:', error);
+        debugError('Error loading tasks from localStorage:', error);
         this.#tasks = [];
         this.#nextId = 1;
       }
@@ -151,8 +150,7 @@ class TaskManager {
               ? compareAsc(dateA, dateB)
               : compareDesc(dateA, dateB);
           } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Error comparing dates:', error, valA, valB);
+            debugError('Error comparing dates:', error, valA, valB);
             return 0;
           }
         } else if (field === 'priority') {
@@ -187,8 +185,7 @@ class TaskManager {
       this.#saveTasks();
       return this.#tasks[taskIndex];
     }
-    // eslint-disable-next-line no-console
-    console.warn(`Task with ID ${id} not found for update.`);
+    debugWarn(`Task with ID ${id} not found for update.`);
     return null;
   }
 
@@ -204,17 +201,10 @@ class TaskManager {
         done: false,
       };
       task.subtasks.push(newSubtask);
-      // eslint-disable-next-line no-console
-      console.log(
-        'Subtask added in TaskManager:',
-        newSubtask,
-        'to task:',
-        task
-      );
+      debugLog('Subtask added in TaskManager:', newSubtask, 'to task:', task);
       this.#saveTasks();
     } else {
-      // eslint-disable-next-line no-console
-      console.error(`Task with ID ${taskId} not found. Cannot add subtask.`);
+      debugError(`Task with ID ${taskId} not found. Cannot add subtask.`);
     }
   }
 
@@ -251,8 +241,7 @@ class TaskManager {
       this.#tasks.splice(idx, 1);
       this.#saveTasks();
     } else {
-      // eslint-disable-next-line no-console
-      console.warn(`deleteTask: no task found with id ${taskId}`);
+      debugWarn(`deleteTask: no task found with id ${taskId}`);
     }
   }
 }
