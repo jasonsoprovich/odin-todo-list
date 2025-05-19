@@ -226,7 +226,7 @@ if (todoListElement) {
     if (toggleButton) {
       const taskId = toggleButton.dataset.id;
       if (!taskId) {
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-console
         console.error(
           'Toggle button clicked, but data-id is missing!',
           toggleButton
@@ -237,13 +237,13 @@ if (todoListElement) {
         const numericTaskId = parseInt(taskId, 10);
         const task = tasksManager.findTaskById(numericTaskId);
         if (!task) {
-          // eslint-disable-next-line
+          // eslint-disable-next-line no-console
           console.error(`Task with ID ${numericTaskId} not found for toggle.`);
           return;
         }
         tasksManager.updateTask(numericTaskId, { done: !task.done });
       } catch (t) {
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-console
         console.error('Error processing task toggle:', e, 'Task ID:', taskId);
       }
       return;
@@ -272,16 +272,35 @@ if (todoListElement) {
 
     const saveNoteButton = target.closest('button.save-note-btn');
     if (saveNoteButton) {
-      const todoId = Number(saveNoteButton.dataset.id);
-      const taskLi = saveNoteButton.closest('li[data-id]');
-      if (taskLi) {
-        const textArea = taskLi.querySelector('textarea.note-text');
-        if (textArea) {
-          tasksManager.updateTaskNote(todoId, textArea.value.trim());
-          if (!textArea.value.trim()) {
-            taskLi.querySelector('.note-area').classList.add('hidden');
-          }
-        }
+      const taskId = saveNoteButton.dataset.id;
+      const listItem = saveNoteButton.closest('li');
+      if (!listItem) {
+        // eslint-disable-next-line no-console
+        console.error('Could not find parent <li> for save note button.');
+        return;
+      }
+      const noteTextArea = listItem.querySelector('.note-area .note-text');
+      if (!taskId) {
+        // eslint-disable-next-line no-alert
+        alert('Task ID is missing. Unable to save note.');
+        return;
+      }
+      if (!noteTextArea) {
+        // eslint-disable-next-line no-console
+        console.error(
+          'Note textarea not found for task ID:',
+          taskId,
+          'within LI:',
+          listItem
+        );
+        return;
+      }
+      try {
+        const noteText = noteTextArea.value;
+        tasksManager.updateTask(parseInt(taskId, 10), { note: noteText });
+      } catch (t) {
+        // eslint-disable-next-line no-console
+        console.error('Error processing save note:', e, 'Task ID:', taskId);
       }
       return;
     }

@@ -367,7 +367,6 @@ class Renderer {
       const noteAreaActions = document.createElement('div');
       noteAreaActions.classList.add('note-area-actions');
       const saveNoteBtn = document.createElement('button');
-      saveNoteBtn.type = 'button';
       saveNoteBtn.classList.add('save-note-btn');
       saveNoteBtn.dataset.id = task.id;
       saveNoteBtn.innerHTML =
