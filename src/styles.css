@@ -480,6 +480,12 @@ todo-form,
 .todo-list .action-icon-btn.list-btn:focus .material-icons-outlined {
   color: var(--color-primary-accent);
 }
+
+/* Add this rule for the note button when it has content */
+.todo-list .action-icon-btn.note-btn.has-content .material-icons-outlined {
+  color: var(--color-primary-accent);
+}
+
 .todo-list .action-icon-btn.note-btn:hover .material-icons-outlined,
 .todo-list .action-icon-btn.note-btn:focus .material-icons-outlined {
   color: var(--color-primary-accent);

@@ -340,7 +340,7 @@ class Renderer {
           '<i class="material-icons-outlined" title="View/Edit Notes">description</i>';
       } else {
         noteBtn.innerHTML =
-          '<i class="material-icons-outlined" title="Add Notes">feed</i>';
+          '<i class="material-icons-outlined" title="Add Notes">description</i>';
       }
       rightGroup.appendChild(noteBtn);
 
