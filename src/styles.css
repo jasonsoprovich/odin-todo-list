@@ -115,9 +115,7 @@ button {
   gap: var(--spacing-xs);
   line-height: 1.4;
 }
-button:hover:not(:disabled) {
-  background-color: var(--color-primary-accent-hover);
-}
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -230,7 +228,7 @@ label {
   transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 .action-icon-btn-sidebar:hover {
-  background-color: var(--color-background-hover);
+  background-color: transparent;
   color: var(--color-danger);
 }
 .action-icon-btn-sidebar .material-icons-outlined {
