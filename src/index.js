@@ -100,9 +100,13 @@ if (projectListElement) {
     const deleteProjectButton = e.target.closest('button.delete-project-btn');
     if (deleteProjectButton) {
       const { projectName } = deleteProjectButton.dataset;
-      confirmationDialog.open(`Delete project "${projectName}"?`, () => {
-        projectsManager.deleteProject(projectName);
-      });
+      confirmationDialog.open(
+        `Are you sure you want to delete project "${projectName}"? ` +
+          `This will permanently remove the project and all its tasks.`,
+        () => {
+          projectsManager.deleteProject(projectName);
+        }
+      );
     }
   });
 }
