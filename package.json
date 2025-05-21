@@ -4,10 +4,10 @@
   "description": "A minimal Webpack starter template with Airbnb ESLint, Prettier, and Babel",
   "scripts": {
     "start": "webpack serve --config config/webpack.dev.js --open",
-    "build": "webpack --config config/webpack.prod.js",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
     "lint": "eslint src/**/*.js",
     "format": "prettier --write \"src/**/*.{js,html,css}\"",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy": "git checkout gh-pages && git merge main --no-edit && npm run build && git add dist -f && git commit -m \"Deployment commit\" && git subtree push --prefix dist origin gh-pages && git checkout main"
   },
   "keywords": [
     "webpack",
@@ -23,6 +23,7 @@
     "@babel/eslint-parser": "^7.27.1",
     "@babel/preset-env": "^7.20.0",
     "babel-loader": "^9.1.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.7.0",
     "eslint": "^8.31.0",
     "eslint-config-airbnb-base": "^15.0.0",
