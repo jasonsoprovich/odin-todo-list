@@ -1,3 +1,4 @@
+/*──────────────────────────────── Base & Variables ───────────────────────────────*/
 *,
 *::before,
 *::after {
@@ -30,10 +31,6 @@
   --color-success: #34c759;
   --color-warning: #ff9500;
 
-  --color-priority-high-text: var(--color-danger);
-  --color-priority-medium-text: var(--color-warning);
-  --color-priority-low-text: var(--color-primary-accent);
-
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
@@ -49,7 +46,6 @@
   --border-radius-medium: 8px;
   --border-radius-large: 12px;
 
-  --max-content-width: 760px;
   --sidebar-width: 240px;
 }
 
@@ -57,7 +53,7 @@ html {
   font-size: 16px;
   line-height: 1.6;
   font-family: var(--font-sans);
-  background-color: var(--color-background-app);
+  background: var(--color-background-app);
   color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -65,7 +61,7 @@ html {
 
 body {
   min-height: 100vh;
-  background-color: var(--color-background-app);
+  background: var(--color-background-app);
 }
 
 h1,
@@ -75,18 +71,15 @@ h4,
 h5,
 h6 {
   font-family: var(--font-sans);
-  margin-top: 0;
   margin-bottom: var(--spacing-sm);
   font-weight: 600;
   line-height: 1.3;
 }
 h1 {
   font-size: 1.75rem;
-  color: var(--color-text-primary);
 }
 h2 {
   font-size: 1.25rem;
-  color: var(--color-text-primary);
 }
 
 a {
@@ -102,7 +95,7 @@ button {
   font-family: var(--font-sans);
   font-size: 0.9rem;
   cursor: pointer;
-  background-color: var(--color-primary-accent);
+  background: var(--color-primary-accent);
   color: var(--color-text-on-accent);
   border: none;
   padding: var(--spacing-sm) var(--spacing-md);
@@ -115,18 +108,12 @@ button {
   gap: var(--spacing-xs);
   line-height: 1.4;
 }
-
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-button .material-icons-outlined {
-  font-size: 1.1em;
-  line-height: 1;
-}
 
-input[type='text'],
-input[type='date'],
+input,
 textarea,
 select {
   font-family: var(--font-sans);
@@ -134,7 +121,7 @@ select {
   padding: var(--spacing-sm);
   border: 1px solid var(--color-border-light);
   border-radius: var(--border-radius-small);
-  background-color: var(--color-background-input);
+  background: var(--color-background-input);
   color: var(--color-text-primary);
   width: 100%;
   line-height: 1.4;
@@ -150,22 +137,15 @@ textarea {
   resize: vertical;
   min-height: 60px;
 }
+
 label {
   font-size: 0.85rem;
   color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-xs);
   display: inline-flex;
-  align-items: center;
   gap: var(--spacing-xs);
 }
 
-.material-icons-outlined {
-  vertical-align: middle;
-  font-size: 1.2em;
-  line-height: 1;
-  display: inline-block;
-}
-
+/*──────────────────────────────── Layout ───────────────────────────────*/
 .layout {
   display: flex;
   height: 100vh;
@@ -173,46 +153,46 @@ label {
   overflow: hidden;
 }
 
+/*──────────────────────────────── Sidebar ───────────────────────────────*/
 .sidebar {
   width: var(--sidebar-width);
   padding: var(--spacing-md);
+  background: var(--color-background-sidebar);
   border-right: 1px solid var(--color-divider);
-  background-color: var(--color-background-sidebar);
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  overflow-y: hidden; /* keep form always visible */
 }
 .sidebar h2 {
   margin-bottom: var(--spacing-md);
   padding-left: var(--spacing-sm);
 }
 .sidebar ul#project-list {
+  flex: 1;
+  overflow-y: auto;
   list-style: none;
   padding: 0;
   margin: 0;
-  flex-grow: 1;
 }
 .sidebar li.project-item {
-  padding: var(--spacing-sm) var(--spacing-sm);
-  cursor: pointer;
-  border-radius: var(--border-radius-small);
-  margin-bottom: var(--spacing-xs);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  gap: var(--spacing-xs);
   font-size: 0.9rem;
+  border-radius: var(--border-radius-small);
   color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+  cursor: pointer;
 }
 .sidebar li.project-item:hover {
-  background-color: var(--color-background-hover);
+  background: var(--color-background-hover);
 }
 .sidebar li.project-item.active {
-  font-weight: 600;
+  background: var(--color-background-active);
   color: var(--color-primary-accent);
-  background-color: var(--color-background-active);
-}
-.sidebar li.project-item .project-name {
-  flex-grow: 1;
+  font-weight: 600;
 }
 .action-icon-btn-sidebar {
   all: unset;
@@ -220,146 +200,124 @@ label {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: var(--spacing-xs);
-  border-radius: 50%;
   width: 24px;
   height: 24px;
+  padding: var(--spacing-xs);
+  border-radius: 50%;
   color: var(--color-text-secondary);
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out;
 }
-.action-icon-btn-sidebar:hover {
-  background-color: transparent;
-  color: var(--color-danger);
+button.delete-project-btn,
+.action-icon-btn-sidebar {
+  background: transparent;
 }
+button.delete-project-btn .material-icons-outlined,
 .action-icon-btn-sidebar .material-icons-outlined {
   font-size: 1.1rem;
 }
-
-.proj-form {
-  margin-top: var(--spacing-md);
-  display: flex;
-  gap: var(--spacing-sm);
+button.delete-project-btn:hover .material-icons-outlined,
+.action-icon-btn-sidebar:hover .material-icons-outlined {
+  color: var(--color-danger);
 }
-.proj-form input {
-  flex-grow: 1;
-  font-size: 0.9rem;
-}
-.proj-form button {
-  padding: var(--spacing-sm);
-  font-size: 0.9rem;
-  flex-shrink: 0;
+button.delete-project-btn:focus,
+.action-icon-btn-sidebar:focus {
+  outline: none;
 }
 
+/*──────────────────────────────── Main Content ───────────────────────────────*/
 .main-content {
   flex: 1;
   padding: var(--spacing-lg);
+  background: var(--color-background-content);
   overflow-y: auto;
-  background-color: var(--color-background-content);
 }
 .main-content h1.text-center {
   margin-bottom: var(--spacing-lg);
 }
 
+/*──────────────────────────────── Toolbar ───────────────────────────────*/
 .toolbar {
-  margin-bottom: var(--spacing-md);
   display: flex;
   gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 .toolbar button {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: 0.85rem;
-  background-color: var(--color-background-sidebar);
+  background: var(--color-background-sidebar);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-light);
 }
 .toolbar button:hover {
-  background-color: var(--color-background-hover);
+  background: var(--color-background-hover);
 }
 .toolbar button.active-sort {
-  background-color: var(--color-primary-accent);
+  background: var(--color-primary-accent);
   color: var(--color-text-on-accent);
   border-color: var(--color-primary-accent);
 }
-
 .toolbar button.active-sort:hover {
-  background-color: var(--color-primary-accent-hover);
+  background: var(--color-primary-accent-hover);
   border-color: var(--color-primary-accent-hover);
 }
 
-.toolbar button .sort-arrow {
-  margin-left: var(--spacing-xs);
-  font-size: 0.8em;
-  line-height: 1;
+/*──────────────────────────────── Forms ───────────────────────────────*/
+/* Project add form */
+.proj-form {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+.proj-form input#proj-input {
+  flex: 1;
+  height: 2.25rem;
+}
+.proj-form button[type='submit'] {
+  flex-shrink: 0;
+  height: 2.25rem;
 }
 
+/* Todo add form */
 .todo-form {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
+  background: var(--color-background-sidebar);
   padding: var(--spacing-md);
-  background-color: var(--color-background-sidebar);
   border-radius: var(--border-radius-medium);
+  margin-bottom: var(--spacing-lg);
   align-items: center;
 }
-.todo-form > #todo-priority {
-  flex-basis: 120px;
-  flex-grow: 1;
+.todo-form > select#todo-priority {
+  flex: 1;
+  min-width: 120px;
 }
-.todo-form > input[type='text'] {
-  flex-basis: 200px;
-  flex-grow: 2;
+.todo-form > input#todo-input {
+  flex: 2;
+  min-width: 200px;
+  height: 2.25rem;
 }
 .todo-form > .todo-due-label {
   display: inline-flex;
   align-items: center;
-  flex-basis: auto;
-  flex-grow: 1;
-  margin-left: 0;
+  flex: 1;
+  min-width: auto;
+  gap: var(--spacing-xs);
+  height: 2.25rem;
 }
-.todo-form > .todo-due-label input[type='date'] {
+.todo-form > .todo-due-label input {
   width: auto;
-  margin-left: var(--spacing-xs);
 }
-.todo-form > #todo-project {
-  flex-basis: 150px;
-  flex-grow: 1;
+.todo-form > select#todo-project {
+  flex: 1;
+  min-width: 150px;
 }
 .todo-form > button[type='submit'] {
   flex-shrink: 0;
-}
-
-.todo-form > button[type='submit'],
-.proj-form button[type='submit'] {
   height: 2.25rem;
-  padding: 0 var(--spacing-md);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.todo-form > button[type='submit'],
-.proj-form button[type='submit'] {
-  padding-top: var(--spacing-sm);
-  padding-bottom: var(--spacing-sm);
-  padding-left: var(--spacing-md);
-  padding-right: var(--spacing-md);
-  font-size: 0.9rem;
-  border-radius: var(--border-radius-small);
-  flex-shrink: 0;
-}
-
-todo-form,
-.proj-form {
-  align-items: stretch;
-}
-
-.todo-form > .todo-due-label {
-  align-items: center;
-  padding-top: var(--spacing-sm);
-  padding-bottom: var(--spacing-sm);
-}
-
+/*──────────────────────────────── Task List ───────────────────────────────*/
 .todo-list {
   list-style: none;
   padding: 0;
@@ -367,95 +325,58 @@ todo-form,
 }
 .todo-list li {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   background: var(--color-background-content);
-  border-radius: var(--border-radius-medium);
   border: 1px solid var(--color-border-light);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius-medium);
   transition: background-color 0.2s ease;
-  flex-wrap: wrap;
 }
 .todo-list li:hover {
-  background-color: var(--color-background-hover);
+  background: var(--color-background-hover);
 }
-
-.task-group-left {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-grow: 1;
-  min-width: 0;
-}
-
-.todo-list .todo-priority {
-  font-size: 1rem;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  color: var(--color-text-secondary);
-}
-.todo-list .todo-priority .material-icons-outlined {
-  color: var(--color-text-secondary);
-  font-size: 1.2em;
-}
-
-.todo-list .todo-priority.high .material-icons-outlined {
-  color: var(--color-danger);
-}
-
-.todo-list .todo-priority.medium .material-icons-outlined {
-  color: var(--color-warning);
-}
-
-.todo-list .todo-priority.low .material-icons-outlined {
-  color: var(--color-primary-accent);
-}
-
-.todo-list .todo-text {
-  flex-grow: 1;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  color: var(--color-text-primary);
-  padding-top: 1px;
-  padding-bottom: 1px;
-  word-break: break-word;
+.todo-list li.done {
+  opacity: 0.7;
 }
 .todo-list li.done .todo-text {
   text-decoration: line-through;
   color: var(--color-text-secondary);
 }
-.todo-list li.done {
-  opacity: 0.7;
-}
 
-.task-group-right {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
+/*──────────────────────────────── Priority & Text ───────────────────────────────*/
+.todo-list .todo-priority {
   flex-shrink: 0;
-}
-
-.todo-list .todo-due {
   display: inline-flex;
   align-items: center;
   color: var(--color-text-secondary);
-  font-size: 0.8rem;
-  border-radius: var(--border-radius-small);
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding: var(--spacing-xs) 0;
 }
-.todo-list .todo-due .material-icons-outlined {
-  font-size: 1.1em;
-  margin-right: var(--spacing-xs);
-  color: inherit;
+.todo-list .todo-priority.high .material-icons-outlined {
+  color: var(--color-danger);
+}
+.todo-list .todo-priority.medium .material-icons-outlined {
+  color: var(--color-warning);
+}
+.todo-list .todo-priority.low .material-icons-outlined {
+  color: var(--color-primary-accent);
 }
 
-.todo-list .action-icon-btn {
+.todo-list .todo-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  padding: 1px 0;
+  word-break: break-word;
+}
+
+/*──────────────────────────────── Action-Icon Buttons ───────────────────────────────*/
+.todo-list .action-icon-btn,
+.action-icon-btn-sidebar {
   all: unset;
   display: inline-flex;
   align-items: center;
@@ -463,76 +384,48 @@ todo-form,
   cursor: pointer;
   padding: var(--spacing-xs);
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
   color: var(--color-text-secondary);
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  transition: background-color 0.15s ease, color 0.15s ease;
   flex-shrink: 0;
 }
 .todo-list .action-icon-btn:hover,
 .todo-list .action-icon-btn:focus {
-  background-color: var(--color-background-hover);
-  color: var(--color-primary-accent);
+  background: var(--color-background-hover);
   outline: none;
 }
-.todo-list .action-icon-btn .material-icons-outlined {
-  font-size: 1.25rem;
-  display: block;
+/* 1) all icons hover to primary‐accent‐hover */
+.todo-list .action-icon-btn:hover .material-icons-outlined {
+  color: var(--color-primary-accent-hover);
 }
 
-.todo-list .action-icon-btn .material-icons-outlined {
-  color: var(--color-text-secondary);
+/* 2) remove‐icon stays red */
+.todo-list .action-icon-btn.remove:hover .material-icons-outlined {
+  color: var(--color-danger-hover);
 }
 
-.todo-list li.done .action-icon-btn.toggle .material-icons-outlined {
+/* 3) hide edit‐task and note areas by default */
+.edit-task-form,
+.note-area {
+  display: none;
+}
+
+/* 4) left align subtask text */
+.todo-list .subtask-text {
+  text-align: left;
+}
+
+/* 5) highlight subtask & note icons when present */
+.todo-list .action-icon-btn.subtask-btn.has-subtasks .material-icons-outlined,
+.todo-list .action-icon-btn.note-btn.has-notes .material-icons-outlined {
+  color: var(--color-primary-accent);
+}
+
+/* 6) subtask‐count green when all done */
+.todo-list .subtask-count.all-done {
   color: var(--color-success);
 }
 
-.todo-list .action-icon-btn.remove:hover .material-icons-outlined,
-.todo-list .action-icon-btn.remove:focus .material-icons-outlined {
-  color: var(--color-danger);
-}
-
-.todo-list .action-icon-btn.has-content.list-btn .material-icons-outlined,
-.todo-list .action-icon-btn.list-btn:hover .material-icons-outlined,
-.todo-list .action-icon-btn.list-btn:focus .material-icons-outlined {
-  color: var(--color-primary-accent);
-}
-
-.todo-list .action-icon-btn.note-btn.has-content .material-icons-outlined {
-  color: var(--color-primary-accent);
-}
-
-.todo-list .action-icon-btn.note-btn:hover .material-icons-outlined,
-.todo-list .action-icon-btn.note-btn:focus .material-icons-outlined {
-  color: var(--color-primary-accent);
-}
-
-.todo-list .action-icon-btn.toggle:hover .material-icons-outlined,
-.todo-list .action-icon-btn.toggle:focus .material-icons-outlined,
-.todo-list .action-icon-btn.edit-btn:hover .material-icons-outlined,
-.todo-list .action-icon-btn.edit-btn:focus .material-icons-outlined {
-  color: var(--color-primary-accent);
-}
-
-button.delete-category-btn,
-.action-icon-btn-sidebar {
-  background: transparent;
-}
-button.delete-category-btn:hover,
-button.delete-category-btn:focus,
-.action-icon-btn-sidebar:hover,
-.action-icon-btn-sidebar:focus {
-  outline: none;
-}
-button.delete-category-btn:hover .material-icons-outlined,
-button.delete-category-btn:focus .material-icons-outlined,
-.action-icon-btn-sidebar:hover .material-icons-outlined,
-.action-icon-btn-sidebar:focus .material-icons-outlined {
-  color: var(--color-danger);
-  background: transparent;
-}
-
+/*──────────────────────────────── Edit-Task Form ───────────────────────────────*/
 .edit-task-form {
   display: flex;
   flex-wrap: wrap;
@@ -543,55 +436,55 @@ button.delete-category-btn:focus .material-icons-outlined,
 .edit-task-form .edit-input {
   padding: var(--spacing-xs);
   font-size: 0.9rem;
-  margin: 0;
   border-radius: var(--border-radius-small);
-  line-height: 1.4;
 }
 .edit-task-form .edit-task-text {
-  flex: 2 1 150px;
+  flex: 2;
+  min-width: 150px;
 }
 .edit-task-form .edit-task-due {
-  flex: 1 1 130px;
+  flex: 1;
+  min-width: 130px;
 }
 .edit-task-form .edit-task-priority {
-  flex: 1 1 110px;
+  flex: 1;
+  min-width: 110px;
 }
 .edit-task-form .edit-task-category {
-  flex: 1 1 110px;
-}
+  flex: 1;
+  min-width: 110px;
+} /* renamed */
 
 .edit-form-actions {
   display: flex;
-  gap: var(--spacing-sm);
-  flex-basis: 100%;
   justify-content: flex-end;
-  padding-top: var(--spacing-sm);
+  gap: var(--spacing-sm);
+  width: 100%;
+  margin-top: var(--spacing-sm);
 }
-button.save-edit-btn,
-button.cancel-edit-btn {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: 0.85rem;
+button.save-edit-btn {
+  background: var(--color-primary-accent);
 }
 button.cancel-edit-btn {
-  background-color: var(--color-background-hover);
+  background: var(--color-background-hover);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-light);
 }
 button.cancel-edit-btn:hover {
-  background-color: var(--color-border-light);
+  background: var(--color-border-light);
 }
 
+/*──────────────────────────────── Notes & Subtasks ───────────────────────────────*/
 .note-area,
 .list-area {
-  flex-basis: 100%;
+  width: 100%;
   margin-top: var(--spacing-sm);
-  padding-top: var(--spacing-sm);
-  padding-left: calc(var(--spacing-sm) + 30px + var(--spacing-sm));
   border-top: 1px solid var(--color-divider);
+  padding-top: var(--spacing-sm);
+  padding-left: calc(30px + var(--spacing-sm) * 2);
 }
 .note-area textarea {
   width: 100%;
-  font-size: 0.9rem;
 }
 .note-area-actions,
 .sub-form-actions {
@@ -602,138 +495,56 @@ button.cancel-edit-btn:hover {
 }
 button.cancel-note-btn,
 button.cancel-subtask-form-btn {
-  background-color: var(--color-background-hover);
+  background: var(--color-background-hover);
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border-light);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: 0.85rem;
 }
 button.cancel-note-btn:hover,
 button.cancel-subtask-form-btn:hover {
-  background-color: var(--color-border-light);
-}
-.note-area-actions .save-note-btn,
-.sub-form-actions button[type='submit'] {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: 0.85rem;
+  background: var(--color-border-light);
 }
 
-.sub-form {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
-}
-.sub-form input {
-  flex-grow: 1;
-  font-size: 0.9rem;
-  padding: var(--spacing-xs);
-}
-.sub-form button {
-  font-size: 0.85rem;
-  padding: var(--spacing-xs) var(--spacing-sm);
-}
-
-.sub-list {
-  list-style: none;
-  padding: 0;
-}
-.sub-list li {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-xs) 0;
-  font-size: 0.9rem;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-.sub-list li .sub-text {
-  flex-grow: 1;
-  color: var(--color-text-secondary);
-}
-.sub-list li.done .sub-text {
-  text-decoration: line-through;
-  color: var(--color-text-secondary);
-}
-.sub-list .action-icon-btn .material-icons-outlined {
-  font-size: 1.1rem;
-}
-
+/*──────────────────────────────── Confirmation Dialog ───────────────────────────────*/
 #confirmation-dialog {
   border: 1px solid var(--color-border-medium);
   border-radius: var(--border-radius-medium);
   padding: var(--spacing-lg);
   min-width: 320px;
   max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  background-color: var(--color-background-content);
+  background: var(--color-background-content);
   color: var(--color-text-primary);
   margin: auto;
 }
-
 #confirmation-dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3);
 }
-
 .confirmation-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
 }
-
-.confirmation-form p {
-  margin-top: 0;
-  margin-bottom: var(--spacing-xs);
+#confirmation-message {
   font-size: 1.1rem;
   line-height: 1.5;
 }
-.confirmation-form .dialog-buttons {
+.dialog-actions {
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-sm);
 }
-
 #confirm-no-btn {
-  background-color: var(--color-background-hover);
+  background: var(--color-background-hover);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-light);
 }
 #confirm-no-btn:hover {
-  background-color: var(--color-border-light);
+  background: var(--color-border-light);
+}
+#confirm-yes-btn:hover:not(:disabled) {
+  background: var(--color-primary-accent-hover);
 }
 
-#confirm-yes-btn {
-  background-color: var(--color-primary-accent);
-  color: var(--color-text-on-accent);
-  border: 1px solid var(--color-border-light);
-}
-#confirm-yes-btn:hover {
-  background-color: var(--color-primary-accent-hover);
-}
-
+/*──────────────────────────────── Hidden Utility Class ───────────────────────────────*/
 .hidden {
-  display: none !important;
-}
-
-.todo-form > input[type='text'],
-.todo-form > select,
-.todo-form > .todo-due-label input[type='date'],
-.todo-form > button[type='submit'],
-.proj-form input[type='text'],
-.proj-form button[type='submit'] {
-  height: 2.25rem;
-}
-
-.sidebar button.delete-category-btn,
-.sidebar button.delete-category-btn:hover,
-.sidebar button.delete-category-btn:focus {
-  background-color: transparent;
-}
-
-.todo-form > button[type='submit']:hover,
-.proj-form > button[type='submit']:hover,
-.edit-form-actions button.save-edit-btn:hover,
-.note-area-actions button.save-note-btn:hover,
-.sub-form-actions button[type='submit']:hover {
-  background-color: var(--color-primary-accent-hover);
+  display: none;
 }
