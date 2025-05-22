@@ -245,20 +245,6 @@ class Renderer {
         dateInput.value = task.due || '';
         editForm.appendChild(dateInput);
 
-        const categoryEditSelect = document.createElement('select');
-        categoryEditSelect.classList.add('edit-input', 'edit-task-category');
-        const assignableCategories = projectsManager.list.filter(
-          (p) => !['All', 'Today', 'Upcoming', 'Overdue'].includes(p.name)
-        );
-        assignableCategories.forEach((cat) => {
-          const option = document.createElement('option');
-          option.value = cat.name;
-          option.textContent = cat.name;
-          if (cat.name === task.category) option.selected = true;
-          categoryEditSelect.appendChild(option);
-        });
-        editForm.appendChild(categoryEditSelect);
-
         const priorityEditSelect = document.createElement('select');
         priorityEditSelect.classList.add('edit-input', 'edit-task-priority');
         const priorityOptions = [
@@ -275,6 +261,20 @@ class Renderer {
           priorityEditSelect.appendChild(option);
         });
         editForm.appendChild(priorityEditSelect);
+
+        const categoryEditSelect = document.createElement('select');
+        categoryEditSelect.classList.add('edit-input', 'edit-task-category');
+        const assignableCategories = projectsManager.list.filter(
+          (p) => !['All', 'Today', 'Upcoming', 'Overdue'].includes(p.name)
+        );
+        assignableCategories.forEach((cat) => {
+          const option = document.createElement('option');
+          option.value = cat.name;
+          option.textContent = cat.name;
+          if (cat.name === task.category) option.selected = true;
+          categoryEditSelect.appendChild(option);
+        });
+        editForm.appendChild(categoryEditSelect);
 
         const editFormActions = document.createElement('div');
         editFormActions.classList.add('edit-form-actions');

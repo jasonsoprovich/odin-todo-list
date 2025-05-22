@@ -330,7 +330,7 @@ button.delete-project-btn:focus,
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg); /* ↑ bigger gap between leftGroup and rightGroup */
   padding: var(--spacing-sm) var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   background: var(--color-background-content);
