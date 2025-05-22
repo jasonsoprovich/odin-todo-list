@@ -35,13 +35,6 @@
         </div>
 
         <form id="todo-form" class="todo-form">
-          <select id="todo-priority" aria-label="priority">
-            <option value="" selected>None</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-
           <input
             type="text"
             id="todo-input"
@@ -53,6 +46,16 @@
             Due:
             <input type="date" id="todo-due" />
           </label>
+          <label for="todo-priority" class="todo-priority-label">
+            Priority:
+            <select id="todo-priority" aria-label="priority">
+              <option value="" selected>None</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </label>
+
           <select id="todo-project" name="todo-project"></select>
           <button type="submit">Add</button>
         </form>

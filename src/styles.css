@@ -297,7 +297,8 @@ button.delete-project-btn:focus,
   min-width: 200px;
   height: 2.25rem;
 }
-.todo-form > .todo-due-label {
+.todo-form > .todo-due-label,
+.todo-form > .todo-priority-label {
   display: inline-flex;
   align-items: center;
   flex: 1;
