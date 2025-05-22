@@ -10,7 +10,6 @@
 :root {
   --color-primary-accent: #007aff;
   --color-primary-accent-hover: #005ecb;
-  --color-primary-accent-hover50: #005ecb50;
   --color-text-primary: #1d1d1f;
   --color-text-secondary: #6e6e73;
   --color-text-placeholder: #c7c7cc;
@@ -20,6 +19,7 @@
   --color-background-content: #ffffff;
   --color-background-sidebar: #f0f2f5;
   --color-background-hover: #e9e9ed;
+  --color-background-hover-alpha: #005ecb10;
   --color-background-active: #ddeaff;
   --color-background-input: #ffffff;
 
@@ -339,7 +339,8 @@ button.delete-project-btn:focus,
   transition: background-color 0.2s ease;
 }
 .todo-list li:hover {
-  background: var(--color-background-hover);
+  /* background: var(--color-background-hover); */
+  background: var(--color-background-hover-alpha);
 }
 .todo-list li.done {
   opacity: 0.7;
