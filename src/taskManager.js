@@ -128,8 +128,8 @@ class TaskManager {
           const bIsNull = valB === null || valB === undefined || valB === '';
 
           if (aIsNull && bIsNull) return 0;
-          if (aIsNull) return direction === 'asc' ? 1 : -1;
-          if (bIsNull) return direction === 'asc' ? -1 : 1;
+          if (aIsNull) return 1;
+          if (bIsNull) return -1;
         }
 
         if (field === 'due') {
@@ -143,8 +143,8 @@ class TaskManager {
             const bIsValid = dateB && isValidDate(dateB);
 
             if (!aIsValid && !bIsValid) return 0;
-            if (!aIsValid) return direction === 'asc' ? 1 : -1;
-            if (!bIsValid) return direction === 'asc' ? -1 : 1;
+            if (!aIsValid) return 1;
+            if (!bIsValid) return -1;
 
             return direction === 'asc'
               ? compareAsc(dateA, dateB)
