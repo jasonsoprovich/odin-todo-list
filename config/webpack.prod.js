@@ -5,6 +5,9 @@ module.exports = (env, argv) =>
   merge(common(env, argv), {
     mode: 'production',
     devtool: 'source-map',
+    output: {
+      publicPath: '/',
+    },
     optimization: {
       splitChunks: {
         cacheGroups: {
