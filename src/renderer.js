@@ -318,17 +318,20 @@ class Renderer {
 
       const noteBtn = document.createElement('button');
       noteBtn.type = 'button';
-      noteBtn.classList.add('note-btn', 'action-icon-btn');
+      noteBtn.classList.add('action-icon-btn', 'note-btn');
       noteBtn.dataset.id = task.id;
       noteBtn.setAttribute('aria-label', 'Notes');
+
+      // only use task.note, not task.notes, to detect saved text
       if (task.note && task.note.trim() !== '') {
-        noteBtn.classList.add('has-content');
+        noteBtn.classList.add('has-notes');
         noteBtn.innerHTML =
           '<i class="material-icons-outlined" title="View/Edit Notes">description</i>';
       } else {
         noteBtn.innerHTML =
           '<i class="material-icons-outlined" title="Add Notes">description</i>';
       }
+
       rightGroup.appendChild(noteBtn);
 
       const listBtn = document.createElement('button');
@@ -339,7 +342,16 @@ class Renderer {
       if (task.subtasks && task.subtasks.length > 0) {
         listBtn.classList.add('has-content');
         const doneCount = task.subtasks.filter((s) => s.done).length;
-        listBtn.innerHTML = `<i class="material-icons-outlined" title="View/Edit Checklist">checklist</i> <span class="subtask-count">${doneCount}/${task.subtasks.length}</span>`;
+        // highlight the counter green if all done
+        const countSpan = document.createElement('span');
+        countSpan.classList.add('subtask-count');
+        if (doneCount === task.subtasks.length) {
+          listBtn.classList.add('all-done'); // ← add this
+          countSpan.classList.add('all-done'); // your existing rule
+        }
+        countSpan.textContent = `${doneCount}/${task.subtasks.length}`;
+        listBtn.innerHTML = `<i class="material-icons-outlined" title="View/Edit Checklist">checklist</i>`;
+        listBtn.appendChild(countSpan);
       } else {
         listBtn.innerHTML = `<i class="material-icons-outlined" title="Add Checklist Items">playlist_add</i>`;
       }
