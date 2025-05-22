@@ -10,6 +10,7 @@
 :root {
   --color-primary-accent: #007aff;
   --color-primary-accent-hover: #005ecb;
+  --color-primary-accent-hover50: #005ecb50;
   --color-text-primary: #1d1d1f;
   --color-text-secondary: #6e6e73;
   --color-text-placeholder: #c7c7cc;

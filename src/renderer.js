@@ -41,7 +41,7 @@ class Renderer {
 
     this.#handleProjectsUpdate({
       projects: projectsManager.list,
-      current: projectsManager.currentProjectName,
+      current: projectsManager.currentProjectName, // still passed as `activeProjectName`
     });
     this.renderTasks(tasksManager.list);
   }
@@ -58,9 +58,10 @@ class Renderer {
     }
   }
 
-  renderProjects(categories, activeCategoryName) {
+  renderProjects(projects, activeProjectName) {
     if (!this.#projectListElement) return;
     this.#projectListElement.innerHTML = '';
+
     const SYSTEM_PROJECT_NAMES = [
       'Inbox',
       'Today',
@@ -108,27 +109,35 @@ class Renderer {
     this.#projectListElement.appendChild(
       createProjectLi({ name: 'All' }, true)
     );
-    categories.forEach((p) => {
+    projects.forEach((p) => {
       if (p.name === 'All') return;
       this.#projectListElement.appendChild(createProjectLi(p));
     });
+
+    // pass activeProjectName so the form dropdown auto-selects it
+    this.renderProjectOptionsInForm(
+      projects.filter((p) => !SYSTEM_PROJECT_NAMES.includes(p.name)),
+      activeProjectName
+    );
   }
 
-  renderProjectOptionsInForm(projects) {
+  renderProjectOptionsInForm(projects, activeProjectName) {
     if (!this.#projectSelectInForm) return;
     this.#projectSelectInForm.innerHTML = '';
-    let inboxSelected = false;
+
+    let selected = false;
+
     projects.forEach((p) => {
       const opt = document.createElement('option');
       opt.value = p.name;
       opt.textContent = p.name;
-      if (p.name === 'Inbox') {
+      if (p.name === activeProjectName) {
         opt.selected = true;
-        inboxSelected = true;
+        selected = true;
       }
       this.#projectSelectInForm.appendChild(opt);
     });
-    if (!inboxSelected && this.#projectSelectInForm.options.length > 0) {
+    if (!selected && this.#projectSelectInForm.options.length > 0) {
       this.#projectSelectInForm.options[0].selected = true;
     }
   }
