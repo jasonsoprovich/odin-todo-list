@@ -74,17 +74,16 @@ class Renderer {
       li.classList.add('project-item');
       li.dataset.projectName = project.name;
 
+      // Make the entire li clickable:
+      li.addEventListener('click', () => {
+        projectsManager.setCurrentProject(project.name);
+      });
+
       const span = document.createElement('span');
       span.textContent = project.name;
       span.classList.add('project-name');
-      span.addEventListener('click', () => {
-        projectsManager.setCurrentProject(project.name);
-      });
+      // no need to attach click on span any more
       li.appendChild(span);
-
-      if (project.name === activeCategoryName) {
-        li.classList.add('active');
-      }
 
       if (!isAll && !SYSTEM_PROJECT_NAMES.includes(project.name)) {
         const btn = document.createElement('button');
@@ -93,8 +92,16 @@ class Renderer {
           '<i class="material-icons-outlined" title="Delete project">delete</i>';
         btn.setAttribute('aria-label', `Delete project ${project.name}`);
         btn.dataset.projectName = project.name;
+
+        // Prevent li click when deleting
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          projectsManager.deleteProject(project.name);
+        });
+
         li.appendChild(btn);
       }
+
       return li;
     };
 
