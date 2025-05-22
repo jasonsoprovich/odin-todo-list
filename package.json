@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A minimal Webpack starter template with Airbnb ESLint, Prettier, and Babel",
   "scripts": {
-    "start": "webpack serve --config config/webpack.dev.js --env development --open",
+    "start": "webpack serve --config config/webpack.dev.js --mode development --open",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
     "lint": "eslint src/**/*.js",
     "format": "prettier --write \"src/**/*.{js,html,css}\"",
