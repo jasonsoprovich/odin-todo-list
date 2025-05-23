@@ -63,6 +63,8 @@ html {
 body {
   min-height: 100vh;
   background: var(--color-background-app);
+  display: flex;
+  flex-direction: column;
 }
 
 h1,
@@ -149,7 +151,8 @@ label {
 /*──────────────────────────────── Layout ───────────────────────────────*/
 .layout {
   display: flex;
-  height: 100vh;
+  flex: 1;
+  min-height: 0;
   width: 100vw;
   overflow: hidden;
 }
@@ -162,7 +165,7 @@ label {
   border-right: 1px solid var(--color-divider);
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
+  height: 100%;
 }
 .sidebar h2 {
   margin-bottom: var(--spacing-md);
@@ -266,7 +269,9 @@ button.delete-project-btn:focus,
 .proj-form {
   display: flex;
   gap: var(--spacing-sm);
-  margin-top: var(--spacing-md);
+  margin-top: auto;
+  flex-shrink: 0;
+  padding-top: var(--spacing-md);
 }
 .proj-form input#proj-input {
   flex: 1;
@@ -601,6 +606,7 @@ button.cancel-subtask-form-btn:hover {
   background-color: var(--color-primary-accent);
   color: white;
   z-index: 1000;
+  flex-shrink: 0;
 }
 
 .app-header .container {
