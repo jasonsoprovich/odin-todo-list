@@ -162,7 +162,7 @@ label {
   border-right: 1px solid var(--color-divider);
   display: flex;
   flex-direction: column;
-  overflow-y: hidden; /* keep form always visible */
+  overflow-y: hidden;
 }
 .sidebar h2 {
   margin-bottom: var(--spacing-md);
@@ -263,7 +263,6 @@ button.delete-project-btn:focus,
 }
 
 /*──────────────────────────────── Forms ───────────────────────────────*/
-/* Project add form */
 .proj-form {
   display: flex;
   gap: var(--spacing-sm);
@@ -278,7 +277,6 @@ button.delete-project-btn:focus,
   height: 2.25rem;
 }
 
-/* Todo add form */
 .todo-form {
   display: flex;
   flex-wrap: wrap;
@@ -330,7 +328,7 @@ button.delete-project-btn:focus,
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-lg); /* ↑ bigger gap between leftGroup and rightGroup */
+  gap: var(--spacing-lg);
   padding: var(--spacing-sm) var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   background: var(--color-background-content);
@@ -339,7 +337,6 @@ button.delete-project-btn:focus,
   transition: background-color 0.2s ease;
 }
 .todo-list li:hover {
-  /* background: var(--color-background-hover); */
   background: var(--color-background-hover-alpha);
 }
 .todo-list li.done {
@@ -368,36 +365,24 @@ button.delete-project-btn:focus,
 }
 
 .todo-list .todo-text {
-  flex: 1; /* Allows it to take up available space */
-  min-width: 0; /* Important for flex items that might shrink */
+  flex: 1;
+  min-width: 0;
   font-size: 0.95rem;
-  line-height: 1.4; /* Standard line height for the text itself */
+  margin-left: 1rem;
+  line-height: 1.4;
   color: var(--color-text-primary);
   word-break: break-word;
-
-  /* This centers the text node(s) if the text itself wraps to multiple lines */
-  /* REMOVE align-self: center; from here.
-     The parent <li>'s align-items: center should handle this. */
 }
 
-/* Ensure the parent <li> is set up for vertical centering.
-   This rule might be redundant if it's already defined above,
-   but it's good to confirm. */
 .todo-list li {
   display: flex;
-  align-items: center; /* This is the key for vertically centering direct children */
-  /* gap: var(--spacing-md); */ /* You have this, which is fine */
-  /* justify-content: space-between; */ /* This is for horizontal distribution */
-  /* flex-wrap: wrap; */ /* You have this, which is fine */
-  /* ... other li styles ... */
+  align-items: center;
 }
 
-/* Ensure your .todo-due is also a well-behaved flex item for centering */
 .todo-list .todo-due {
-  display: inline-flex; /* Makes it a flex container for its icon and text */
-  align-items: center; /* Centers the icon and text within the .todo-due span */
+  display: inline-flex;
+  align-items: center;
   gap: var(--spacing-xs);
-  /* No specific align-self needed here either if the parent li handles it */
 }
 
 /*──────────────────────────────── Action-Icon Buttons ───────────────────────────────*/
@@ -419,45 +404,36 @@ button.delete-project-btn:focus,
   background: var(--color-background-hover);
   outline: none;
 }
-/* subtask button (list-btn) with any items → blue flag */
 .todo-list .action-icon-btn.list-btn.all-done .material-icons-outlined {
   color: var(--color-success);
 }
 
-/* 1) all icons hover to primary‐accent‐hover */
 .todo-list .action-icon-btn:hover .material-icons-outlined {
   color: var(--color-primary-accent-hover);
 }
 
-/* 2) remove‐icon stays red */
 .todo-list .action-icon-btn.remove:hover .material-icons-outlined {
   color: var(--color-danger-hover);
 }
 
-/* 3) hide edit‐task and note areas by default */
 .edit-task-form {
   display: none;
 }
 
-/* 4) left align subtask text */
 .todo-list .subtask-text {
   text-align: left;
 }
 
-/* 5) highlight subtask & note icons when present */
 .todo-list .action-icon-btn.list-btn.all-done .material-icons-outlined {
   color: var(--color-success);
 }
-/* note icon with saved content → blue */
 .todo-list .action-icon-btn.note-btn.has-notes .material-icons-outlined {
   color: var(--color-primary-accent);
 }
-/* but on hover it should still go blue */
 .todo-list .action-icon-btn.note-btn.has-notes:hover .material-icons-outlined {
   color: var(--color-primary-accent-hover);
 }
 
-/* 6) subtask‐count green when all done */
 .todo-list .subtask-count.all-done {
   color: var(--color-success);
 }
@@ -490,7 +466,7 @@ button.delete-project-btn:focus,
 .edit-task-form .edit-task-category {
   flex: 1;
   min-width: 110px;
-} /* renamed */
+}
 
 .edit-form-actions {
   display: flex;
@@ -586,29 +562,24 @@ button.cancel-subtask-form-btn:hover {
   display: none;
 }
 
-/*──────────────────────────────── Center task text & due date ────────────────────────────*/
-/* Ensure the list items are centering their children (should already be set) */
 .todo-list li {
   display: flex;
   align-items: center;
 }
 
-/* Remove any stray vertical padding on the text */
 .todo-list .todo-text {
   padding: 0;
   display: inline-flex;
   align-items: center;
 }
 
-/* Assuming your due‐date is wrapped in a span with class “todo-due” (adjust if yours differs) */
 .todo-list .todo-due {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs); /* small gap between calendar icon and text */
+  gap: var(--spacing-xs);
 }
 
 /*──────────────────────────────── Due Date Hover ───────────────────────────────*/
-/* Only highlight the due‐date when you hover over it */
 .todo-list .todo-due:hover {
   color: var(--color-primary-accent-hover);
 }
@@ -634,4 +605,21 @@ button.cancel-subtask-form-btn:hover {
 #add-project-btn:hover,
 #add-task-btn:hover {
   background-color: var(--color-primary-accent-hover);
+}
+
+/*────────────────── Unified Button Border Radius ──────────────────*/
+button,
+.todo-list .action-icon-btn,
+.action-icon-btn-sidebar {
+  border-radius: var(--border-radius-medium);
+}
+
+/*───────────────── More spacing in each task li ──────────────────*/
+.todo-list li {
+  gap: var(--spacing-xl);
+}
+
+.todo-list li > .task-group-left,
+.todo-list li > .task-group-right {
+  gap: var(--spacing-xl);
 }

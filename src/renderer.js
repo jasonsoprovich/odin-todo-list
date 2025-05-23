@@ -41,7 +41,7 @@ class Renderer {
 
     this.#handleProjectsUpdate({
       projects: projectsManager.list,
-      current: projectsManager.currentProjectName, // still passed as `activeProjectName`
+      current: projectsManager.currentProjectName,
     });
     this.renderTasks(tasksManager.list);
   }
@@ -75,7 +75,6 @@ class Renderer {
       li.classList.add('project-item');
       li.dataset.projectName = project.name;
 
-      // Make the entire li clickable:
       li.addEventListener('click', () => {
         projectsManager.setCurrentProject(project.name);
       });
@@ -83,7 +82,6 @@ class Renderer {
       const span = document.createElement('span');
       span.textContent = project.name;
       span.classList.add('project-name');
-      // no need to attach click on span any more
       li.appendChild(span);
 
       if (!isAll && !SYSTEM_PROJECT_NAMES.includes(project.name)) {
@@ -94,7 +92,6 @@ class Renderer {
         btn.setAttribute('aria-label', `Delete project ${project.name}`);
         btn.dataset.projectName = project.name;
 
-        // Prevent li click when deleting
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           projectsManager.deleteProject(project.name);
@@ -114,7 +111,6 @@ class Renderer {
       this.#projectListElement.appendChild(createProjectLi(p));
     });
 
-    // pass activeProjectName so the form dropdown auto-selects it
     this.renderProjectOptionsInForm(
       projects.filter((p) => !SYSTEM_PROJECT_NAMES.includes(p.name)),
       activeProjectName
@@ -338,7 +334,6 @@ class Renderer {
       noteBtn.dataset.id = task.id;
       noteBtn.setAttribute('aria-label', 'Notes');
 
-      // only use task.note, not task.notes, to detect saved text
       if (task.note && task.note.trim() !== '') {
         noteBtn.classList.add('has-notes');
         noteBtn.innerHTML =
@@ -358,12 +353,11 @@ class Renderer {
       if (task.subtasks && task.subtasks.length > 0) {
         listBtn.classList.add('has-content');
         const doneCount = task.subtasks.filter((s) => s.done).length;
-        // highlight the counter green if all done
         const countSpan = document.createElement('span');
         countSpan.classList.add('subtask-count');
         if (doneCount === task.subtasks.length) {
-          listBtn.classList.add('all-done'); // ← add this
-          countSpan.classList.add('all-done'); // your existing rule
+          listBtn.classList.add('all-done');
+          countSpan.classList.add('all-done');
         }
         countSpan.textContent = `${doneCount}/${task.subtasks.length}`;
         listBtn.innerHTML = `<i class="material-icons-outlined" title="View/Edit Checklist">checklist</i>`;
