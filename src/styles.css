@@ -568,6 +568,12 @@ button.cancel-subtask-form-btn:hover {
   align-items: center;
 }
 
+.todo-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .todo-list .todo-text {
   padding: 0;
   display: inline-flex;
@@ -617,12 +623,12 @@ button,
 
 /*───────────────── More spacing in each task li ──────────────────*/
 .todo-list li {
-  gap: var(--spacing-xl);
+  gap: var(--spacing-xs);
 }
 
 .todo-list li > .task-group-left,
 .todo-list li > .task-group-right {
-  gap: var(--spacing-xl);
+  gap: var(--spacing-xs);
 }
 
 /*───────────────── Action Buttons Uniform Height ──────────────────*/
@@ -639,7 +645,8 @@ button,
   margin-bottom: var(--spacing-sm);
 }
 
-.task-group-left {
+.task-group-left,
+.task-group-right {
   display: flex;
   flex-direction: row;
   align-items: center;
