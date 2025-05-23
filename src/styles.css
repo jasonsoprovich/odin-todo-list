@@ -638,3 +638,9 @@ button,
 .sub-form-actions button {
   margin-bottom: var(--spacing-sm);
 }
+
+.task-group-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
