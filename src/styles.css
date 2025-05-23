@@ -372,6 +372,7 @@ button.delete-project-btn:focus,
   line-height: 1.4;
   color: var(--color-text-primary);
   word-break: break-word;
+  align-self: center;
 }
 
 .todo-list li {
@@ -622,4 +623,18 @@ button,
 .todo-list li > .task-group-left,
 .todo-list li > .task-group-right {
   gap: var(--spacing-xl);
+}
+
+/*───────────────── Action Buttons Uniform Height ──────────────────*/
+.proj-form button[type='submit'],
+.todo-form button[type='submit'],
+.edit-form-actions button,
+.note-area-actions button,
+.sub-form-actions button {
+  height: 2.25rem;
+  line-height: 2.25rem;
+}
+
+.sub-form-actions button {
+  margin-bottom: var(--spacing-sm);
 }
