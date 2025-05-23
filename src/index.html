@@ -11,6 +11,11 @@
   </head>
 
   <body>
+    <header class="app-header">
+      <div class="container">
+        <h1 class="app-header-title playwrite-title">Momentum</h1>
+      </div>
+    </header>
     <div class="layout">
       <aside class="sidebar">
         <h2 id="sidebar-heading">Projects</h2>
@@ -22,7 +27,7 @@
             placeholder="New project"
             required
           />
-          <button type="submit">Add</button>
+          <button type="submit" id="add-project-btn">Add</button>
         </form>
       </aside>
       <main id="app" class="main-content container">
@@ -38,7 +43,7 @@
           <input
             type="text"
             id="todo-input"
-            placeholder="Add new task."
+            placeholder="Add new task"
             required
             autocomplete="off"
           />
@@ -57,7 +62,7 @@
           </label>
 
           <select id="todo-project" name="todo-project"></select>
-          <button type="submit">Add</button>
+          <button type="submit" id="add-task-btn">Add</button>
         </form>
         <ul id="todo-list" class="todo-list"></ul>
       </main>

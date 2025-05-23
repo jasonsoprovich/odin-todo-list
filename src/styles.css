@@ -615,3 +615,23 @@ button.cancel-subtask-form-btn:hover {
 .todo-list .todo-due:hover .material-icons-outlined {
   color: var(--color-primary-accent-hover);
 }
+
+/*──────────────────────────────── Sticky App Header ────────────────────────────*/
+.app-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-primary-accent);
+  color: white;
+  z-index: 1000;
+}
+
+.app-header .container {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+#add-project-btn:hover,
+#add-task-btn:hover {
+  background-color: var(--color-primary-accent-hover);
+}
